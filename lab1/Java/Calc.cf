@@ -1,0 +1,44 @@
+ProgDef. Program ::= [Def];
+terminator Def "";
+
+comment "//";
+comment "/*" "*/";
+comment "#";
+
+QualConstDef.   Def ::= "using" Exp ";";
+FuncDef.        Def ::= Type Id "(" [Arg] ")" "{" [Stm] "}";
+separator       Arg ",";
+
+ArgDecl.        Arg ::= Type Id;
+
+StmDef.         Stm ::= Exp ";";
+StmDecl.        Stm ::= Type Id ";" ;
+StmDecl2.       Stm ::= Exp Id ";";
+StmDecls.       Stm ::= Type Id "," [Id] ";" ;
+StmInit.        Stm ::= Type Id "=" Exp ";" ;
+ReturnStm.      Stm ::= "return" Stm;
+terminator      Stm "";
+
+
+
+LShift.         Exp10 ::= Exp10 "<<" Exp11 ;
+RShift.         Exp10 ::= Exp10 ">>" Exp11 ;
+
+
+
+IntExp.         Exp15 ::= Integer;
+DoubleExp.      Exp15 ::= Double;
+StringExp.      Exp15 ::= String;
+
+
+QualConstExp.   Exp15 ::= [Id];
+separator       nonempty Id "::";
+
+BoolType.       Type ::= "bool";
+DoubleType.     Type ::= "double";
+IntType.        Type ::= "int";
+VoidType.       Type ::= "void";
+
+token Id (letter (letter | digit | '_')*);
+
+coercions Exp 15;

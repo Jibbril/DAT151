@@ -1,0 +1,9 @@
+EAdd. Exp ::= Exp "+" Exp1;
+EMin. Exp ::= Exp "-" Exp1;
+EMul. Exp1 ::= Exp1 "*" Exp2;
+EDiv. Exp1 ::= Exp1 "/" Exp2;
+EInt. Exp2 ::= Integer;
+JVMAdd. Exp ::= Exp Exp "iadd";
+EDefault. Exp ::= Exp Exp;
+
+coercions Exp 2;

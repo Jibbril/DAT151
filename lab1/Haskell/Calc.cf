@@ -1,0 +1,27 @@
+PDefs. Program ::= [Def];
+terminator Def "";
+
+comment "//";
+comment "/*" "*/";
+comment "#";
+
+DFun.       Def ::= Type Id "(" [Arg] ")" "{" [Stm] "}";
+separator   Arg ",";
+terminator  Stm "";
+
+ADecl.      Arg ::= Type Id;
+SCout.      Stm ::= "std::cout <<" Exp "<< std::endl" ";";
+SReturn.    Stm ::= "return" Exp ";";
+
+EInt.       Exp ::= Integer;
+EDouble.    Exp ::= Double;
+EString.    Exp ::= String;
+
+Tbool.      Type ::= "bool";
+Tdouble.    Type ::= "double";
+Tint.       Type ::= "int";
+Tvoid.      Type ::= "void";
+
+token Id (letter (letter | digit | '_')*);
+
+coercions Exp 1;
