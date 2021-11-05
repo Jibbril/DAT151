@@ -91,6 +91,39 @@ public class ComposVisitor<A> implements
       calc.Absyn.Stm stm_ = p.stm_.accept(this, arg);
       return new calc.Absyn.ReturnStm(stm_);
     }
+    public calc.Absyn.Stm visit(calc.Absyn.WhileStm p, A arg)
+    {
+      calc.Absyn.Exp exp_ = p.exp_.accept(this, arg);
+      calc.Absyn.Stm stm_ = p.stm_.accept(this, arg);
+      return new calc.Absyn.WhileStm(exp_, stm_);
+    }
+    public calc.Absyn.Stm visit(calc.Absyn.IfStm p, A arg)
+    {
+      calc.Absyn.Exp exp_ = p.exp_.accept(this, arg);
+      calc.Absyn.Stm stm_ = p.stm_.accept(this, arg);
+      return new calc.Absyn.IfStm(exp_, stm_);
+    }
+    public calc.Absyn.Stm visit(calc.Absyn.BlockStm p, A arg)
+    {
+      calc.Absyn.ListStm liststm_ = new calc.Absyn.ListStm();
+      for (calc.Absyn.Stm x : p.liststm_)
+      {
+        liststm_.add(x.accept(this,arg));
+      }
+      return new calc.Absyn.BlockStm(liststm_);
+    }
+    public calc.Absyn.Stm visit(calc.Absyn.TypeDefStm p, A arg)
+    {
+      calc.Absyn.Type type_ = p.type_.accept(this, arg);
+      String id_ = p.id_;
+      return new calc.Absyn.TypeDefStm(type_, id_);
+    }
+    public calc.Absyn.Stm visit(calc.Absyn.ConstTypeDefStm p, A arg)
+    {
+      calc.Absyn.Type type_ = p.type_.accept(this, arg);
+      String id_ = p.id_;
+      return new calc.Absyn.ConstTypeDefStm(type_, id_);
+    }
 
     /* Exp */
     public calc.Absyn.Exp visit(calc.Absyn.LShift p, A arg)
@@ -104,6 +137,22 @@ public class ComposVisitor<A> implements
       calc.Absyn.Exp exp_1 = p.exp_1.accept(this, arg);
       calc.Absyn.Exp exp_2 = p.exp_2.accept(this, arg);
       return new calc.Absyn.RShift(exp_1, exp_2);
+    }
+    public calc.Absyn.Exp visit(calc.Absyn.IndexExp p, A arg)
+    {
+      calc.Absyn.Exp exp_1 = p.exp_1.accept(this, arg);
+      calc.Absyn.Exp exp_2 = p.exp_2.accept(this, arg);
+      return new calc.Absyn.IndexExp(exp_1, exp_2);
+    }
+    public calc.Absyn.Exp visit(calc.Absyn.FunCallExp p, A arg)
+    {
+      calc.Absyn.Exp exp_ = p.exp_.accept(this, arg);
+      calc.Absyn.ListExp listexp_ = new calc.Absyn.ListExp();
+      for (calc.Absyn.Exp x : p.listexp_)
+      {
+        listexp_.add(x.accept(this,arg));
+      }
+      return new calc.Absyn.FunCallExp(exp_, listexp_);
     }
     public calc.Absyn.Exp visit(calc.Absyn.IntExp p, A arg)
     {

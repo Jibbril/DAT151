@@ -8,10 +8,14 @@ package calc;
 /** CUP generated class containing symbol constants. */
 public class sym {
   /* terminals */
-  public static final int _INTEGER_ = 19;
-  public static final int _STRING_ = 18;
+  public static final int _INTEGER_ = 25;
+  public static final int _STRING_ = 24;
+  public static final int _SYMB_19 = 21;
+  public static final int _SYMB_18 = 20;
+  public static final int _SYMB_17 = 19;
+  public static final int _SYMB_16 = 18;
   public static final int _SYMB_15 = 17;
-  public static final int _DOUBLE_ = 20;
+  public static final int _DOUBLE_ = 26;
   public static final int _SYMB_14 = 16;
   public static final int _SYMB_13 = 15;
   public static final int _SYMB_12 = 14;
@@ -28,8 +32,10 @@ public class sym {
   public static final int _SYMB_2 = 4;
   public static final int _SYMB_1 = 3;
   public static final int _SYMB_0 = 2;
-  public static final int Id = 21;
+  public static final int Id = 27;
   public static final int error = 1;
+  public static final int _SYMB_21 = 23;
+  public static final int _SYMB_20 = 22;
   public static final String[] terminalNames = new String[] {
   "EOF",
   "error",
@@ -49,6 +55,12 @@ public class sym {
   "_SYMB_13",
   "_SYMB_14",
   "_SYMB_15",
+  "_SYMB_16",
+  "_SYMB_17",
+  "_SYMB_18",
+  "_SYMB_19",
+  "_SYMB_20",
+  "_SYMB_21",
   "_STRING_",
   "_INTEGER_",
   "_DOUBLE_",

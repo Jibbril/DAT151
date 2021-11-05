@@ -91,6 +91,37 @@ public class VisitSkel
       p.stm_.accept(new StmVisitor<R,A>(), arg);
       return null;
     }
+    public R visit(calc.Absyn.WhileStm p, A arg)
+    { /* Code for WhileStm goes here */
+      p.exp_.accept(new ExpVisitor<R,A>(), arg);
+      p.stm_.accept(new StmVisitor<R,A>(), arg);
+      return null;
+    }
+    public R visit(calc.Absyn.IfStm p, A arg)
+    { /* Code for IfStm goes here */
+      p.exp_.accept(new ExpVisitor<R,A>(), arg);
+      p.stm_.accept(new StmVisitor<R,A>(), arg);
+      return null;
+    }
+    public R visit(calc.Absyn.BlockStm p, A arg)
+    { /* Code for BlockStm goes here */
+      for (calc.Absyn.Stm x: p.liststm_) {
+        x.accept(new StmVisitor<R,A>(), arg);
+      }
+      return null;
+    }
+    public R visit(calc.Absyn.TypeDefStm p, A arg)
+    { /* Code for TypeDefStm goes here */
+      p.type_.accept(new TypeVisitor<R,A>(), arg);
+      //p.id_;
+      return null;
+    }
+    public R visit(calc.Absyn.ConstTypeDefStm p, A arg)
+    { /* Code for ConstTypeDefStm goes here */
+      p.type_.accept(new TypeVisitor<R,A>(), arg);
+      //p.id_;
+      return null;
+    }
   }
   public class ExpVisitor<R,A> implements calc.Absyn.Exp.Visitor<R,A>
   {
@@ -104,6 +135,20 @@ public class VisitSkel
     { /* Code for RShift goes here */
       p.exp_1.accept(new ExpVisitor<R,A>(), arg);
       p.exp_2.accept(new ExpVisitor<R,A>(), arg);
+      return null;
+    }
+    public R visit(calc.Absyn.IndexExp p, A arg)
+    { /* Code for IndexExp goes here */
+      p.exp_1.accept(new ExpVisitor<R,A>(), arg);
+      p.exp_2.accept(new ExpVisitor<R,A>(), arg);
+      return null;
+    }
+    public R visit(calc.Absyn.FunCallExp p, A arg)
+    { /* Code for FunCallExp goes here */
+      p.exp_.accept(new ExpVisitor<R,A>(), arg);
+      for (calc.Absyn.Exp x: p.listexp_) {
+        x.accept(new ExpVisitor<R,A>(), arg);
+      }
       return null;
     }
     public R visit(calc.Absyn.IntExp p, A arg)

@@ -28,12 +28,19 @@ public class AbstractVisitor<R,A> implements AllVisitor<R,A> {
     public R visit(calc.Absyn.StmDecls p, A arg) { return visitDefault(p, arg); }
     public R visit(calc.Absyn.StmInit p, A arg) { return visitDefault(p, arg); }
     public R visit(calc.Absyn.ReturnStm p, A arg) { return visitDefault(p, arg); }
+    public R visit(calc.Absyn.WhileStm p, A arg) { return visitDefault(p, arg); }
+    public R visit(calc.Absyn.IfStm p, A arg) { return visitDefault(p, arg); }
+    public R visit(calc.Absyn.BlockStm p, A arg) { return visitDefault(p, arg); }
+    public R visit(calc.Absyn.TypeDefStm p, A arg) { return visitDefault(p, arg); }
+    public R visit(calc.Absyn.ConstTypeDefStm p, A arg) { return visitDefault(p, arg); }
     public R visitDefault(calc.Absyn.Stm p, A arg) {
       throw new IllegalArgumentException(this.getClass().getName() + ": " + p);
     }
     /* Exp */
     public R visit(calc.Absyn.LShift p, A arg) { return visitDefault(p, arg); }
     public R visit(calc.Absyn.RShift p, A arg) { return visitDefault(p, arg); }
+    public R visit(calc.Absyn.IndexExp p, A arg) { return visitDefault(p, arg); }
+    public R visit(calc.Absyn.FunCallExp p, A arg) { return visitDefault(p, arg); }
     public R visit(calc.Absyn.IntExp p, A arg) { return visitDefault(p, arg); }
     public R visit(calc.Absyn.DoubleExp p, A arg) { return visitDefault(p, arg); }
     public R visit(calc.Absyn.StringExp p, A arg) { return visitDefault(p, arg); }

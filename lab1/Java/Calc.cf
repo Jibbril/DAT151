@@ -1,44 +1,77 @@
+-- ===================== DEFINITIONS =====================
 ProgDef. Program ::= [Def];
+QualConstDef.   Def ::= "using" Exp ";";
+FuncDef.        Def ::= Type Id "(" [Arg] ")" "{" [Stm] "}";
 terminator Def "";
 
+-- ===================== COMMENTS =====================
 comment "//";
 comment "/*" "*/";
 comment "#";
 
-QualConstDef.   Def ::= "using" Exp ";";
-FuncDef.        Def ::= Type Id "(" [Arg] ")" "{" [Stm] "}";
+-- ===================== ARGUMENTS =====================
 separator       Arg ",";
-
 ArgDecl.        Arg ::= Type Id;
 
-StmDef.         Stm ::= Exp ";";
-StmDecl.        Stm ::= Type Id ";" ;
-StmDecl2.       Stm ::= Exp Id ";";
-StmDecls.       Stm ::= Type Id "," [Id] ";" ;
-StmInit.        Stm ::= Type Id "=" Exp ";" ;
-ReturnStm.      Stm ::= "return" Stm;
+-- ===================== STATEMENTS =====================
+StmDef.             Stm ::= Exp ";";
+StmDecl.            Stm ::= Type Id ";" ;
+StmDecl2.           Stm ::= Exp Id ";";
+StmDecls.           Stm ::= Type Id "," [Id] ";" ;
+StmInit.            Stm ::= Type Id "=" Exp ";" ;
+ReturnStm.          Stm ::= "return" Stm;
+WhileStm.           Stm ::= "while" "(" Exp ")" Stm ;
+-- Conflict here
+IfStm.              Stm ::= "if" "(" Exp ")" Stm ;
+IfElseStm.          Stm ::= "if" "(" Exp ")" Stm "else" Stm ;
+-- Conflict end
+BlockStm.           Stm ::= "{" [Stm] "}" ;
+TypeDefStm.         Stm ::= "typedef" Type Id ";";
+ConstTypeDefStm.    Stm ::= "typedef const" Type Id ";";
+
 terminator      Stm "";
 
+-- ===================== EXPRESSIONS =====================
+AssignExp.          Exp2 ::= Exp2 "=" Exp3 ;
+IncrExp.            Exp2 ::= Exp2 "+=" Exp3 ;
+DecrExp.            Exp2 ::= Exp2 "-=" Exp3 ;
+CondExp.            Exp2 ::= Exp2 "?" Exp3 ":" Exp3 ;
 
+EqExp.              Exp8 ::= Exp8 "==" Exp9 ;
+InEqExp.            Exp8 ::= Exp8 "!=" Exp9 ;
 
-LShift.         Exp10 ::= Exp10 "<<" Exp11 ;
-RShift.         Exp10 ::= Exp10 ">>" Exp11 ;
+LShift.             Exp10 ::= Exp10 "<<" Exp11 ;
+RShift.             Exp10 ::= Exp10 ">>" Exp11 ;
 
+AddExp.             Exp11 ::= Exp11 "+" Exp12;
+MinExp.             Exp11 ::= Exp11 "-" Exp12;
 
+MulExp.             Exp12 ::= Exp12 "*" Exp13;
+DivExp.             Exp12 ::= Exp12 "/" Exp13;
+ModExp.             Exp12 ::= Exp12 "%" Exp13;
 
-IntExp.         Exp15 ::= Integer;
-DoubleExp.      Exp15 ::= Double;
-StringExp.      Exp15 ::= String;
+IndexExp.           Exp14 ::= Exp14 "[" Exp "]";
+FunCallExp.         Exp14 ::= Exp14 "(" [Exp] ")";
+DotStrucProjExp.    Exp14 ::= Exp14 "." Exp15 ;
+ArrStrucProjExp.    Exp14 ::= Exp14 "->" Exp15 ;
 
+IntExp.             Exp15 ::= Integer;
+DoubleExp.          Exp15 ::= Double;
+StringExp.          Exp15 ::= String;
+separator           Exp ",";
 
+-- ===================== QUALIFIED CONSTANTS =====================
 QualConstExp.   Exp15 ::= [Id];
 separator       nonempty Id "::";
 
+-- ===================== TYPES =====================
 BoolType.       Type ::= "bool";
 DoubleType.     Type ::= "double";
 IntType.        Type ::= "int";
 VoidType.       Type ::= "void";
 
+-- ===================== TOKENS =====================
 token Id (letter (letter | digit | '_')*);
 
+-- ===================== COERCIONS =====================
 coercions Exp 15;

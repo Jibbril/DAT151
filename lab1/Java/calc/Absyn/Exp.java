@@ -7,6 +7,8 @@ public abstract class Exp implements java.io.Serializable {
   public interface Visitor <R,A> {
     public R visit(calc.Absyn.LShift p, A arg);
     public R visit(calc.Absyn.RShift p, A arg);
+    public R visit(calc.Absyn.IndexExp p, A arg);
+    public R visit(calc.Absyn.FunCallExp p, A arg);
     public R visit(calc.Absyn.IntExp p, A arg);
     public R visit(calc.Absyn.DoubleExp p, A arg);
     public R visit(calc.Absyn.StringExp p, A arg);

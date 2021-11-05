@@ -80,21 +80,6 @@ public class PrettyPrinter
     buf_.delete(0,buf_.length());
     return temp;
   }
-  public static String print(calc.Absyn.ListDef foo)
-  {
-    pp(foo, 0);
-    trim();
-    String temp = buf_.toString();
-    buf_.delete(0,buf_.length());
-    return temp;
-  }
-  public static String show(calc.Absyn.ListDef foo)
-  {
-    sh(foo);
-    String temp = buf_.toString();
-    buf_.delete(0,buf_.length());
-    return temp;
-  }
   public static String print(calc.Absyn.Def foo)
   {
     pp(foo, 0);
@@ -104,6 +89,21 @@ public class PrettyPrinter
     return temp;
   }
   public static String show(calc.Absyn.Def foo)
+  {
+    sh(foo);
+    String temp = buf_.toString();
+    buf_.delete(0,buf_.length());
+    return temp;
+  }
+  public static String print(calc.Absyn.ListDef foo)
+  {
+    pp(foo, 0);
+    trim();
+    String temp = buf_.toString();
+    buf_.delete(0,buf_.length());
+    return temp;
+  }
+  public static String show(calc.Absyn.ListDef foo)
   {
     sh(foo);
     String temp = buf_.toString();
@@ -185,6 +185,21 @@ public class PrettyPrinter
     buf_.delete(0,buf_.length());
     return temp;
   }
+  public static String print(calc.Absyn.ListExp foo)
+  {
+    pp(foo, 0);
+    trim();
+    String temp = buf_.toString();
+    buf_.delete(0,buf_.length());
+    return temp;
+  }
+  public static String show(calc.Absyn.ListExp foo)
+  {
+    sh(foo);
+    String temp = buf_.toString();
+    buf_.delete(0,buf_.length());
+    return temp;
+  }
   public static String print(calc.Absyn.ListId foo)
   {
     pp(foo, 0);
@@ -229,21 +244,6 @@ public class PrettyPrinter
 
   }
 
-  private static void pp(calc.Absyn.ListDef foo, int _i_)
-  {
-    ppListDef(foo.iterator(), _i_);
-  }
-
-  private static void ppListDef(java.util.Iterator<calc.Absyn.Def> it, int _i_)
-  {
-    if (it.hasNext())
-    { /* cons */
-      calc.Absyn.Def el = it.next();
-      pp(el, _i_); ppListDef(it, _i_);
-    }
-  }
-
-
   private static void pp(calc.Absyn.Def foo, int _i_)
   {
     if (foo instanceof calc.Absyn.QualConstDef)
@@ -271,6 +271,21 @@ public class PrettyPrinter
     }
 
   }
+
+  private static void pp(calc.Absyn.ListDef foo, int _i_)
+  {
+    ppListDef(foo.iterator(), _i_);
+  }
+
+  private static void ppListDef(java.util.Iterator<calc.Absyn.Def> it, int _i_)
+  {
+    if (it.hasNext())
+    { /* cons */
+      calc.Absyn.Def el = it.next();
+      pp(el, _i_); ppListDef(it, _i_);
+    }
+  }
+
 
   private static void pp(calc.Absyn.ListArg foo, int _i_)
   {
@@ -365,6 +380,58 @@ public class PrettyPrinter
        pp(_returnstm.stm_, 0);
        if (_i_ > 0) render(_R_PAREN);
     }
+    else     if (foo instanceof calc.Absyn.WhileStm)
+    {
+       calc.Absyn.WhileStm _whilestm = (calc.Absyn.WhileStm) foo;
+       if (_i_ > 0) render(_L_PAREN);
+       render("while");
+       render("(");
+       pp(_whilestm.exp_, 0);
+       render(")");
+       pp(_whilestm.stm_, 0);
+       if (_i_ > 0) render(_R_PAREN);
+    }
+    else     if (foo instanceof calc.Absyn.IfStm)
+    {
+       calc.Absyn.IfStm _ifstm = (calc.Absyn.IfStm) foo;
+       if (_i_ > 0) render(_L_PAREN);
+       render("if");
+       render("(");
+       pp(_ifstm.exp_, 0);
+       render(")");
+       pp(_ifstm.stm_, 0);
+       if (_i_ > 0) render(_R_PAREN);
+    }
+    else     if (foo instanceof calc.Absyn.BlockStm)
+    {
+       calc.Absyn.BlockStm _blockstm = (calc.Absyn.BlockStm) foo;
+       if (_i_ > 0) render(_L_PAREN);
+       render("{");
+       pp(_blockstm.liststm_, 0);
+       render("}");
+       if (_i_ > 0) render(_R_PAREN);
+    }
+    else     if (foo instanceof calc.Absyn.TypeDefStm)
+    {
+       calc.Absyn.TypeDefStm _typedefstm = (calc.Absyn.TypeDefStm) foo;
+       if (_i_ > 0) render(_L_PAREN);
+       render("typedef");
+       pp(_typedefstm.type_, 0);
+       pp(_typedefstm.id_, 0);
+       render(";");
+       if (_i_ > 0) render(_R_PAREN);
+    }
+    else     if (foo instanceof calc.Absyn.ConstTypeDefStm)
+    {
+       calc.Absyn.ConstTypeDefStm _consttypedefstm = (calc.Absyn.ConstTypeDefStm) foo;
+       if (_i_ > 0) render(_L_PAREN);
+       render("typedef");
+       render("const");
+       pp(_consttypedefstm.type_, 0);
+       pp(_consttypedefstm.id_, 0);
+       render(";");
+       if (_i_ > 0) render(_R_PAREN);
+    }
 
   }
 
@@ -403,6 +470,26 @@ public class PrettyPrinter
        pp(_rshift.exp_2, 11);
        if (_i_ > 10) render(_R_PAREN);
     }
+    else     if (foo instanceof calc.Absyn.IndexExp)
+    {
+       calc.Absyn.IndexExp _indexexp = (calc.Absyn.IndexExp) foo;
+       if (_i_ > 14) render(_L_PAREN);
+       pp(_indexexp.exp_1, 14);
+       render("[");
+       pp(_indexexp.exp_2, 0);
+       render("]");
+       if (_i_ > 14) render(_R_PAREN);
+    }
+    else     if (foo instanceof calc.Absyn.FunCallExp)
+    {
+       calc.Absyn.FunCallExp _funcallexp = (calc.Absyn.FunCallExp) foo;
+       if (_i_ > 14) render(_L_PAREN);
+       pp(_funcallexp.exp_, 14);
+       render("(");
+       pp(_funcallexp.listexp_, 0);
+       render(")");
+       if (_i_ > 14) render(_R_PAREN);
+    }
     else     if (foo instanceof calc.Absyn.IntExp)
     {
        calc.Absyn.IntExp _intexp = (calc.Absyn.IntExp) foo;
@@ -433,6 +520,28 @@ public class PrettyPrinter
     }
 
   }
+
+  private static void pp(calc.Absyn.ListExp foo, int _i_)
+  {
+    ppListExp(foo.iterator(), _i_);
+  }
+
+  private static void ppListExp(java.util.Iterator<calc.Absyn.Exp> it, int _i_)
+  {
+    if (it.hasNext())
+    {
+      calc.Absyn.Exp el = it.next();
+      if (!it.hasNext())
+      { /* last */
+        pp(el, _i_);
+      }
+      else
+      { /* cons */
+        pp(el, _i_); render(","); ppListExp(it, _i_);
+      }
+    }
+  }
+
 
   private static void pp(calc.Absyn.ListId foo, int _i_)
   {
@@ -504,16 +613,6 @@ public class PrettyPrinter
     }
   }
 
-  private static void sh(calc.Absyn.ListDef foo)
-  {
-     for (java.util.Iterator<calc.Absyn.Def> it = foo.iterator(); it.hasNext();)
-     {
-       sh(it.next());
-       if (it.hasNext())
-         render(",");
-     }
-  }
-
   private static void sh(calc.Absyn.Def foo)
   {
     if (foo instanceof calc.Absyn.QualConstDef)
@@ -539,6 +638,16 @@ public class PrettyPrinter
        render("]");
        render(")");
     }
+  }
+
+  private static void sh(calc.Absyn.ListDef foo)
+  {
+     for (java.util.Iterator<calc.Absyn.Def> it = foo.iterator(); it.hasNext();)
+     {
+       sh(it.next());
+       if (it.hasNext())
+         render(",");
+     }
   }
 
   private static void sh(calc.Absyn.ListArg foo)
@@ -622,6 +731,52 @@ public class PrettyPrinter
        sh(_returnstm.stm_);
        render(")");
     }
+    if (foo instanceof calc.Absyn.WhileStm)
+    {
+       calc.Absyn.WhileStm _whilestm = (calc.Absyn.WhileStm) foo;
+       render("(");
+       render("WhileStm");
+       sh(_whilestm.exp_);
+       sh(_whilestm.stm_);
+       render(")");
+    }
+    if (foo instanceof calc.Absyn.IfStm)
+    {
+       calc.Absyn.IfStm _ifstm = (calc.Absyn.IfStm) foo;
+       render("(");
+       render("IfStm");
+       sh(_ifstm.exp_);
+       sh(_ifstm.stm_);
+       render(")");
+    }
+    if (foo instanceof calc.Absyn.BlockStm)
+    {
+       calc.Absyn.BlockStm _blockstm = (calc.Absyn.BlockStm) foo;
+       render("(");
+       render("BlockStm");
+       render("[");
+       sh(_blockstm.liststm_);
+       render("]");
+       render(")");
+    }
+    if (foo instanceof calc.Absyn.TypeDefStm)
+    {
+       calc.Absyn.TypeDefStm _typedefstm = (calc.Absyn.TypeDefStm) foo;
+       render("(");
+       render("TypeDefStm");
+       sh(_typedefstm.type_);
+       sh(_typedefstm.id_);
+       render(")");
+    }
+    if (foo instanceof calc.Absyn.ConstTypeDefStm)
+    {
+       calc.Absyn.ConstTypeDefStm _consttypedefstm = (calc.Absyn.ConstTypeDefStm) foo;
+       render("(");
+       render("ConstTypeDefStm");
+       sh(_consttypedefstm.type_);
+       sh(_consttypedefstm.id_);
+       render(")");
+    }
   }
 
   private static void sh(calc.Absyn.ListStm foo)
@@ -652,6 +807,26 @@ public class PrettyPrinter
        render("RShift");
        sh(_rshift.exp_1);
        sh(_rshift.exp_2);
+       render(")");
+    }
+    if (foo instanceof calc.Absyn.IndexExp)
+    {
+       calc.Absyn.IndexExp _indexexp = (calc.Absyn.IndexExp) foo;
+       render("(");
+       render("IndexExp");
+       sh(_indexexp.exp_1);
+       sh(_indexexp.exp_2);
+       render(")");
+    }
+    if (foo instanceof calc.Absyn.FunCallExp)
+    {
+       calc.Absyn.FunCallExp _funcallexp = (calc.Absyn.FunCallExp) foo;
+       render("(");
+       render("FunCallExp");
+       sh(_funcallexp.exp_);
+       render("[");
+       sh(_funcallexp.listexp_);
+       render("]");
        render(")");
     }
     if (foo instanceof calc.Absyn.IntExp)
@@ -688,6 +863,16 @@ public class PrettyPrinter
        render("]");
        render(")");
     }
+  }
+
+  private static void sh(calc.Absyn.ListExp foo)
+  {
+     for (java.util.Iterator<calc.Absyn.Exp> it = foo.iterator(); it.hasNext();)
+     {
+       sh(it.next());
+       if (it.hasNext())
+         render(",");
+     }
   }
 
   private static void sh(calc.Absyn.ListId foo)
