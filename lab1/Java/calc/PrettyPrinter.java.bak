@@ -200,6 +200,36 @@ public class PrettyPrinter
     buf_.delete(0,buf_.length());
     return temp;
   }
+  public static String print(calc.Absyn.ListString foo)
+  {
+    pp(foo, 0);
+    trim();
+    String temp = buf_.toString();
+    buf_.delete(0,buf_.length());
+    return temp;
+  }
+  public static String show(calc.Absyn.ListString foo)
+  {
+    sh(foo);
+    String temp = buf_.toString();
+    buf_.delete(0,buf_.length());
+    return temp;
+  }
+  public static String print(calc.Absyn.QualConst foo)
+  {
+    pp(foo, 0);
+    trim();
+    String temp = buf_.toString();
+    buf_.delete(0,buf_.length());
+    return temp;
+  }
+  public static String show(calc.Absyn.QualConst foo)
+  {
+    sh(foo);
+    String temp = buf_.toString();
+    buf_.delete(0,buf_.length());
+    return temp;
+  }
   public static String print(calc.Absyn.ListId foo)
   {
     pp(foo, 0);
@@ -230,6 +260,51 @@ public class PrettyPrinter
     buf_.delete(0,buf_.length());
     return temp;
   }
+  public static String print(calc.Absyn.GenType foo)
+  {
+    pp(foo, 0);
+    trim();
+    String temp = buf_.toString();
+    buf_.delete(0,buf_.length());
+    return temp;
+  }
+  public static String show(calc.Absyn.GenType foo)
+  {
+    sh(foo);
+    String temp = buf_.toString();
+    buf_.delete(0,buf_.length());
+    return temp;
+  }
+  public static String print(calc.Absyn.Init foo)
+  {
+    pp(foo, 0);
+    trim();
+    String temp = buf_.toString();
+    buf_.delete(0,buf_.length());
+    return temp;
+  }
+  public static String show(calc.Absyn.Init foo)
+  {
+    sh(foo);
+    String temp = buf_.toString();
+    buf_.delete(0,buf_.length());
+    return temp;
+  }
+  public static String print(calc.Absyn.ListInit foo)
+  {
+    pp(foo, 0);
+    trim();
+    String temp = buf_.toString();
+    buf_.delete(0,buf_.length());
+    return temp;
+  }
+  public static String show(calc.Absyn.ListInit foo)
+  {
+    sh(foo);
+    String temp = buf_.toString();
+    buf_.delete(0,buf_.length());
+    return temp;
+  }
   /***   You shouldn't need to change anything beyond this point.   ***/
 
   private static void pp(calc.Absyn.Program foo, int _i_)
@@ -251,7 +326,7 @@ public class PrettyPrinter
        calc.Absyn.QualConstDef _qualconstdef = (calc.Absyn.QualConstDef) foo;
        if (_i_ > 0) render(_L_PAREN);
        render("using");
-       pp(_qualconstdef.exp_, 0);
+       pp(_qualconstdef.qualconst_, 0);
        render(";");
        if (_i_ > 0) render(_R_PAREN);
     }
@@ -324,51 +399,20 @@ public class PrettyPrinter
 
   private static void pp(calc.Absyn.Stm foo, int _i_)
   {
-    if (foo instanceof calc.Absyn.StmDef)
+    if (foo instanceof calc.Absyn.InitStm)
+    {
+       calc.Absyn.InitStm _initstm = (calc.Absyn.InitStm) foo;
+       if (_i_ > 0) render(_L_PAREN);
+       pp(_initstm.gentype_, 0);
+       pp(_initstm.listinit_, 0);
+       render(";");
+       if (_i_ > 0) render(_R_PAREN);
+    }
+    else     if (foo instanceof calc.Absyn.StmDef)
     {
        calc.Absyn.StmDef _stmdef = (calc.Absyn.StmDef) foo;
        if (_i_ > 0) render(_L_PAREN);
        pp(_stmdef.exp_, 0);
-       render(";");
-       if (_i_ > 0) render(_R_PAREN);
-    }
-    else     if (foo instanceof calc.Absyn.StmDecl)
-    {
-       calc.Absyn.StmDecl _stmdecl = (calc.Absyn.StmDecl) foo;
-       if (_i_ > 0) render(_L_PAREN);
-       pp(_stmdecl.type_, 0);
-       pp(_stmdecl.id_, 0);
-       render(";");
-       if (_i_ > 0) render(_R_PAREN);
-    }
-    else     if (foo instanceof calc.Absyn.StmDecl2)
-    {
-       calc.Absyn.StmDecl2 _stmdecl2 = (calc.Absyn.StmDecl2) foo;
-       if (_i_ > 0) render(_L_PAREN);
-       pp(_stmdecl2.exp_, 0);
-       pp(_stmdecl2.id_, 0);
-       render(";");
-       if (_i_ > 0) render(_R_PAREN);
-    }
-    else     if (foo instanceof calc.Absyn.StmDecls)
-    {
-       calc.Absyn.StmDecls _stmdecls = (calc.Absyn.StmDecls) foo;
-       if (_i_ > 0) render(_L_PAREN);
-       pp(_stmdecls.type_, 0);
-       pp(_stmdecls.id_, 0);
-       render(",");
-       pp(_stmdecls.listid_, 0);
-       render(";");
-       if (_i_ > 0) render(_R_PAREN);
-    }
-    else     if (foo instanceof calc.Absyn.StmInit)
-    {
-       calc.Absyn.StmInit _stminit = (calc.Absyn.StmInit) foo;
-       if (_i_ > 0) render(_L_PAREN);
-       pp(_stminit.type_, 0);
-       pp(_stminit.id_, 0);
-       render("=");
-       pp(_stminit.exp_, 0);
        render(";");
        if (_i_ > 0) render(_R_PAREN);
     }
@@ -429,19 +473,8 @@ public class PrettyPrinter
        calc.Absyn.TypeDefStm _typedefstm = (calc.Absyn.TypeDefStm) foo;
        if (_i_ > 0) render(_L_PAREN);
        render("typedef");
-       pp(_typedefstm.type_, 0);
+       pp(_typedefstm.gentype_, 0);
        pp(_typedefstm.id_, 0);
-       render(";");
-       if (_i_ > 0) render(_R_PAREN);
-    }
-    else     if (foo instanceof calc.Absyn.ConstTypeDefStm)
-    {
-       calc.Absyn.ConstTypeDefStm _consttypedefstm = (calc.Absyn.ConstTypeDefStm) foo;
-       if (_i_ > 0) render(_L_PAREN);
-       render("typedef");
-       render("const");
-       pp(_consttypedefstm.type_, 0);
-       pp(_consttypedefstm.id_, 0);
        render(";");
        if (_i_ > 0) render(_R_PAREN);
     }
@@ -465,7 +498,63 @@ public class PrettyPrinter
 
   private static void pp(calc.Absyn.Exp foo, int _i_)
   {
-    if (foo instanceof calc.Absyn.LShift)
+    if (foo instanceof calc.Absyn.AssignExp)
+    {
+       calc.Absyn.AssignExp _assignexp = (calc.Absyn.AssignExp) foo;
+       if (_i_ > 2) render(_L_PAREN);
+       pp(_assignexp.exp_1, 2);
+       render("=");
+       pp(_assignexp.exp_2, 3);
+       if (_i_ > 2) render(_R_PAREN);
+    }
+    else     if (foo instanceof calc.Absyn.IncrExp)
+    {
+       calc.Absyn.IncrExp _increxp = (calc.Absyn.IncrExp) foo;
+       if (_i_ > 2) render(_L_PAREN);
+       pp(_increxp.exp_1, 2);
+       render("+=");
+       pp(_increxp.exp_2, 3);
+       if (_i_ > 2) render(_R_PAREN);
+    }
+    else     if (foo instanceof calc.Absyn.DecrExp)
+    {
+       calc.Absyn.DecrExp _decrexp = (calc.Absyn.DecrExp) foo;
+       if (_i_ > 2) render(_L_PAREN);
+       pp(_decrexp.exp_1, 2);
+       render("-=");
+       pp(_decrexp.exp_2, 3);
+       if (_i_ > 2) render(_R_PAREN);
+    }
+    else     if (foo instanceof calc.Absyn.CondExp)
+    {
+       calc.Absyn.CondExp _condexp = (calc.Absyn.CondExp) foo;
+       if (_i_ > 2) render(_L_PAREN);
+       pp(_condexp.exp_1, 2);
+       render("?");
+       pp(_condexp.exp_2, 3);
+       render(":");
+       pp(_condexp.exp_3, 3);
+       if (_i_ > 2) render(_R_PAREN);
+    }
+    else     if (foo instanceof calc.Absyn.EqExp)
+    {
+       calc.Absyn.EqExp _eqexp = (calc.Absyn.EqExp) foo;
+       if (_i_ > 8) render(_L_PAREN);
+       pp(_eqexp.exp_1, 8);
+       render("==");
+       pp(_eqexp.exp_2, 9);
+       if (_i_ > 8) render(_R_PAREN);
+    }
+    else     if (foo instanceof calc.Absyn.InEqExp)
+    {
+       calc.Absyn.InEqExp _ineqexp = (calc.Absyn.InEqExp) foo;
+       if (_i_ > 8) render(_L_PAREN);
+       pp(_ineqexp.exp_1, 8);
+       render("!=");
+       pp(_ineqexp.exp_2, 9);
+       if (_i_ > 8) render(_R_PAREN);
+    }
+    else     if (foo instanceof calc.Absyn.LShift)
     {
        calc.Absyn.LShift _lshift = (calc.Absyn.LShift) foo;
        if (_i_ > 10) render(_L_PAREN);
@@ -483,13 +572,58 @@ public class PrettyPrinter
        pp(_rshift.exp_2, 11);
        if (_i_ > 10) render(_R_PAREN);
     }
+    else     if (foo instanceof calc.Absyn.AddExp)
+    {
+       calc.Absyn.AddExp _addexp = (calc.Absyn.AddExp) foo;
+       if (_i_ > 11) render(_L_PAREN);
+       pp(_addexp.exp_1, 11);
+       render("+");
+       pp(_addexp.exp_2, 12);
+       if (_i_ > 11) render(_R_PAREN);
+    }
+    else     if (foo instanceof calc.Absyn.MinExp)
+    {
+       calc.Absyn.MinExp _minexp = (calc.Absyn.MinExp) foo;
+       if (_i_ > 11) render(_L_PAREN);
+       pp(_minexp.exp_1, 11);
+       render("-");
+       pp(_minexp.exp_2, 12);
+       if (_i_ > 11) render(_R_PAREN);
+    }
+    else     if (foo instanceof calc.Absyn.MulExp)
+    {
+       calc.Absyn.MulExp _mulexp = (calc.Absyn.MulExp) foo;
+       if (_i_ > 12) render(_L_PAREN);
+       pp(_mulexp.exp_1, 12);
+       render("*");
+       pp(_mulexp.exp_2, 13);
+       if (_i_ > 12) render(_R_PAREN);
+    }
+    else     if (foo instanceof calc.Absyn.DivExp)
+    {
+       calc.Absyn.DivExp _divexp = (calc.Absyn.DivExp) foo;
+       if (_i_ > 12) render(_L_PAREN);
+       pp(_divexp.exp_1, 12);
+       render("/");
+       pp(_divexp.exp_2, 13);
+       if (_i_ > 12) render(_R_PAREN);
+    }
+    else     if (foo instanceof calc.Absyn.ModExp)
+    {
+       calc.Absyn.ModExp _modexp = (calc.Absyn.ModExp) foo;
+       if (_i_ > 12) render(_L_PAREN);
+       pp(_modexp.exp_1, 12);
+       render("%");
+       pp(_modexp.exp_2, 13);
+       if (_i_ > 12) render(_R_PAREN);
+    }
     else     if (foo instanceof calc.Absyn.IndexExp)
     {
        calc.Absyn.IndexExp _indexexp = (calc.Absyn.IndexExp) foo;
        if (_i_ > 14) render(_L_PAREN);
        pp(_indexexp.exp_1, 14);
        render("[");
-       pp(_indexexp.exp_2, 0);
+       pp(_indexexp.exp_2, 15);
        render("]");
        if (_i_ > 14) render(_R_PAREN);
     }
@@ -501,6 +635,24 @@ public class PrettyPrinter
        render("(");
        pp(_funcallexp.listexp_, 0);
        render(")");
+       if (_i_ > 14) render(_R_PAREN);
+    }
+    else     if (foo instanceof calc.Absyn.DotStrucProjExp)
+    {
+       calc.Absyn.DotStrucProjExp _dotstrucprojexp = (calc.Absyn.DotStrucProjExp) foo;
+       if (_i_ > 14) render(_L_PAREN);
+       pp(_dotstrucprojexp.exp_1, 14);
+       render(".");
+       pp(_dotstrucprojexp.exp_2, 15);
+       if (_i_ > 14) render(_R_PAREN);
+    }
+    else     if (foo instanceof calc.Absyn.ArrStrucProjExp)
+    {
+       calc.Absyn.ArrStrucProjExp _arrstrucprojexp = (calc.Absyn.ArrStrucProjExp) foo;
+       if (_i_ > 14) render(_L_PAREN);
+       pp(_arrstrucprojexp.exp_1, 14);
+       render("->");
+       pp(_arrstrucprojexp.exp_2, 15);
        if (_i_ > 14) render(_R_PAREN);
     }
     else     if (foo instanceof calc.Absyn.IntExp)
@@ -517,18 +669,25 @@ public class PrettyPrinter
        pp(_doubleexp.double_, 0);
        if (_i_ > 15) render(_R_PAREN);
     }
-    else     if (foo instanceof calc.Absyn.StringExp)
+    else     if (foo instanceof calc.Absyn.StringArrExp)
     {
-       calc.Absyn.StringExp _stringexp = (calc.Absyn.StringExp) foo;
+       calc.Absyn.StringArrExp _stringarrexp = (calc.Absyn.StringArrExp) foo;
        if (_i_ > 15) render(_L_PAREN);
-       printQuoted(_stringexp.string_);
+       pp(_stringarrexp.liststring_, 0);
+       if (_i_ > 15) render(_R_PAREN);
+    }
+    else     if (foo instanceof calc.Absyn.CharExp)
+    {
+       calc.Absyn.CharExp _charexp = (calc.Absyn.CharExp) foo;
+       if (_i_ > 15) render(_L_PAREN);
+       pp(_charexp.char_, 0);
        if (_i_ > 15) render(_R_PAREN);
     }
     else     if (foo instanceof calc.Absyn.QualConstExp)
     {
        calc.Absyn.QualConstExp _qualconstexp = (calc.Absyn.QualConstExp) foo;
        if (_i_ > 15) render(_L_PAREN);
-       pp(_qualconstexp.listid_, 0);
+       pp(_qualconstexp.qualconst_, 0);
        if (_i_ > 15) render(_R_PAREN);
     }
 
@@ -556,6 +715,47 @@ public class PrettyPrinter
   }
 
 
+  private static void pp(calc.Absyn.ListString foo, int _i_)
+  {
+    ppListString(foo.iterator(), _i_);
+  }
+
+  private static void ppListString(java.util.Iterator<String> it, int _i_)
+  {
+    if (it.hasNext())
+    {
+      String el = it.next();
+      if (!it.hasNext())
+      { /* last */
+        printQuoted(el);
+      }
+      else
+      { /* cons */
+        printQuoted(el); ppListString(it, _i_);
+      }
+    }
+  }
+
+
+  private static void pp(calc.Absyn.QualConst foo, int _i_)
+  {
+    if (foo instanceof calc.Absyn.QualConstDecl)
+    {
+       calc.Absyn.QualConstDecl _qualconstdecl = (calc.Absyn.QualConstDecl) foo;
+       if (_i_ > 0) render(_L_PAREN);
+       pp(_qualconstdecl.id_, 0);
+       if (_i_ > 0) render(_R_PAREN);
+    }
+    else     if (foo instanceof calc.Absyn.QualConstDecls)
+    {
+       calc.Absyn.QualConstDecls _qualconstdecls = (calc.Absyn.QualConstDecls) foo;
+       if (_i_ > 0) render(_L_PAREN);
+       pp(_qualconstdecls.listid_, 0);
+       if (_i_ > 0) render(_R_PAREN);
+    }
+
+  }
+
   private static void pp(calc.Absyn.ListId foo, int _i_)
   {
     ppListId(foo.iterator(), _i_);
@@ -580,7 +780,14 @@ public class PrettyPrinter
 
   private static void pp(calc.Absyn.Type foo, int _i_)
   {
-    if (foo instanceof calc.Absyn.BoolType)
+    if (foo instanceof calc.Absyn.CharType)
+    {
+       calc.Absyn.CharType _chartype = (calc.Absyn.CharType) foo;
+       if (_i_ > 0) render(_L_PAREN);
+       render("char");
+       if (_i_ > 0) render(_R_PAREN);
+    }
+    else     if (foo instanceof calc.Absyn.BoolType)
     {
        calc.Absyn.BoolType _booltype = (calc.Absyn.BoolType) foo;
        if (_i_ > 0) render(_L_PAREN);
@@ -608,8 +815,95 @@ public class PrettyPrinter
        render("void");
        if (_i_ > 0) render(_R_PAREN);
     }
+    else     if (foo instanceof calc.Absyn.QualConstType)
+    {
+       calc.Absyn.QualConstType _qualconsttype = (calc.Absyn.QualConstType) foo;
+       if (_i_ > 0) render(_L_PAREN);
+       pp(_qualconsttype.qualconst_, 0);
+       if (_i_ > 0) render(_R_PAREN);
+    }
 
   }
+
+  private static void pp(calc.Absyn.GenType foo, int _i_)
+  {
+    if (foo instanceof calc.Absyn.GenTypeDecl)
+    {
+       calc.Absyn.GenTypeDecl _gentypedecl = (calc.Absyn.GenTypeDecl) foo;
+       if (_i_ > 0) render(_L_PAREN);
+       pp(_gentypedecl.type_, 0);
+       if (_i_ > 0) render(_R_PAREN);
+    }
+    else     if (foo instanceof calc.Absyn.ConstGenType)
+    {
+       calc.Absyn.ConstGenType _constgentype = (calc.Absyn.ConstGenType) foo;
+       if (_i_ > 0) render(_L_PAREN);
+       render("const");
+       pp(_constgentype.type_, 0);
+       if (_i_ > 0) render(_R_PAREN);
+    }
+    else     if (foo instanceof calc.Absyn.AndGenType)
+    {
+       calc.Absyn.AndGenType _andgentype = (calc.Absyn.AndGenType) foo;
+       if (_i_ > 0) render(_L_PAREN);
+       pp(_andgentype.type_, 0);
+       render("&");
+       if (_i_ > 0) render(_R_PAREN);
+    }
+    else     if (foo instanceof calc.Absyn.CAndGenType)
+    {
+       calc.Absyn.CAndGenType _candgentype = (calc.Absyn.CAndGenType) foo;
+       if (_i_ > 0) render(_L_PAREN);
+       render("const");
+       pp(_candgentype.type_, 0);
+       render("&");
+       if (_i_ > 0) render(_R_PAREN);
+    }
+
+  }
+
+  private static void pp(calc.Absyn.Init foo, int _i_)
+  {
+    if (foo instanceof calc.Absyn.InitDecl)
+    {
+       calc.Absyn.InitDecl _initdecl = (calc.Absyn.InitDecl) foo;
+       if (_i_ > 0) render(_L_PAREN);
+       pp(_initdecl.id_, 0);
+       if (_i_ > 0) render(_R_PAREN);
+    }
+    else     if (foo instanceof calc.Absyn.InitAssign)
+    {
+       calc.Absyn.InitAssign _initassign = (calc.Absyn.InitAssign) foo;
+       if (_i_ > 0) render(_L_PAREN);
+       pp(_initassign.id_, 0);
+       render("=");
+       pp(_initassign.exp_, 0);
+       if (_i_ > 0) render(_R_PAREN);
+    }
+
+  }
+
+  private static void pp(calc.Absyn.ListInit foo, int _i_)
+  {
+    ppListInit(foo.iterator(), _i_);
+  }
+
+  private static void ppListInit(java.util.Iterator<calc.Absyn.Init> it, int _i_)
+  {
+    if (it.hasNext())
+    {
+      calc.Absyn.Init el = it.next();
+      if (!it.hasNext())
+      { /* last */
+        pp(el, _i_);
+      }
+      else
+      { /* cons */
+        pp(el, _i_); render(","); ppListInit(it, _i_);
+      }
+    }
+  }
+
 
 
   private static void sh(calc.Absyn.Program foo)
@@ -633,7 +927,7 @@ public class PrettyPrinter
        calc.Absyn.QualConstDef _qualconstdef = (calc.Absyn.QualConstDef) foo;
        render("(");
        render("QualConstDef");
-       sh(_qualconstdef.exp_);
+       sh(_qualconstdef.qualconst_);
        render(")");
     }
     if (foo instanceof calc.Absyn.FuncDef)
@@ -688,52 +982,23 @@ public class PrettyPrinter
 
   private static void sh(calc.Absyn.Stm foo)
   {
+    if (foo instanceof calc.Absyn.InitStm)
+    {
+       calc.Absyn.InitStm _initstm = (calc.Absyn.InitStm) foo;
+       render("(");
+       render("InitStm");
+       sh(_initstm.gentype_);
+       render("[");
+       sh(_initstm.listinit_);
+       render("]");
+       render(")");
+    }
     if (foo instanceof calc.Absyn.StmDef)
     {
        calc.Absyn.StmDef _stmdef = (calc.Absyn.StmDef) foo;
        render("(");
        render("StmDef");
        sh(_stmdef.exp_);
-       render(")");
-    }
-    if (foo instanceof calc.Absyn.StmDecl)
-    {
-       calc.Absyn.StmDecl _stmdecl = (calc.Absyn.StmDecl) foo;
-       render("(");
-       render("StmDecl");
-       sh(_stmdecl.type_);
-       sh(_stmdecl.id_);
-       render(")");
-    }
-    if (foo instanceof calc.Absyn.StmDecl2)
-    {
-       calc.Absyn.StmDecl2 _stmdecl2 = (calc.Absyn.StmDecl2) foo;
-       render("(");
-       render("StmDecl2");
-       sh(_stmdecl2.exp_);
-       sh(_stmdecl2.id_);
-       render(")");
-    }
-    if (foo instanceof calc.Absyn.StmDecls)
-    {
-       calc.Absyn.StmDecls _stmdecls = (calc.Absyn.StmDecls) foo;
-       render("(");
-       render("StmDecls");
-       sh(_stmdecls.type_);
-       sh(_stmdecls.id_);
-       render("[");
-       sh(_stmdecls.listid_);
-       render("]");
-       render(")");
-    }
-    if (foo instanceof calc.Absyn.StmInit)
-    {
-       calc.Absyn.StmInit _stminit = (calc.Absyn.StmInit) foo;
-       render("(");
-       render("StmInit");
-       sh(_stminit.type_);
-       sh(_stminit.id_);
-       sh(_stminit.exp_);
        render(")");
     }
     if (foo instanceof calc.Absyn.ReturnStm)
@@ -787,17 +1052,8 @@ public class PrettyPrinter
        calc.Absyn.TypeDefStm _typedefstm = (calc.Absyn.TypeDefStm) foo;
        render("(");
        render("TypeDefStm");
-       sh(_typedefstm.type_);
+       sh(_typedefstm.gentype_);
        sh(_typedefstm.id_);
-       render(")");
-    }
-    if (foo instanceof calc.Absyn.ConstTypeDefStm)
-    {
-       calc.Absyn.ConstTypeDefStm _consttypedefstm = (calc.Absyn.ConstTypeDefStm) foo;
-       render("(");
-       render("ConstTypeDefStm");
-       sh(_consttypedefstm.type_);
-       sh(_consttypedefstm.id_);
        render(")");
     }
   }
@@ -814,6 +1070,61 @@ public class PrettyPrinter
 
   private static void sh(calc.Absyn.Exp foo)
   {
+    if (foo instanceof calc.Absyn.AssignExp)
+    {
+       calc.Absyn.AssignExp _assignexp = (calc.Absyn.AssignExp) foo;
+       render("(");
+       render("AssignExp");
+       sh(_assignexp.exp_1);
+       sh(_assignexp.exp_2);
+       render(")");
+    }
+    if (foo instanceof calc.Absyn.IncrExp)
+    {
+       calc.Absyn.IncrExp _increxp = (calc.Absyn.IncrExp) foo;
+       render("(");
+       render("IncrExp");
+       sh(_increxp.exp_1);
+       sh(_increxp.exp_2);
+       render(")");
+    }
+    if (foo instanceof calc.Absyn.DecrExp)
+    {
+       calc.Absyn.DecrExp _decrexp = (calc.Absyn.DecrExp) foo;
+       render("(");
+       render("DecrExp");
+       sh(_decrexp.exp_1);
+       sh(_decrexp.exp_2);
+       render(")");
+    }
+    if (foo instanceof calc.Absyn.CondExp)
+    {
+       calc.Absyn.CondExp _condexp = (calc.Absyn.CondExp) foo;
+       render("(");
+       render("CondExp");
+       sh(_condexp.exp_1);
+       sh(_condexp.exp_2);
+       sh(_condexp.exp_3);
+       render(")");
+    }
+    if (foo instanceof calc.Absyn.EqExp)
+    {
+       calc.Absyn.EqExp _eqexp = (calc.Absyn.EqExp) foo;
+       render("(");
+       render("EqExp");
+       sh(_eqexp.exp_1);
+       sh(_eqexp.exp_2);
+       render(")");
+    }
+    if (foo instanceof calc.Absyn.InEqExp)
+    {
+       calc.Absyn.InEqExp _ineqexp = (calc.Absyn.InEqExp) foo;
+       render("(");
+       render("InEqExp");
+       sh(_ineqexp.exp_1);
+       sh(_ineqexp.exp_2);
+       render(")");
+    }
     if (foo instanceof calc.Absyn.LShift)
     {
        calc.Absyn.LShift _lshift = (calc.Absyn.LShift) foo;
@@ -830,6 +1141,51 @@ public class PrettyPrinter
        render("RShift");
        sh(_rshift.exp_1);
        sh(_rshift.exp_2);
+       render(")");
+    }
+    if (foo instanceof calc.Absyn.AddExp)
+    {
+       calc.Absyn.AddExp _addexp = (calc.Absyn.AddExp) foo;
+       render("(");
+       render("AddExp");
+       sh(_addexp.exp_1);
+       sh(_addexp.exp_2);
+       render(")");
+    }
+    if (foo instanceof calc.Absyn.MinExp)
+    {
+       calc.Absyn.MinExp _minexp = (calc.Absyn.MinExp) foo;
+       render("(");
+       render("MinExp");
+       sh(_minexp.exp_1);
+       sh(_minexp.exp_2);
+       render(")");
+    }
+    if (foo instanceof calc.Absyn.MulExp)
+    {
+       calc.Absyn.MulExp _mulexp = (calc.Absyn.MulExp) foo;
+       render("(");
+       render("MulExp");
+       sh(_mulexp.exp_1);
+       sh(_mulexp.exp_2);
+       render(")");
+    }
+    if (foo instanceof calc.Absyn.DivExp)
+    {
+       calc.Absyn.DivExp _divexp = (calc.Absyn.DivExp) foo;
+       render("(");
+       render("DivExp");
+       sh(_divexp.exp_1);
+       sh(_divexp.exp_2);
+       render(")");
+    }
+    if (foo instanceof calc.Absyn.ModExp)
+    {
+       calc.Absyn.ModExp _modexp = (calc.Absyn.ModExp) foo;
+       render("(");
+       render("ModExp");
+       sh(_modexp.exp_1);
+       sh(_modexp.exp_2);
        render(")");
     }
     if (foo instanceof calc.Absyn.IndexExp)
@@ -852,6 +1208,24 @@ public class PrettyPrinter
        render("]");
        render(")");
     }
+    if (foo instanceof calc.Absyn.DotStrucProjExp)
+    {
+       calc.Absyn.DotStrucProjExp _dotstrucprojexp = (calc.Absyn.DotStrucProjExp) foo;
+       render("(");
+       render("DotStrucProjExp");
+       sh(_dotstrucprojexp.exp_1);
+       sh(_dotstrucprojexp.exp_2);
+       render(")");
+    }
+    if (foo instanceof calc.Absyn.ArrStrucProjExp)
+    {
+       calc.Absyn.ArrStrucProjExp _arrstrucprojexp = (calc.Absyn.ArrStrucProjExp) foo;
+       render("(");
+       render("ArrStrucProjExp");
+       sh(_arrstrucprojexp.exp_1);
+       sh(_arrstrucprojexp.exp_2);
+       render(")");
+    }
     if (foo instanceof calc.Absyn.IntExp)
     {
        calc.Absyn.IntExp _intexp = (calc.Absyn.IntExp) foo;
@@ -868,12 +1242,22 @@ public class PrettyPrinter
        sh(_doubleexp.double_);
        render(")");
     }
-    if (foo instanceof calc.Absyn.StringExp)
+    if (foo instanceof calc.Absyn.StringArrExp)
     {
-       calc.Absyn.StringExp _stringexp = (calc.Absyn.StringExp) foo;
+       calc.Absyn.StringArrExp _stringarrexp = (calc.Absyn.StringArrExp) foo;
        render("(");
-       render("StringExp");
-       sh(_stringexp.string_);
+       render("StringArrExp");
+       render("[");
+       sh(_stringarrexp.liststring_);
+       render("]");
+       render(")");
+    }
+    if (foo instanceof calc.Absyn.CharExp)
+    {
+       calc.Absyn.CharExp _charexp = (calc.Absyn.CharExp) foo;
+       render("(");
+       render("CharExp");
+       sh(_charexp.char_);
        render(")");
     }
     if (foo instanceof calc.Absyn.QualConstExp)
@@ -881,9 +1265,7 @@ public class PrettyPrinter
        calc.Absyn.QualConstExp _qualconstexp = (calc.Absyn.QualConstExp) foo;
        render("(");
        render("QualConstExp");
-       render("[");
-       sh(_qualconstexp.listid_);
-       render("]");
+       sh(_qualconstexp.qualconst_);
        render(")");
     }
   }
@@ -898,6 +1280,38 @@ public class PrettyPrinter
      }
   }
 
+  private static void sh(calc.Absyn.ListString foo)
+  {
+     for (java.util.Iterator<String> it = foo.iterator(); it.hasNext();)
+     {
+       sh(it.next());
+       if (it.hasNext())
+         render(",");
+     }
+  }
+
+  private static void sh(calc.Absyn.QualConst foo)
+  {
+    if (foo instanceof calc.Absyn.QualConstDecl)
+    {
+       calc.Absyn.QualConstDecl _qualconstdecl = (calc.Absyn.QualConstDecl) foo;
+       render("(");
+       render("QualConstDecl");
+       sh(_qualconstdecl.id_);
+       render(")");
+    }
+    if (foo instanceof calc.Absyn.QualConstDecls)
+    {
+       calc.Absyn.QualConstDecls _qualconstdecls = (calc.Absyn.QualConstDecls) foo;
+       render("(");
+       render("QualConstDecls");
+       render("[");
+       sh(_qualconstdecls.listid_);
+       render("]");
+       render(")");
+    }
+  }
+
   private static void sh(calc.Absyn.ListId foo)
   {
      for (java.util.Iterator<String> it = foo.iterator(); it.hasNext();)
@@ -910,6 +1324,11 @@ public class PrettyPrinter
 
   private static void sh(calc.Absyn.Type foo)
   {
+    if (foo instanceof calc.Absyn.CharType)
+    {
+       calc.Absyn.CharType _chartype = (calc.Absyn.CharType) foo;
+       render("CharType");
+    }
     if (foo instanceof calc.Absyn.BoolType)
     {
        calc.Absyn.BoolType _booltype = (calc.Absyn.BoolType) foo;
@@ -930,6 +1349,81 @@ public class PrettyPrinter
        calc.Absyn.VoidType _voidtype = (calc.Absyn.VoidType) foo;
        render("VoidType");
     }
+    if (foo instanceof calc.Absyn.QualConstType)
+    {
+       calc.Absyn.QualConstType _qualconsttype = (calc.Absyn.QualConstType) foo;
+       render("(");
+       render("QualConstType");
+       sh(_qualconsttype.qualconst_);
+       render(")");
+    }
+  }
+
+  private static void sh(calc.Absyn.GenType foo)
+  {
+    if (foo instanceof calc.Absyn.GenTypeDecl)
+    {
+       calc.Absyn.GenTypeDecl _gentypedecl = (calc.Absyn.GenTypeDecl) foo;
+       render("(");
+       render("GenTypeDecl");
+       sh(_gentypedecl.type_);
+       render(")");
+    }
+    if (foo instanceof calc.Absyn.ConstGenType)
+    {
+       calc.Absyn.ConstGenType _constgentype = (calc.Absyn.ConstGenType) foo;
+       render("(");
+       render("ConstGenType");
+       sh(_constgentype.type_);
+       render(")");
+    }
+    if (foo instanceof calc.Absyn.AndGenType)
+    {
+       calc.Absyn.AndGenType _andgentype = (calc.Absyn.AndGenType) foo;
+       render("(");
+       render("AndGenType");
+       sh(_andgentype.type_);
+       render(")");
+    }
+    if (foo instanceof calc.Absyn.CAndGenType)
+    {
+       calc.Absyn.CAndGenType _candgentype = (calc.Absyn.CAndGenType) foo;
+       render("(");
+       render("CAndGenType");
+       sh(_candgentype.type_);
+       render(")");
+    }
+  }
+
+  private static void sh(calc.Absyn.Init foo)
+  {
+    if (foo instanceof calc.Absyn.InitDecl)
+    {
+       calc.Absyn.InitDecl _initdecl = (calc.Absyn.InitDecl) foo;
+       render("(");
+       render("InitDecl");
+       sh(_initdecl.id_);
+       render(")");
+    }
+    if (foo instanceof calc.Absyn.InitAssign)
+    {
+       calc.Absyn.InitAssign _initassign = (calc.Absyn.InitAssign) foo;
+       render("(");
+       render("InitAssign");
+       sh(_initassign.id_);
+       sh(_initassign.exp_);
+       render(")");
+    }
+  }
+
+  private static void sh(calc.Absyn.ListInit foo)
+  {
+     for (java.util.Iterator<calc.Absyn.Init> it = foo.iterator(); it.hasNext();)
+     {
+       sh(it.next());
+       if (it.hasNext())
+         render(",");
+     }
   }
 
 

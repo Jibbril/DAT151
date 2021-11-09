@@ -5,13 +5,27 @@ package calc.Absyn;
 public abstract class Exp implements java.io.Serializable {
   public abstract <R,A> R accept(Exp.Visitor<R,A> v, A arg);
   public interface Visitor <R,A> {
+    public R visit(calc.Absyn.AssignExp p, A arg);
+    public R visit(calc.Absyn.IncrExp p, A arg);
+    public R visit(calc.Absyn.DecrExp p, A arg);
+    public R visit(calc.Absyn.CondExp p, A arg);
+    public R visit(calc.Absyn.EqExp p, A arg);
+    public R visit(calc.Absyn.InEqExp p, A arg);
     public R visit(calc.Absyn.LShift p, A arg);
     public R visit(calc.Absyn.RShift p, A arg);
+    public R visit(calc.Absyn.AddExp p, A arg);
+    public R visit(calc.Absyn.MinExp p, A arg);
+    public R visit(calc.Absyn.MulExp p, A arg);
+    public R visit(calc.Absyn.DivExp p, A arg);
+    public R visit(calc.Absyn.ModExp p, A arg);
     public R visit(calc.Absyn.IndexExp p, A arg);
     public R visit(calc.Absyn.FunCallExp p, A arg);
+    public R visit(calc.Absyn.DotStrucProjExp p, A arg);
+    public R visit(calc.Absyn.ArrStrucProjExp p, A arg);
     public R visit(calc.Absyn.IntExp p, A arg);
     public R visit(calc.Absyn.DoubleExp p, A arg);
-    public R visit(calc.Absyn.StringExp p, A arg);
+    public R visit(calc.Absyn.StringArrExp p, A arg);
+    public R visit(calc.Absyn.CharExp p, A arg);
     public R visit(calc.Absyn.QualConstExp p, A arg);
 
   }

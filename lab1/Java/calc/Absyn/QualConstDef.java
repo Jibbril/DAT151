@@ -3,8 +3,8 @@
 package calc.Absyn;
 
 public class QualConstDef  extends Def {
-  public final Exp exp_;
-  public QualConstDef(Exp p1) { exp_ = p1; }
+  public final QualConst qualconst_;
+  public QualConstDef(QualConst p1) { qualconst_ = p1; }
 
   public <R,A> R accept(calc.Absyn.Def.Visitor<R,A> v, A arg) { return v.visit(this, arg); }
 
@@ -12,13 +12,13 @@ public class QualConstDef  extends Def {
     if (this == o) return true;
     if (o instanceof calc.Absyn.QualConstDef) {
       calc.Absyn.QualConstDef x = (calc.Absyn.QualConstDef)o;
-      return this.exp_.equals(x.exp_);
+      return this.qualconst_.equals(x.qualconst_);
     }
     return false;
   }
 
   public int hashCode() {
-    return this.exp_.hashCode();
+    return this.qualconst_.hashCode();
   }
 
 

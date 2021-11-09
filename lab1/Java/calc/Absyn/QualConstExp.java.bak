@@ -2,11 +2,11 @@
 
 package calc.Absyn;
 
-public class QualConstExp  extends QualConst {
+public class QualConstExp  extends Exp {
   public final ListId listid_;
   public QualConstExp(ListId p1) { listid_ = p1; }
 
-  public <R,A> R accept(calc.Absyn.QualConst.Visitor<R,A> v, A arg) { return v.visit(this, arg); }
+  public <R,A> R accept(calc.Absyn.Exp.Visitor<R,A> v, A arg) { return v.visit(this, arg); }
 
   public boolean equals(java.lang.Object o) {
     if (this == o) return true;

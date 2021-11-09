@@ -40,24 +40,29 @@ nonterminal calc.Absyn.ListArg ListArg;
 nonterminal calc.Absyn.Arg Arg;
 nonterminal calc.Absyn.Stm Stm;
 nonterminal calc.Absyn.ListStm ListStm;
+nonterminal calc.Absyn.Exp Exp2;
+nonterminal calc.Absyn.Exp Exp8;
 nonterminal calc.Absyn.Exp Exp10;
+nonterminal calc.Absyn.Exp Exp11;
+nonterminal calc.Absyn.Exp Exp12;
 nonterminal calc.Absyn.Exp Exp14;
 nonterminal calc.Absyn.Exp Exp15;
 nonterminal calc.Absyn.ListExp ListExp;
+nonterminal calc.Absyn.ListString ListString;
+nonterminal calc.Absyn.QualConst QualConst;
 nonterminal calc.Absyn.ListId ListId;
 nonterminal calc.Absyn.Type Type;
+nonterminal calc.Absyn.GenType GenType;
+nonterminal calc.Absyn.Init Init;
+nonterminal calc.Absyn.ListInit ListInit;
 nonterminal calc.Absyn.Exp Exp;
 nonterminal calc.Absyn.Exp Exp1;
-nonterminal calc.Absyn.Exp Exp2;
 nonterminal calc.Absyn.Exp Exp3;
 nonterminal calc.Absyn.Exp Exp4;
 nonterminal calc.Absyn.Exp Exp5;
 nonterminal calc.Absyn.Exp Exp6;
 nonterminal calc.Absyn.Exp Exp7;
-nonterminal calc.Absyn.Exp Exp8;
 nonterminal calc.Absyn.Exp Exp9;
-nonterminal calc.Absyn.Exp Exp11;
-nonterminal calc.Absyn.Exp Exp12;
 nonterminal calc.Absyn.Exp Exp13;
 
 terminal _SYMB_0;    //   ;
@@ -67,24 +72,40 @@ terminal _SYMB_3;    //   {
 terminal _SYMB_4;    //   }
 terminal _SYMB_5;    //   ,
 terminal _SYMB_6;    //   =
-terminal _SYMB_7;    //   <<
-terminal _SYMB_8;    //   >>
-terminal _SYMB_9;    //   [
-terminal _SYMB_10;    //   ]
-terminal _SYMB_11;    //   ::
-terminal _SYMB_12;    //   bool
-terminal _SYMB_13;    //   const
-terminal _SYMB_14;    //   double
-terminal _SYMB_15;    //   if
-terminal _SYMB_16;    //   int
-terminal _SYMB_17;    //   return
-terminal _SYMB_18;    //   typedef
-terminal _SYMB_19;    //   using
-terminal _SYMB_20;    //   void
-terminal _SYMB_21;    //   while
+terminal _SYMB_7;    //   +=
+terminal _SYMB_8;    //   -=
+terminal _SYMB_9;    //   ?
+terminal _SYMB_10;    //   :
+terminal _SYMB_11;    //   ==
+terminal _SYMB_12;    //   !=
+terminal _SYMB_13;    //   <<
+terminal _SYMB_14;    //   >>
+terminal _SYMB_15;    //   +
+terminal _SYMB_16;    //   -
+terminal _SYMB_17;    //   *
+terminal _SYMB_18;    //   /
+terminal _SYMB_19;    //   %
+terminal _SYMB_20;    //   [
+terminal _SYMB_21;    //   ]
+terminal _SYMB_22;    //   .
+terminal _SYMB_23;    //   ->
+terminal _SYMB_24;    //   ::
+terminal _SYMB_25;    //   &
+terminal _SYMB_26;    //   bool
+terminal _SYMB_27;    //   char
+terminal _SYMB_28;    //   const
+terminal _SYMB_29;    //   double
+terminal _SYMB_30;    //   else
+terminal _SYMB_31;    //   if
+terminal _SYMB_32;    //   int
+terminal _SYMB_33;    //   return
+terminal _SYMB_34;    //   typedef
+terminal _SYMB_35;    //   using
+terminal _SYMB_36;    //   void
+terminal _SYMB_37;    //   while
 
 terminal String _STRING_;
-
+terminal Character _CHAR_;
 terminal Integer _INTEGER_;
 terminal Double _DOUBLE_;
 
@@ -97,7 +118,7 @@ start with Program;
 
 Program ::= ListDef:p_1  {: RESULT = new calc.Absyn.ProgDef(p_1); :}
 ;
-Def ::= _SYMB_19:p_1 Exp:p_2 _SYMB_0:p_3  {: RESULT = new calc.Absyn.QualConstDef(p_2); :}
+Def ::= _SYMB_35:p_1 QualConst:p_2 _SYMB_0:p_3  {: RESULT = new calc.Absyn.QualConstDef(p_2); :}
   | Type:p_1 Id:p_2 _SYMB_1:p_3 ListArg:p_4 _SYMB_2:p_5 _SYMB_3:p_6 ListStm:p_7 _SYMB_4:p_8  {: RESULT = new calc.Absyn.FuncDef(p_1,p_2,p_4,p_7); :}
 ;
 ListDef ::=  /* empty */  {: RESULT = new calc.Absyn.ListDef(); :}
@@ -109,52 +130,88 @@ ListArg ::=  /* empty */  {: RESULT = new calc.Absyn.ListArg(); :}
 ;
 Arg ::= Type:p_1 Id:p_2  {: RESULT = new calc.Absyn.ArgDecl(p_1,p_2); :}
 ;
-Stm ::= Exp:p_1 _SYMB_0:p_2  {: RESULT = new calc.Absyn.StmDef(p_1); :}
-  | Type:p_1 Id:p_2 _SYMB_0:p_3  {: RESULT = new calc.Absyn.StmDecl(p_1,p_2); :}
-  | Exp:p_1 Id:p_2 _SYMB_0:p_3  {: RESULT = new calc.Absyn.StmDecl2(p_1,p_2); :}
-  | Type:p_1 Id:p_2 _SYMB_5:p_3 ListId:p_4 _SYMB_0:p_5  {: RESULT = new calc.Absyn.StmDecls(p_1,p_2,p_4); :}
-  | Type:p_1 Id:p_2 _SYMB_6:p_3 Exp:p_4 _SYMB_0:p_5  {: RESULT = new calc.Absyn.StmInit(p_1,p_2,p_4); :}
-  | _SYMB_17:p_1 Stm:p_2  {: RESULT = new calc.Absyn.ReturnStm(p_2); :}
-  | _SYMB_21:p_1 _SYMB_1:p_2 Exp:p_3 _SYMB_2:p_4 Stm:p_5  {: RESULT = new calc.Absyn.WhileStm(p_3,p_5); :}
-  | _SYMB_15:p_1 _SYMB_1:p_2 Exp:p_3 _SYMB_2:p_4 Stm:p_5  {: RESULT = new calc.Absyn.IfStm(p_3,p_5); :}
+Stm ::= GenType:p_1 ListInit:p_2 _SYMB_0:p_3  {: RESULT = new calc.Absyn.InitStm(p_1,p_2); :}
+  | Exp:p_1 _SYMB_0:p_2  {: RESULT = new calc.Absyn.StmDef(p_1); :}
+  | _SYMB_33:p_1 Stm:p_2  {: RESULT = new calc.Absyn.ReturnStm(p_2); :}
+  | _SYMB_37:p_1 _SYMB_1:p_2 Exp:p_3 _SYMB_2:p_4 Stm:p_5  {: RESULT = new calc.Absyn.WhileStm(p_3,p_5); :}
+  | _SYMB_31:p_1 _SYMB_1:p_2 Exp:p_3 _SYMB_2:p_4 Stm:p_5  {: RESULT = new calc.Absyn.IfStm(p_3,p_5); :}
+  | _SYMB_31:p_1 _SYMB_1:p_2 Exp:p_3 _SYMB_2:p_4 Stm:p_5 _SYMB_30:p_6 Stm:p_7  {: RESULT = new calc.Absyn.IfElseStm(p_3,p_5,p_7); :}
   | _SYMB_3:p_1 ListStm:p_2 _SYMB_4:p_3  {: RESULT = new calc.Absyn.BlockStm(p_2); :}
-  | _SYMB_18:p_1 Type:p_2 Id:p_3 _SYMB_0:p_4  {: RESULT = new calc.Absyn.TypeDefStm(p_2,p_3); :}
-  | _SYMB_18:p_1 _SYMB_13:p_2 Type:p_3 Id:p_4 _SYMB_0:p_5  {: RESULT = new calc.Absyn.ConstTypeDefStm(p_3,p_4); :}
+  | _SYMB_34:p_1 GenType:p_2 Id:p_3 _SYMB_0:p_4  {: RESULT = new calc.Absyn.TypeDefStm(p_2,p_3); :}
 ;
 ListStm ::=  /* empty */  {: RESULT = new calc.Absyn.ListStm(); :}
   | ListStm:p_1 Stm:p_2  {: RESULT = p_1; p_1.addLast(p_2); :}
 ;
-Exp10 ::= Exp10:p_1 _SYMB_7:p_2 Exp11:p_3  {: RESULT = new calc.Absyn.LShift(p_1,p_3); :}
-  | Exp10:p_1 _SYMB_8:p_2 Exp11:p_3  {: RESULT = new calc.Absyn.RShift(p_1,p_3); :}
+Exp2 ::= Exp2:p_1 _SYMB_6:p_2 Exp3:p_3  {: RESULT = new calc.Absyn.AssignExp(p_1,p_3); :}
+  | Exp2:p_1 _SYMB_7:p_2 Exp3:p_3  {: RESULT = new calc.Absyn.IncrExp(p_1,p_3); :}
+  | Exp2:p_1 _SYMB_8:p_2 Exp3:p_3  {: RESULT = new calc.Absyn.DecrExp(p_1,p_3); :}
+  | Exp2:p_1 _SYMB_9:p_2 Exp3:p_3 _SYMB_10:p_4 Exp3:p_5  {: RESULT = new calc.Absyn.CondExp(p_1,p_3,p_5); :}
+  | Exp3:p_1  {: RESULT = p_1; :}
+;
+Exp8 ::= Exp8:p_1 _SYMB_11:p_2 Exp9:p_3  {: RESULT = new calc.Absyn.EqExp(p_1,p_3); :}
+  | Exp8:p_1 _SYMB_12:p_2 Exp9:p_3  {: RESULT = new calc.Absyn.InEqExp(p_1,p_3); :}
+  | Exp9:p_1  {: RESULT = p_1; :}
+;
+Exp10 ::= Exp10:p_1 _SYMB_13:p_2 Exp11:p_3  {: RESULT = new calc.Absyn.LShift(p_1,p_3); :}
+  | Exp10:p_1 _SYMB_14:p_2 Exp11:p_3  {: RESULT = new calc.Absyn.RShift(p_1,p_3); :}
   | Exp11:p_1  {: RESULT = p_1; :}
 ;
-Exp14 ::= Exp14:p_1 _SYMB_9:p_2 Exp:p_3 _SYMB_10:p_4  {: RESULT = new calc.Absyn.IndexExp(p_1,p_3); :}
+Exp11 ::= Exp11:p_1 _SYMB_15:p_2 Exp12:p_3  {: RESULT = new calc.Absyn.AddExp(p_1,p_3); :}
+  | Exp11:p_1 _SYMB_16:p_2 Exp12:p_3  {: RESULT = new calc.Absyn.MinExp(p_1,p_3); :}
+  | Exp12:p_1  {: RESULT = p_1; :}
+;
+Exp12 ::= Exp12:p_1 _SYMB_17:p_2 Exp13:p_3  {: RESULT = new calc.Absyn.MulExp(p_1,p_3); :}
+  | Exp12:p_1 _SYMB_18:p_2 Exp13:p_3  {: RESULT = new calc.Absyn.DivExp(p_1,p_3); :}
+  | Exp12:p_1 _SYMB_19:p_2 Exp13:p_3  {: RESULT = new calc.Absyn.ModExp(p_1,p_3); :}
+  | Exp13:p_1  {: RESULT = p_1; :}
+;
+Exp14 ::= Exp14:p_1 _SYMB_20:p_2 Exp:p_3 _SYMB_21:p_4  {: RESULT = new calc.Absyn.IndexExp(p_1,p_3); :}
   | Exp14:p_1 _SYMB_1:p_2 ListExp:p_3 _SYMB_2:p_4  {: RESULT = new calc.Absyn.FunCallExp(p_1,p_3); :}
+  | Exp14:p_1 _SYMB_22:p_2 Exp15:p_3  {: RESULT = new calc.Absyn.DotStrucProjExp(p_1,p_3); :}
+  | Exp14:p_1 _SYMB_23:p_2 Exp15:p_3  {: RESULT = new calc.Absyn.ArrStrucProjExp(p_1,p_3); :}
   | Exp15:p_1  {: RESULT = p_1; :}
 ;
 Exp15 ::= _INTEGER_:p_1  {: RESULT = new calc.Absyn.IntExp(p_1); :}
   | _DOUBLE_:p_1  {: RESULT = new calc.Absyn.DoubleExp(p_1); :}
-  | _STRING_:p_1  {: RESULT = new calc.Absyn.StringExp(p_1); :}
-  | ListId:p_1  {: RESULT = new calc.Absyn.QualConstExp(p_1); :}
+  | ListString:p_1  {: RESULT = new calc.Absyn.StringArrExp(p_1); :}
+  | _CHAR_:p_1  {: RESULT = new calc.Absyn.CharExp(p_1); :}
+  | QualConst:p_1  {: RESULT = new calc.Absyn.QualConstExp(p_1); :}
   | _SYMB_1:p_1 Exp:p_2 _SYMB_2:p_3  {: RESULT = p_2; :}
 ;
 ListExp ::=  /* empty */  {: RESULT = new calc.Absyn.ListExp(); :}
   | Exp:p_1  {: RESULT = new calc.Absyn.ListExp(); RESULT.addLast(p_1); :}
   | Exp:p_1 _SYMB_5:p_2 ListExp:p_3  {: RESULT = p_3; p_3.addFirst(p_1); :}
 ;
-ListId ::= Id:p_1  {: RESULT = new calc.Absyn.ListId(); RESULT.addLast(p_1); :}
-  | Id:p_1 _SYMB_11:p_2 ListId:p_3  {: RESULT = p_3; p_3.addFirst(p_1); :}
+ListString ::= _STRING_:p_1  {: RESULT = new calc.Absyn.ListString(); RESULT.addLast(p_1); :}
+  | _STRING_:p_1 ListString:p_2  {: RESULT = p_2; p_2.addFirst(p_1); :}
 ;
-Type ::= _SYMB_12:p_1  {: RESULT = new calc.Absyn.BoolType(); :}
-  | _SYMB_14:p_1  {: RESULT = new calc.Absyn.DoubleType(); :}
-  | _SYMB_16:p_1  {: RESULT = new calc.Absyn.IntType(); :}
-  | _SYMB_20:p_1  {: RESULT = new calc.Absyn.VoidType(); :}
+QualConst ::= Id:p_1  {: RESULT = new calc.Absyn.QualConstDecl(p_1); :}
+  | ListId:p_1  {: RESULT = new calc.Absyn.QualConstDecls(p_1); :}
+;
+ListId ::= Id:p_1  {: RESULT = new calc.Absyn.ListId(); RESULT.addLast(p_1); :}
+  | Id:p_1 _SYMB_24:p_2 ListId:p_3  {: RESULT = p_3; p_3.addFirst(p_1); :}
+;
+Type ::= _SYMB_27:p_1  {: RESULT = new calc.Absyn.CharType(); :}
+  | _SYMB_26:p_1  {: RESULT = new calc.Absyn.BoolType(); :}
+  | _SYMB_29:p_1  {: RESULT = new calc.Absyn.DoubleType(); :}
+  | _SYMB_32:p_1  {: RESULT = new calc.Absyn.IntType(); :}
+  | _SYMB_36:p_1  {: RESULT = new calc.Absyn.VoidType(); :}
+  | QualConst:p_1  {: RESULT = new calc.Absyn.QualConstType(p_1); :}
+;
+GenType ::= Type:p_1  {: RESULT = new calc.Absyn.GenTypeDecl(p_1); :}
+  | _SYMB_28:p_1 Type:p_2  {: RESULT = new calc.Absyn.ConstGenType(p_2); :}
+  | Type:p_1 _SYMB_25:p_2  {: RESULT = new calc.Absyn.AndGenType(p_1); :}
+  | _SYMB_28:p_1 Type:p_2 _SYMB_25:p_3  {: RESULT = new calc.Absyn.CAndGenType(p_2); :}
+;
+Init ::= Id:p_1  {: RESULT = new calc.Absyn.InitDecl(p_1); :}
+  | Id:p_1 _SYMB_6:p_2 Exp:p_3  {: RESULT = new calc.Absyn.InitAssign(p_1,p_3); :}
+;
+ListInit ::= Init:p_1  {: RESULT = new calc.Absyn.ListInit(); RESULT.addLast(p_1); :}
+  | Init:p_1 _SYMB_5:p_2 ListInit:p_3  {: RESULT = p_3; p_3.addFirst(p_1); :}
 ;
 Exp ::= Exp1:p_1  {: RESULT = p_1; :}
 ;
 Exp1 ::= Exp2:p_1  {: RESULT = p_1; :}
-;
-Exp2 ::= Exp3:p_1  {: RESULT = p_1; :}
 ;
 Exp3 ::= Exp4:p_1  {: RESULT = p_1; :}
 ;
@@ -166,13 +223,7 @@ Exp6 ::= Exp7:p_1  {: RESULT = p_1; :}
 ;
 Exp7 ::= Exp8:p_1  {: RESULT = p_1; :}
 ;
-Exp8 ::= Exp9:p_1  {: RESULT = p_1; :}
-;
 Exp9 ::= Exp10:p_1  {: RESULT = p_1; :}
-;
-Exp11 ::= Exp12:p_1  {: RESULT = p_1; :}
-;
-Exp12 ::= Exp13:p_1  {: RESULT = p_1; :}
 ;
 Exp13 ::= Exp14:p_1  {: RESULT = p_1; :}
 ;

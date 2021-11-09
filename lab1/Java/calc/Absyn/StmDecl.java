@@ -3,9 +3,9 @@
 package calc.Absyn;
 
 public class StmDecl  extends Stm {
-  public final Type type_;
+  public final GenType gentype_;
   public final String id_;
-  public StmDecl(Type p1, String p2) { type_ = p1; id_ = p2; }
+  public StmDecl(GenType p1, String p2) { gentype_ = p1; id_ = p2; }
 
   public <R,A> R accept(calc.Absyn.Stm.Visitor<R,A> v, A arg) { return v.visit(this, arg); }
 
@@ -13,13 +13,13 @@ public class StmDecl  extends Stm {
     if (this == o) return true;
     if (o instanceof calc.Absyn.StmDecl) {
       calc.Absyn.StmDecl x = (calc.Absyn.StmDecl)o;
-      return this.type_.equals(x.type_) && this.id_.equals(x.id_);
+      return this.gentype_.equals(x.gentype_) && this.id_.equals(x.id_);
     }
     return false;
   }
 
   public int hashCode() {
-    return 37*(this.type_.hashCode())+this.id_.hashCode();
+    return 37*(this.gentype_.hashCode())+this.id_.hashCode();
   }
 
 

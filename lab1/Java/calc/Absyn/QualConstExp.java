@@ -3,8 +3,8 @@
 package calc.Absyn;
 
 public class QualConstExp  extends Exp {
-  public final ListId listid_;
-  public QualConstExp(ListId p1) { listid_ = p1; }
+  public final QualConst qualconst_;
+  public QualConstExp(QualConst p1) { qualconst_ = p1; }
 
   public <R,A> R accept(calc.Absyn.Exp.Visitor<R,A> v, A arg) { return v.visit(this, arg); }
 
@@ -12,13 +12,13 @@ public class QualConstExp  extends Exp {
     if (this == o) return true;
     if (o instanceof calc.Absyn.QualConstExp) {
       calc.Absyn.QualConstExp x = (calc.Absyn.QualConstExp)o;
-      return this.listid_.equals(x.listid_);
+      return this.qualconst_.equals(x.qualconst_);
     }
     return false;
   }
 
   public int hashCode() {
-    return this.listid_.hashCode();
+    return this.qualconst_.hashCode();
   }
 
 

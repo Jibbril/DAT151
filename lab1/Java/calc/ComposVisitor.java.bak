@@ -10,7 +10,10 @@ public class ComposVisitor<A> implements
   calc.Absyn.Arg.Visitor<calc.Absyn.Arg,A>,
   calc.Absyn.Stm.Visitor<calc.Absyn.Stm,A>,
   calc.Absyn.Exp.Visitor<calc.Absyn.Exp,A>,
-  calc.Absyn.Type.Visitor<calc.Absyn.Type,A>
+  calc.Absyn.QualConst.Visitor<calc.Absyn.QualConst,A>,
+  calc.Absyn.Type.Visitor<calc.Absyn.Type,A>,
+  calc.Absyn.GenType.Visitor<calc.Absyn.GenType,A>,
+  calc.Absyn.Init.Visitor<calc.Absyn.Init,A>
 {
     /* Program */
     public calc.Absyn.Program visit(calc.Absyn.ProgDef p, A arg)
@@ -26,8 +29,8 @@ public class ComposVisitor<A> implements
     /* Def */
     public calc.Absyn.Def visit(calc.Absyn.QualConstDef p, A arg)
     {
-      calc.Absyn.Exp exp_ = p.exp_.accept(this, arg);
-      return new calc.Absyn.QualConstDef(exp_);
+      calc.Absyn.QualConst qualconst_ = p.qualconst_.accept(this, arg);
+      return new calc.Absyn.QualConstDef(qualconst_);
     }
     public calc.Absyn.Def visit(calc.Absyn.FuncDef p, A arg)
     {
@@ -55,6 +58,16 @@ public class ComposVisitor<A> implements
     }
 
     /* Stm */
+    public calc.Absyn.Stm visit(calc.Absyn.InitStm p, A arg)
+    {
+      calc.Absyn.GenType gentype_ = p.gentype_.accept(this, arg);
+      calc.Absyn.ListInit listinit_ = new calc.Absyn.ListInit();
+      for (calc.Absyn.Init x : p.listinit_)
+      {
+        listinit_.add(x.accept(this,arg));
+      }
+      return new calc.Absyn.InitStm(gentype_, listinit_);
+    }
     public calc.Absyn.Stm visit(calc.Absyn.StmDef p, A arg)
     {
       calc.Absyn.Exp exp_ = p.exp_.accept(this, arg);
@@ -62,29 +75,15 @@ public class ComposVisitor<A> implements
     }
     public calc.Absyn.Stm visit(calc.Absyn.StmDecl p, A arg)
     {
-      calc.Absyn.Type type_ = p.type_.accept(this, arg);
+      calc.Absyn.GenType gentype_ = p.gentype_.accept(this, arg);
       String id_ = p.id_;
-      return new calc.Absyn.StmDecl(type_, id_);
+      return new calc.Absyn.StmDecl(gentype_, id_);
     }
     public calc.Absyn.Stm visit(calc.Absyn.StmDecl2 p, A arg)
     {
       calc.Absyn.Exp exp_ = p.exp_.accept(this, arg);
       String id_ = p.id_;
       return new calc.Absyn.StmDecl2(exp_, id_);
-    }
-    public calc.Absyn.Stm visit(calc.Absyn.StmDecls p, A arg)
-    {
-      calc.Absyn.Type type_ = p.type_.accept(this, arg);
-      String id_ = p.id_;
-      calc.Absyn.ListId listid_ = p.listid_;
-      return new calc.Absyn.StmDecls(type_, id_, listid_);
-    }
-    public calc.Absyn.Stm visit(calc.Absyn.StmInit p, A arg)
-    {
-      calc.Absyn.Type type_ = p.type_.accept(this, arg);
-      String id_ = p.id_;
-      calc.Absyn.Exp exp_ = p.exp_.accept(this, arg);
-      return new calc.Absyn.StmInit(type_, id_, exp_);
     }
     public calc.Absyn.Stm visit(calc.Absyn.ReturnStm p, A arg)
     {
@@ -121,18 +120,49 @@ public class ComposVisitor<A> implements
     }
     public calc.Absyn.Stm visit(calc.Absyn.TypeDefStm p, A arg)
     {
-      calc.Absyn.Type type_ = p.type_.accept(this, arg);
+      calc.Absyn.GenType gentype_ = p.gentype_.accept(this, arg);
       String id_ = p.id_;
-      return new calc.Absyn.TypeDefStm(type_, id_);
-    }
-    public calc.Absyn.Stm visit(calc.Absyn.ConstTypeDefStm p, A arg)
-    {
-      calc.Absyn.Type type_ = p.type_.accept(this, arg);
-      String id_ = p.id_;
-      return new calc.Absyn.ConstTypeDefStm(type_, id_);
+      return new calc.Absyn.TypeDefStm(gentype_, id_);
     }
 
     /* Exp */
+    public calc.Absyn.Exp visit(calc.Absyn.AssignExp p, A arg)
+    {
+      calc.Absyn.Exp exp_1 = p.exp_1.accept(this, arg);
+      calc.Absyn.Exp exp_2 = p.exp_2.accept(this, arg);
+      return new calc.Absyn.AssignExp(exp_1, exp_2);
+    }
+    public calc.Absyn.Exp visit(calc.Absyn.IncrExp p, A arg)
+    {
+      calc.Absyn.Exp exp_1 = p.exp_1.accept(this, arg);
+      calc.Absyn.Exp exp_2 = p.exp_2.accept(this, arg);
+      return new calc.Absyn.IncrExp(exp_1, exp_2);
+    }
+    public calc.Absyn.Exp visit(calc.Absyn.DecrExp p, A arg)
+    {
+      calc.Absyn.Exp exp_1 = p.exp_1.accept(this, arg);
+      calc.Absyn.Exp exp_2 = p.exp_2.accept(this, arg);
+      return new calc.Absyn.DecrExp(exp_1, exp_2);
+    }
+    public calc.Absyn.Exp visit(calc.Absyn.CondExp p, A arg)
+    {
+      calc.Absyn.Exp exp_1 = p.exp_1.accept(this, arg);
+      calc.Absyn.Exp exp_2 = p.exp_2.accept(this, arg);
+      calc.Absyn.Exp exp_3 = p.exp_3.accept(this, arg);
+      return new calc.Absyn.CondExp(exp_1, exp_2, exp_3);
+    }
+    public calc.Absyn.Exp visit(calc.Absyn.EqExp p, A arg)
+    {
+      calc.Absyn.Exp exp_1 = p.exp_1.accept(this, arg);
+      calc.Absyn.Exp exp_2 = p.exp_2.accept(this, arg);
+      return new calc.Absyn.EqExp(exp_1, exp_2);
+    }
+    public calc.Absyn.Exp visit(calc.Absyn.InEqExp p, A arg)
+    {
+      calc.Absyn.Exp exp_1 = p.exp_1.accept(this, arg);
+      calc.Absyn.Exp exp_2 = p.exp_2.accept(this, arg);
+      return new calc.Absyn.InEqExp(exp_1, exp_2);
+    }
     public calc.Absyn.Exp visit(calc.Absyn.LShift p, A arg)
     {
       calc.Absyn.Exp exp_1 = p.exp_1.accept(this, arg);
@@ -144,6 +174,36 @@ public class ComposVisitor<A> implements
       calc.Absyn.Exp exp_1 = p.exp_1.accept(this, arg);
       calc.Absyn.Exp exp_2 = p.exp_2.accept(this, arg);
       return new calc.Absyn.RShift(exp_1, exp_2);
+    }
+    public calc.Absyn.Exp visit(calc.Absyn.AddExp p, A arg)
+    {
+      calc.Absyn.Exp exp_1 = p.exp_1.accept(this, arg);
+      calc.Absyn.Exp exp_2 = p.exp_2.accept(this, arg);
+      return new calc.Absyn.AddExp(exp_1, exp_2);
+    }
+    public calc.Absyn.Exp visit(calc.Absyn.MinExp p, A arg)
+    {
+      calc.Absyn.Exp exp_1 = p.exp_1.accept(this, arg);
+      calc.Absyn.Exp exp_2 = p.exp_2.accept(this, arg);
+      return new calc.Absyn.MinExp(exp_1, exp_2);
+    }
+    public calc.Absyn.Exp visit(calc.Absyn.MulExp p, A arg)
+    {
+      calc.Absyn.Exp exp_1 = p.exp_1.accept(this, arg);
+      calc.Absyn.Exp exp_2 = p.exp_2.accept(this, arg);
+      return new calc.Absyn.MulExp(exp_1, exp_2);
+    }
+    public calc.Absyn.Exp visit(calc.Absyn.DivExp p, A arg)
+    {
+      calc.Absyn.Exp exp_1 = p.exp_1.accept(this, arg);
+      calc.Absyn.Exp exp_2 = p.exp_2.accept(this, arg);
+      return new calc.Absyn.DivExp(exp_1, exp_2);
+    }
+    public calc.Absyn.Exp visit(calc.Absyn.ModExp p, A arg)
+    {
+      calc.Absyn.Exp exp_1 = p.exp_1.accept(this, arg);
+      calc.Absyn.Exp exp_2 = p.exp_2.accept(this, arg);
+      return new calc.Absyn.ModExp(exp_1, exp_2);
     }
     public calc.Absyn.Exp visit(calc.Absyn.IndexExp p, A arg)
     {
@@ -161,6 +221,18 @@ public class ComposVisitor<A> implements
       }
       return new calc.Absyn.FunCallExp(exp_, listexp_);
     }
+    public calc.Absyn.Exp visit(calc.Absyn.DotStrucProjExp p, A arg)
+    {
+      calc.Absyn.Exp exp_1 = p.exp_1.accept(this, arg);
+      calc.Absyn.Exp exp_2 = p.exp_2.accept(this, arg);
+      return new calc.Absyn.DotStrucProjExp(exp_1, exp_2);
+    }
+    public calc.Absyn.Exp visit(calc.Absyn.ArrStrucProjExp p, A arg)
+    {
+      calc.Absyn.Exp exp_1 = p.exp_1.accept(this, arg);
+      calc.Absyn.Exp exp_2 = p.exp_2.accept(this, arg);
+      return new calc.Absyn.ArrStrucProjExp(exp_1, exp_2);
+    }
     public calc.Absyn.Exp visit(calc.Absyn.IntExp p, A arg)
     {
       Integer integer_ = p.integer_;
@@ -171,18 +243,39 @@ public class ComposVisitor<A> implements
       Double double_ = p.double_;
       return new calc.Absyn.DoubleExp(double_);
     }
-    public calc.Absyn.Exp visit(calc.Absyn.StringExp p, A arg)
+    public calc.Absyn.Exp visit(calc.Absyn.StringArrExp p, A arg)
     {
-      String string_ = p.string_;
-      return new calc.Absyn.StringExp(string_);
+      calc.Absyn.ListString liststring_ = p.liststring_;
+      return new calc.Absyn.StringArrExp(liststring_);
+    }
+    public calc.Absyn.Exp visit(calc.Absyn.CharExp p, A arg)
+    {
+      Character char_ = p.char_;
+      return new calc.Absyn.CharExp(char_);
     }
     public calc.Absyn.Exp visit(calc.Absyn.QualConstExp p, A arg)
     {
+      calc.Absyn.QualConst qualconst_ = p.qualconst_.accept(this, arg);
+      return new calc.Absyn.QualConstExp(qualconst_);
+    }
+
+    /* QualConst */
+    public calc.Absyn.QualConst visit(calc.Absyn.QualConstDecl p, A arg)
+    {
+      String id_ = p.id_;
+      return new calc.Absyn.QualConstDecl(id_);
+    }
+    public calc.Absyn.QualConst visit(calc.Absyn.QualConstDecls p, A arg)
+    {
       calc.Absyn.ListId listid_ = p.listid_;
-      return new calc.Absyn.QualConstExp(listid_);
+      return new calc.Absyn.QualConstDecls(listid_);
     }
 
     /* Type */
+    public calc.Absyn.Type visit(calc.Absyn.CharType p, A arg)
+    {
+      return new calc.Absyn.CharType();
+    }
     public calc.Absyn.Type visit(calc.Absyn.BoolType p, A arg)
     {
       return new calc.Absyn.BoolType();
@@ -198,5 +291,45 @@ public class ComposVisitor<A> implements
     public calc.Absyn.Type visit(calc.Absyn.VoidType p, A arg)
     {
       return new calc.Absyn.VoidType();
+    }
+    public calc.Absyn.Type visit(calc.Absyn.QualConstType p, A arg)
+    {
+      calc.Absyn.QualConst qualconst_ = p.qualconst_.accept(this, arg);
+      return new calc.Absyn.QualConstType(qualconst_);
+    }
+
+    /* GenType */
+    public calc.Absyn.GenType visit(calc.Absyn.GenTypeDecl p, A arg)
+    {
+      calc.Absyn.Type type_ = p.type_.accept(this, arg);
+      return new calc.Absyn.GenTypeDecl(type_);
+    }
+    public calc.Absyn.GenType visit(calc.Absyn.ConstGenType p, A arg)
+    {
+      calc.Absyn.Type type_ = p.type_.accept(this, arg);
+      return new calc.Absyn.ConstGenType(type_);
+    }
+    public calc.Absyn.GenType visit(calc.Absyn.AndGenType p, A arg)
+    {
+      calc.Absyn.Type type_ = p.type_.accept(this, arg);
+      return new calc.Absyn.AndGenType(type_);
+    }
+    public calc.Absyn.GenType visit(calc.Absyn.CAndGenType p, A arg)
+    {
+      calc.Absyn.Type type_ = p.type_.accept(this, arg);
+      return new calc.Absyn.CAndGenType(type_);
+    }
+
+    /* Init */
+    public calc.Absyn.Init visit(calc.Absyn.InitDecl p, A arg)
+    {
+      String id_ = p.id_;
+      return new calc.Absyn.InitDecl(id_);
+    }
+    public calc.Absyn.Init visit(calc.Absyn.InitAssign p, A arg)
+    {
+      String id_ = p.id_;
+      calc.Absyn.Exp exp_ = p.exp_.accept(this, arg);
+      return new calc.Absyn.InitAssign(id_, exp_);
     }
 }

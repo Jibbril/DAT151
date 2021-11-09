@@ -5,7 +5,8 @@ package calc.Absyn;
 public abstract class QualConst implements java.io.Serializable {
   public abstract <R,A> R accept(QualConst.Visitor<R,A> v, A arg);
   public interface Visitor <R,A> {
-    public R visit(calc.Absyn.QualConstExp p, A arg);
+    public R visit(calc.Absyn.QualConstDecl p, A arg);
+    public R visit(calc.Absyn.QualConstDecls p, A arg);
 
   }
 

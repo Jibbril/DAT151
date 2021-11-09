@@ -10,5 +10,8 @@ public interface AllVisitor<R,A> extends
   calc.Absyn.Arg.Visitor<R,A>,
   calc.Absyn.Stm.Visitor<R,A>,
   calc.Absyn.Exp.Visitor<R,A>,
-  calc.Absyn.Type.Visitor<R,A>
+  calc.Absyn.QualConst.Visitor<R,A>,
+  calc.Absyn.Type.Visitor<R,A>,
+  calc.Absyn.GenType.Visitor<R,A>,
+  calc.Absyn.Init.Visitor<R,A>
 {}

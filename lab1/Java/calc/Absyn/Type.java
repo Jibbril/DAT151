@@ -5,10 +5,12 @@ package calc.Absyn;
 public abstract class Type implements java.io.Serializable {
   public abstract <R,A> R accept(Type.Visitor<R,A> v, A arg);
   public interface Visitor <R,A> {
+    public R visit(calc.Absyn.CharType p, A arg);
     public R visit(calc.Absyn.BoolType p, A arg);
     public R visit(calc.Absyn.DoubleType p, A arg);
     public R visit(calc.Absyn.IntType p, A arg);
     public R visit(calc.Absyn.VoidType p, A arg);
+    public R visit(calc.Absyn.QualConstType p, A arg);
 
   }
 

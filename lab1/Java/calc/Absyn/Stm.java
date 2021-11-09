@@ -5,17 +5,14 @@ package calc.Absyn;
 public abstract class Stm implements java.io.Serializable {
   public abstract <R,A> R accept(Stm.Visitor<R,A> v, A arg);
   public interface Visitor <R,A> {
+    public R visit(calc.Absyn.InitStm p, A arg);
     public R visit(calc.Absyn.StmDef p, A arg);
-    public R visit(calc.Absyn.StmDecl p, A arg);
-    public R visit(calc.Absyn.StmDecl2 p, A arg);
-    public R visit(calc.Absyn.StmDecls p, A arg);
-    public R visit(calc.Absyn.StmInit p, A arg);
     public R visit(calc.Absyn.ReturnStm p, A arg);
     public R visit(calc.Absyn.WhileStm p, A arg);
     public R visit(calc.Absyn.IfStm p, A arg);
+    public R visit(calc.Absyn.IfElseStm p, A arg);
     public R visit(calc.Absyn.BlockStm p, A arg);
     public R visit(calc.Absyn.TypeDefStm p, A arg);
-    public R visit(calc.Absyn.ConstTypeDefStm p, A arg);
 
   }
 

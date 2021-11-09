@@ -1,6 +1,6 @@
 -- ===================== DEFINITIONS =====================
-ProgDef. Program ::= [Def];
-QualConstDef.   Def ::= "using" Exp ";";
+ProgDef.        Program ::= [Def];
+QualConstDef.   Def ::= "using" QualConst ";";
 FuncDef.        Def ::= Type Id "(" [Arg] ")" "{" [Stm] "}";
 terminator Def "";
 
@@ -14,11 +14,8 @@ separator       Arg ",";
 ArgDecl.        Arg ::= Type Id;
 
 -- ===================== STATEMENTS =====================
+InitStm.            Stm ::= GenType [Init] ";";
 StmDef.             Stm ::= Exp ";";
-StmDecl.            Stm ::= Type Id ";" ;
-StmDecl2.           Stm ::= Exp Id ";";
-StmDecls.           Stm ::= Type Id "," [Id] ";" ;
-StmInit.            Stm ::= Type Id "=" Exp ";" ;
 ReturnStm.          Stm ::= "return" Stm;
 WhileStm.           Stm ::= "while" "(" Exp ")" Stm ;
 -- Conflict here
@@ -26,8 +23,7 @@ IfStm.              Stm ::= "if" "(" Exp ")" Stm ;
 IfElseStm.          Stm ::= "if" "(" Exp ")" Stm "else" Stm ;
 -- Conflict end
 BlockStm.           Stm ::= "{" [Stm] "}" ;
-TypeDefStm.         Stm ::= "typedef" Type Id ";";
-ConstTypeDefStm.    Stm ::= "typedef const" Type Id ";";
+TypeDefStm.         Stm ::= "typedef" GenType Id ";";
 
 terminator      Stm "";
 
@@ -57,18 +53,39 @@ ArrStrucProjExp.    Exp14 ::= Exp14 "->" Exp15 ;
 
 IntExp.             Exp15 ::= Integer;
 DoubleExp.          Exp15 ::= Double;
-StringExp.          Exp15 ::= String;
+StringArrExp.       Exp15 ::= [String];
+CharExp.            Exp15 ::= Char;
+QualConstExp.       Exp15 ::= QualConst;
 separator           Exp ",";
 
+separator           nonempty String "" ;
+
+
 -- ===================== QUALIFIED CONSTANTS =====================
-QualConstExp.   Exp15 ::= [Id];
+--Hej.            Stm ::= Type Id "=" Exp ";";    
+QualConstDecl.  QualConst ::= Id;
+QualConstDecls. QualConst ::= [Id];
 separator       nonempty Id "::";
 
 -- ===================== TYPES =====================
+CharType.       Type ::= "char";
 BoolType.       Type ::= "bool";
 DoubleType.     Type ::= "double";
 IntType.        Type ::= "int";
 VoidType.       Type ::= "void";
+QualConstType.  Type ::= QualConst;
+
+GenTypeDecl.    GenType ::= Type;
+ConstGenType.   GenType ::= "const" Type;
+AndGenType.     GenType ::= Type "&";
+CAndGenType.    GenType ::= "const" Type "&";
+
+-- ===================== INITIALIZATION =====================
+InitDecl.     Init ::= Id;
+InitAssign.   Init ::= Id "=" Exp;
+separator nonempty Init ",";
+
+
 
 -- ===================== TOKENS =====================
 token Id (letter (letter | digit | '_')*);

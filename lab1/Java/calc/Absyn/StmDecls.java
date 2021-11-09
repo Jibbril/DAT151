@@ -3,10 +3,10 @@
 package calc.Absyn;
 
 public class StmDecls  extends Stm {
-  public final Type type_;
+  public final GenType gentype_;
   public final String id_;
   public final ListId listid_;
-  public StmDecls(Type p1, String p2, ListId p3) { type_ = p1; id_ = p2; listid_ = p3; }
+  public StmDecls(GenType p1, String p2, ListId p3) { gentype_ = p1; id_ = p2; listid_ = p3; }
 
   public <R,A> R accept(calc.Absyn.Stm.Visitor<R,A> v, A arg) { return v.visit(this, arg); }
 
@@ -14,13 +14,13 @@ public class StmDecls  extends Stm {
     if (this == o) return true;
     if (o instanceof calc.Absyn.StmDecls) {
       calc.Absyn.StmDecls x = (calc.Absyn.StmDecls)o;
-      return this.type_.equals(x.type_) && this.id_.equals(x.id_) && this.listid_.equals(x.listid_);
+      return this.gentype_.equals(x.gentype_) && this.id_.equals(x.id_) && this.listid_.equals(x.listid_);
     }
     return false;
   }
 
   public int hashCode() {
-    return 37*(37*(this.type_.hashCode())+this.id_.hashCode())+this.listid_.hashCode();
+    return 37*(37*(this.gentype_.hashCode())+this.id_.hashCode())+this.listid_.hashCode();
   }
 
 

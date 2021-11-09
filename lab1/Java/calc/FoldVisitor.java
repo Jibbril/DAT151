@@ -20,7 +20,7 @@ public abstract class FoldVisitor<R,A> implements AllVisitor<R,A> {
 /* Def */
     public R visit(calc.Absyn.QualConstDef p, A arg) {
       R r = leaf(arg);
-      r = combine(p.exp_.accept(this, arg), r, arg);
+      r = combine(p.qualconst_.accept(this, arg), r, arg);
       return r;
     }
     public R visit(calc.Absyn.FuncDef p, A arg) {
@@ -45,29 +45,17 @@ public abstract class FoldVisitor<R,A> implements AllVisitor<R,A> {
     }
 
 /* Stm */
+    public R visit(calc.Absyn.InitStm p, A arg) {
+      R r = leaf(arg);
+      r = combine(p.gentype_.accept(this, arg), r, arg);
+      for (calc.Absyn.Init x : p.listinit_)
+      {
+        r = combine(x.accept(this, arg), r, arg);
+      }
+      return r;
+    }
     public R visit(calc.Absyn.StmDef p, A arg) {
       R r = leaf(arg);
-      r = combine(p.exp_.accept(this, arg), r, arg);
-      return r;
-    }
-    public R visit(calc.Absyn.StmDecl p, A arg) {
-      R r = leaf(arg);
-      r = combine(p.type_.accept(this, arg), r, arg);
-      return r;
-    }
-    public R visit(calc.Absyn.StmDecl2 p, A arg) {
-      R r = leaf(arg);
-      r = combine(p.exp_.accept(this, arg), r, arg);
-      return r;
-    }
-    public R visit(calc.Absyn.StmDecls p, A arg) {
-      R r = leaf(arg);
-      r = combine(p.type_.accept(this, arg), r, arg);
-      return r;
-    }
-    public R visit(calc.Absyn.StmInit p, A arg) {
-      R r = leaf(arg);
-      r = combine(p.type_.accept(this, arg), r, arg);
       r = combine(p.exp_.accept(this, arg), r, arg);
       return r;
     }
@@ -88,6 +76,13 @@ public abstract class FoldVisitor<R,A> implements AllVisitor<R,A> {
       r = combine(p.stm_.accept(this, arg), r, arg);
       return r;
     }
+    public R visit(calc.Absyn.IfElseStm p, A arg) {
+      R r = leaf(arg);
+      r = combine(p.exp_.accept(this, arg), r, arg);
+      r = combine(p.stm_1.accept(this, arg), r, arg);
+      r = combine(p.stm_2.accept(this, arg), r, arg);
+      return r;
+    }
     public R visit(calc.Absyn.BlockStm p, A arg) {
       R r = leaf(arg);
       for (calc.Absyn.Stm x : p.liststm_)
@@ -98,16 +93,48 @@ public abstract class FoldVisitor<R,A> implements AllVisitor<R,A> {
     }
     public R visit(calc.Absyn.TypeDefStm p, A arg) {
       R r = leaf(arg);
-      r = combine(p.type_.accept(this, arg), r, arg);
-      return r;
-    }
-    public R visit(calc.Absyn.ConstTypeDefStm p, A arg) {
-      R r = leaf(arg);
-      r = combine(p.type_.accept(this, arg), r, arg);
+      r = combine(p.gentype_.accept(this, arg), r, arg);
       return r;
     }
 
 /* Exp */
+    public R visit(calc.Absyn.AssignExp p, A arg) {
+      R r = leaf(arg);
+      r = combine(p.exp_1.accept(this, arg), r, arg);
+      r = combine(p.exp_2.accept(this, arg), r, arg);
+      return r;
+    }
+    public R visit(calc.Absyn.IncrExp p, A arg) {
+      R r = leaf(arg);
+      r = combine(p.exp_1.accept(this, arg), r, arg);
+      r = combine(p.exp_2.accept(this, arg), r, arg);
+      return r;
+    }
+    public R visit(calc.Absyn.DecrExp p, A arg) {
+      R r = leaf(arg);
+      r = combine(p.exp_1.accept(this, arg), r, arg);
+      r = combine(p.exp_2.accept(this, arg), r, arg);
+      return r;
+    }
+    public R visit(calc.Absyn.CondExp p, A arg) {
+      R r = leaf(arg);
+      r = combine(p.exp_1.accept(this, arg), r, arg);
+      r = combine(p.exp_2.accept(this, arg), r, arg);
+      r = combine(p.exp_3.accept(this, arg), r, arg);
+      return r;
+    }
+    public R visit(calc.Absyn.EqExp p, A arg) {
+      R r = leaf(arg);
+      r = combine(p.exp_1.accept(this, arg), r, arg);
+      r = combine(p.exp_2.accept(this, arg), r, arg);
+      return r;
+    }
+    public R visit(calc.Absyn.InEqExp p, A arg) {
+      R r = leaf(arg);
+      r = combine(p.exp_1.accept(this, arg), r, arg);
+      r = combine(p.exp_2.accept(this, arg), r, arg);
+      return r;
+    }
     public R visit(calc.Absyn.LShift p, A arg) {
       R r = leaf(arg);
       r = combine(p.exp_1.accept(this, arg), r, arg);
@@ -115,6 +142,36 @@ public abstract class FoldVisitor<R,A> implements AllVisitor<R,A> {
       return r;
     }
     public R visit(calc.Absyn.RShift p, A arg) {
+      R r = leaf(arg);
+      r = combine(p.exp_1.accept(this, arg), r, arg);
+      r = combine(p.exp_2.accept(this, arg), r, arg);
+      return r;
+    }
+    public R visit(calc.Absyn.AddExp p, A arg) {
+      R r = leaf(arg);
+      r = combine(p.exp_1.accept(this, arg), r, arg);
+      r = combine(p.exp_2.accept(this, arg), r, arg);
+      return r;
+    }
+    public R visit(calc.Absyn.MinExp p, A arg) {
+      R r = leaf(arg);
+      r = combine(p.exp_1.accept(this, arg), r, arg);
+      r = combine(p.exp_2.accept(this, arg), r, arg);
+      return r;
+    }
+    public R visit(calc.Absyn.MulExp p, A arg) {
+      R r = leaf(arg);
+      r = combine(p.exp_1.accept(this, arg), r, arg);
+      r = combine(p.exp_2.accept(this, arg), r, arg);
+      return r;
+    }
+    public R visit(calc.Absyn.DivExp p, A arg) {
+      R r = leaf(arg);
+      r = combine(p.exp_1.accept(this, arg), r, arg);
+      r = combine(p.exp_2.accept(this, arg), r, arg);
+      return r;
+    }
+    public R visit(calc.Absyn.ModExp p, A arg) {
       R r = leaf(arg);
       r = combine(p.exp_1.accept(this, arg), r, arg);
       r = combine(p.exp_2.accept(this, arg), r, arg);
@@ -135,6 +192,18 @@ public abstract class FoldVisitor<R,A> implements AllVisitor<R,A> {
       }
       return r;
     }
+    public R visit(calc.Absyn.DotStrucProjExp p, A arg) {
+      R r = leaf(arg);
+      r = combine(p.exp_1.accept(this, arg), r, arg);
+      r = combine(p.exp_2.accept(this, arg), r, arg);
+      return r;
+    }
+    public R visit(calc.Absyn.ArrStrucProjExp p, A arg) {
+      R r = leaf(arg);
+      r = combine(p.exp_1.accept(this, arg), r, arg);
+      r = combine(p.exp_2.accept(this, arg), r, arg);
+      return r;
+    }
     public R visit(calc.Absyn.IntExp p, A arg) {
       R r = leaf(arg);
       return r;
@@ -143,16 +212,35 @@ public abstract class FoldVisitor<R,A> implements AllVisitor<R,A> {
       R r = leaf(arg);
       return r;
     }
-    public R visit(calc.Absyn.StringExp p, A arg) {
+    public R visit(calc.Absyn.StringArrExp p, A arg) {
+      R r = leaf(arg);
+      return r;
+    }
+    public R visit(calc.Absyn.CharExp p, A arg) {
       R r = leaf(arg);
       return r;
     }
     public R visit(calc.Absyn.QualConstExp p, A arg) {
       R r = leaf(arg);
+      r = combine(p.qualconst_.accept(this, arg), r, arg);
+      return r;
+    }
+
+/* QualConst */
+    public R visit(calc.Absyn.QualConstDecl p, A arg) {
+      R r = leaf(arg);
+      return r;
+    }
+    public R visit(calc.Absyn.QualConstDecls p, A arg) {
+      R r = leaf(arg);
       return r;
     }
 
 /* Type */
+    public R visit(calc.Absyn.CharType p, A arg) {
+      R r = leaf(arg);
+      return r;
+    }
     public R visit(calc.Absyn.BoolType p, A arg) {
       R r = leaf(arg);
       return r;
@@ -167,6 +255,44 @@ public abstract class FoldVisitor<R,A> implements AllVisitor<R,A> {
     }
     public R visit(calc.Absyn.VoidType p, A arg) {
       R r = leaf(arg);
+      return r;
+    }
+    public R visit(calc.Absyn.QualConstType p, A arg) {
+      R r = leaf(arg);
+      r = combine(p.qualconst_.accept(this, arg), r, arg);
+      return r;
+    }
+
+/* GenType */
+    public R visit(calc.Absyn.GenTypeDecl p, A arg) {
+      R r = leaf(arg);
+      r = combine(p.type_.accept(this, arg), r, arg);
+      return r;
+    }
+    public R visit(calc.Absyn.ConstGenType p, A arg) {
+      R r = leaf(arg);
+      r = combine(p.type_.accept(this, arg), r, arg);
+      return r;
+    }
+    public R visit(calc.Absyn.AndGenType p, A arg) {
+      R r = leaf(arg);
+      r = combine(p.type_.accept(this, arg), r, arg);
+      return r;
+    }
+    public R visit(calc.Absyn.CAndGenType p, A arg) {
+      R r = leaf(arg);
+      r = combine(p.type_.accept(this, arg), r, arg);
+      return r;
+    }
+
+/* Init */
+    public R visit(calc.Absyn.InitDecl p, A arg) {
+      R r = leaf(arg);
+      return r;
+    }
+    public R visit(calc.Absyn.InitAssign p, A arg) {
+      R r = leaf(arg);
+      r = combine(p.exp_.accept(this, arg), r, arg);
       return r;
     }
 
