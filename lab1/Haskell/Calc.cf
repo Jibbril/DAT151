@@ -1,27 +1,121 @@
-PDefs. Program ::= [Def];
-terminator Def "";
+entrypoints Program;
 
+-- ===================== DEFINITIONS =====================
+ProgDef.        Program ::= [Def];
+QualConstDef.   Def ::= "using" QualConst ";";
+StmDef.         Def ::= GenType [Init] ";";
+FuncDef.        Def ::= GenType Id "(" [Arg] ")" "{" [Stm] "}";
+FuncDef2.       Def ::= GenType Id "(" [Arg] ")" ";";
+TypeDef.	Def ::= "typedef" GenType Id ";";
+terminator 	Def "";
+
+-- ===================== COMMENTS =====================
 comment "//";
 comment "/*" "*/";
 comment "#";
 
-DFun.       Def ::= Type Id "(" [Arg] ")" "{" [Stm] "}";
-separator   Arg ",";
-terminator  Stm "";
+-- ===================== ARGUMENTS =====================
+separator           Arg ",";
+ArgDecl2.	        Arg ::= GenType Init;
+ArgDecl3.	        Arg ::= GenType;
 
-ADecl.      Arg ::= Type Id;
-SCout.      Stm ::= "std::cout <<" Exp "<< std::endl" ";";
-SReturn.    Stm ::= "return" Exp ";";
+-- ===================== STATEMENTS =====================
+InitStm.            Stm ::= GenType [Init] ";";
+StmExp.             Stm ::= Exp ";";
+ReturnStm.          Stm ::= "return" Stm;
+WhileStm.           Stm ::= "while" "(" Exp ")" Stm ;
+ForStm.		        Stm ::= "for" "(" GenType Init ";" Exp ";" Exp")" Stm; 
+DoWhileStm.	        Stm ::= "do" Stm "while" "(" Exp ")" ";" ;
+BlockStm.           Stm ::= "{" [Stm] "}" ;
+TypeDefStm.         Stm ::= "typedef" GenType Id ";";
 
-EInt.       Exp ::= Integer;
-EDouble.    Exp ::= Double;
-EString.    Exp ::= String;
+-- These rules cause a shift/reduce conflict that can be ignored since
+-- it will always default to shifting. This is correct since we want every
+-- "else" statement to be connected to the "if" statement closest before it.
+-- So "if (Exp) if (Exp) Stm else Stm" => "if (Exp) (if (Exp) Stm else Stm)"
+IfStm.              Stm ::= "if" "(" Exp ")" Stm ;
+IfElseStm.          Stm ::= "if" "(" Exp ")" Stm "else" Stm ;
 
-Tbool.      Type ::= "bool";
-Tdouble.    Type ::= "double";
-Tint.       Type ::= "int";
-Tvoid.      Type ::= "void";
 
+terminator          Stm "";
+
+-- ===================== EXPRESSIONS =====================
+ThrowExcep.	        Exp1 ::= "throw" Exp1 ; 
+
+AssignExp.          Exp2 ::= Exp3 "=" Exp2 ;
+PlusAssigExp.       Exp2 ::= Exp3 "+=" Exp2 ;
+MinusAssigExp.      Exp2 ::= Exp3 "-=" Exp2 ;
+CondExp.            Exp2 ::= Exp3 "?" Exp ":" Exp2 ;
+
+DisjExp.	        Exp3 ::= Exp3 "||" Exp4;
+ConjExp.	        Exp4 ::= Exp4 "&&" Exp5;
+
+EqExp.              Exp8 ::= Exp8 "==" Exp9 ;
+InEqExp.            Exp8 ::= Exp8 "!=" Exp9 ;
+
+LessExp.	        Exp9 ::= Exp9 "<" Exp10;
+LeqExp.		        Exp9 ::= Exp9 "<=" Exp10;
+GeqExp.		        Exp9 ::= Exp9 ">=" Exp10;
+GreaterExp.	        Exp9 ::= Exp9 ">" Exp10;
+
+LShift.             Exp10 ::= Exp10 "<<" Exp11 ;
+RShift.             Exp10 ::= Exp10 ">>" Exp11 ;
+
+AddExp.             Exp11 ::= Exp11 "+" Exp12;
+MinExp.             Exp11 ::= Exp11 "-" Exp12;
+
+MulExp.             Exp12 ::= Exp12 "*" Exp13;
+DivExp.             Exp12 ::= Exp12 "/" Exp13;
+ModExp.             Exp12 ::= Exp12 "%" Exp13;
+
+Incr2Exp.	        Exp13 ::= "++" Exp13; 
+Decr2Exp.	        Exp13 ::= "--" Exp13;
+NegExp.	            Exp13 ::= "!" Exp13;
+DeRefExp.	        Exp13 ::= "*" Exp13;
+
+Incr1Exp.	        Exp14 ::= Exp14 "++"; 
+Decr1Exp.	        Exp14 ::= Exp14 "--";
+IndexExp.           Exp14 ::= Exp14 "[" Exp "]";
+FunCallExp.         Exp14 ::= Exp14 "(" [Exp] ")";
+DotStrucProjExp.    Exp14 ::= Exp14 "." Exp15 ;
+ArrStrucProjExp.    Exp14 ::= Exp14 "->" Exp15 ;
+
+IntExp.             Exp15 ::= Integer;
+DoubleExp.          Exp15 ::= Double;
+StringArrExp.       Exp15 ::= [String];
+CharExp.            Exp15 ::= Char;
+QualConstExp.       Exp15 ::= QualConst;
+separator           Exp ",";
+
+separator           nonempty String "" ;
+
+
+-- ===================== QUALIFIED CONSTANTS =====================   
+QualConstDecls.   QualConst ::= [Id];
+separator         nonempty Id "::";
+
+-- ===================== TYPES =====================
+CharType.       Type ::= "char";
+BoolType.       Type ::= "bool";
+DoubleType.     Type ::= "double";
+IntType.        Type ::= "int";
+VoidType.       Type ::= "void";
+QualConstType.  Type ::= QualConst;
+
+GenTypeDecl.    GenType ::= Type;
+ConstGenType.   GenType ::= "const" Type;
+AndGenType.     GenType ::= Type "&";
+CAndGenType.    GenType ::= "const" Type "&";
+
+-- ===================== INITIALIZATION =====================
+InitDecl.     Init ::= Id;
+InitAssign.   Init ::= Id "=" Exp;
+separator nonempty Init ",";
+
+
+
+-- ===================== TOKENS =====================
 token Id (letter (letter | digit | '_')*);
 
-coercions Exp 1;
+-- ===================== COERCIONS =====================
+coercions Exp 15;

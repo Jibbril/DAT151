@@ -6,26 +6,96 @@
 
 module AbsCalc where
 
-import Prelude (Double, Integer, String)
+import Prelude (Char, Double, Integer, String)
 import qualified Prelude as C (Eq, Ord, Show, Read)
 import qualified Data.String
 
-data Program = PDefs [Def]
+data Program = ProgDef [Def]
   deriving (C.Eq, C.Ord, C.Show, C.Read)
 
-data Def = DFun Type Id [Arg] [Stm]
+data Def
+    = QualConstDef QualConst
+    | StmDef GenType [Init]
+    | FuncDef GenType Id [Arg] [Stm]
+    | FuncDef2 GenType Id [Arg]
+    | TypeDef GenType Id
   deriving (C.Eq, C.Ord, C.Show, C.Read)
 
-data Arg = ADecl Type Id
+data Arg
+    = ArgDecl GenType Id | ArgDecl2 GenType Init | ArgDecl3 GenType
   deriving (C.Eq, C.Ord, C.Show, C.Read)
 
-data Stm = SCout Exp | SReturn Exp
+data Stm
+    = InitStm GenType [Init]
+    | StmExp Exp
+    | ReturnStm Stm
+    | WhileStm Exp Stm
+    | IfStm Exp Stm
+    | IfElseStm Exp Stm Stm
+    | ForStm GenType Init Exp Exp Stm
+    | DoWhileStm Stm Exp
+    | BlockStm [Stm]
+    | TypeDefStm GenType Id
   deriving (C.Eq, C.Ord, C.Show, C.Read)
 
-data Exp = EInt Integer | EDouble Double
+data Exp
+    = ThrowExcep Exp
+    | AssignExp Exp Exp
+    | PlusAssigExp Exp Exp
+    | MinusAssigExp Exp Exp
+    | CondExp Exp Exp Exp
+    | DisjExp Exp Exp
+    | ConjExp Exp Exp
+    | EqExp Exp Exp
+    | InEqExp Exp Exp
+    | LessExp Exp Exp
+    | LeqExp Exp Exp
+    | GeqExp Exp Exp
+    | GreaterExp Exp Exp
+    | LShift Exp Exp
+    | RShift Exp Exp
+    | AddExp Exp Exp
+    | MinExp Exp Exp
+    | MulExp Exp Exp
+    | DivExp Exp Exp
+    | ModExp Exp Exp
+    | Incr2Exp Exp
+    | Decr2Exp Exp
+    | NegExp Exp
+    | DeRefExp Exp
+    | Incr1Exp Exp
+    | Decr1Exp Exp
+    | IndexExp Exp Exp
+    | FunCallExp Exp [Exp]
+    | DotStrucProjExp Exp Exp
+    | ArrStrucProjExp Exp Exp
+    | IntExp Integer
+    | DoubleExp Double
+    | StringArrExp [String]
+    | CharExp Char
+    | QualConstExp QualConst
   deriving (C.Eq, C.Ord, C.Show, C.Read)
 
-data Type = Tbool | Tdouble | Tint | Tvoid
+data QualConst = QualConstDecl Id | QualConstDecls [Id]
+  deriving (C.Eq, C.Ord, C.Show, C.Read)
+
+data Type
+    = CharType
+    | BoolType
+    | DoubleType
+    | IntType
+    | VoidType
+    | QualConstType QualConst
+  deriving (C.Eq, C.Ord, C.Show, C.Read)
+
+data GenType
+    = GenTypeDecl Type
+    | ConstGenType Type
+    | AndGenType Type
+    | CAndGenType Type
+  deriving (C.Eq, C.Ord, C.Show, C.Read)
+
+data Init = InitDecl Id | InitAssign Id Exp
   deriving (C.Eq, C.Ord, C.Show, C.Read)
 
 newtype Id = Id String

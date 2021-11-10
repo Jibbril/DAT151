@@ -142,43 +142,126 @@ instance Print AbsCalc.Id where
   prt _ (AbsCalc.Id i) = doc $ showString i
 instance Print AbsCalc.Program where
   prt i = \case
-    AbsCalc.PDefs defs -> prPrec i 0 (concatD [prt 0 defs])
+    AbsCalc.ProgDef defs -> prPrec i 0 (concatD [prt 0 defs])
+
+instance Print AbsCalc.Def where
+  prt i = \case
+    AbsCalc.QualConstDef qualconst -> prPrec i 0 (concatD [doc (showString "using"), prt 0 qualconst, doc (showString ";")])
+    AbsCalc.StmDef gentype inits -> prPrec i 0 (concatD [prt 0 gentype, prt 0 inits, doc (showString ";")])
+    AbsCalc.FuncDef gentype id_ args stms -> prPrec i 0 (concatD [prt 0 gentype, prt 0 id_, doc (showString "("), prt 0 args, doc (showString ")"), doc (showString "{"), prt 0 stms, doc (showString "}")])
+    AbsCalc.FuncDef2 gentype id_ args -> prPrec i 0 (concatD [prt 0 gentype, prt 0 id_, doc (showString "("), prt 0 args, doc (showString ")"), doc (showString ";")])
+    AbsCalc.TypeDef gentype id_ -> prPrec i 0 (concatD [doc (showString "typedef"), prt 0 gentype, prt 0 id_, doc (showString ";")])
 
 instance Print [AbsCalc.Def] where
   prt _ [] = concatD []
   prt _ (x:xs) = concatD [prt 0 x, prt 0 xs]
-
-instance Print AbsCalc.Def where
-  prt i = \case
-    AbsCalc.DFun type_ id_ args stms -> prPrec i 0 (concatD [prt 0 type_, prt 0 id_, doc (showString "("), prt 0 args, doc (showString ")"), doc (showString "{"), prt 0 stms, doc (showString "}")])
 
 instance Print [AbsCalc.Arg] where
   prt _ [] = concatD []
   prt _ [x] = concatD [prt 0 x]
   prt _ (x:xs) = concatD [prt 0 x, doc (showString ","), prt 0 xs]
 
+instance Print AbsCalc.Arg where
+  prt i = \case
+    AbsCalc.ArgDecl2 gentype init -> prPrec i 0 (concatD [prt 0 gentype, prt 0 init])
+    AbsCalc.ArgDecl3 gentype -> prPrec i 0 (concatD [prt 0 gentype])
+
+instance Print AbsCalc.Stm where
+  prt i = \case
+    AbsCalc.InitStm gentype inits -> prPrec i 0 (concatD [prt 0 gentype, prt 0 inits, doc (showString ";")])
+    AbsCalc.StmExp exp -> prPrec i 0 (concatD [prt 0 exp, doc (showString ";")])
+    AbsCalc.ReturnStm stm -> prPrec i 0 (concatD [doc (showString "return"), prt 0 stm])
+    AbsCalc.WhileStm exp stm -> prPrec i 0 (concatD [doc (showString "while"), doc (showString "("), prt 0 exp, doc (showString ")"), prt 0 stm])
+    AbsCalc.ForStm gentype init exp1 exp2 stm -> prPrec i 0 (concatD [doc (showString "for"), doc (showString "("), prt 0 gentype, prt 0 init, doc (showString ";"), prt 0 exp1, doc (showString ";"), prt 0 exp2, doc (showString ")"), prt 0 stm])
+    AbsCalc.DoWhileStm stm exp -> prPrec i 0 (concatD [doc (showString "do"), prt 0 stm, doc (showString "while"), doc (showString "("), prt 0 exp, doc (showString ")"), doc (showString ";")])
+    AbsCalc.BlockStm stms -> prPrec i 0 (concatD [doc (showString "{"), prt 0 stms, doc (showString "}")])
+    AbsCalc.TypeDefStm gentype id_ -> prPrec i 0 (concatD [doc (showString "typedef"), prt 0 gentype, prt 0 id_, doc (showString ";")])
+    AbsCalc.IfStm exp stm -> prPrec i 0 (concatD [doc (showString "if"), doc (showString "("), prt 0 exp, doc (showString ")"), prt 0 stm])
+    AbsCalc.IfElseStm exp stm1 stm2 -> prPrec i 0 (concatD [doc (showString "if"), doc (showString "("), prt 0 exp, doc (showString ")"), prt 0 stm1, doc (showString "else"), prt 0 stm2])
+
 instance Print [AbsCalc.Stm] where
   prt _ [] = concatD []
   prt _ (x:xs) = concatD [prt 0 x, prt 0 xs]
 
-instance Print AbsCalc.Arg where
-  prt i = \case
-    AbsCalc.ADecl type_ id_ -> prPrec i 0 (concatD [prt 0 type_, prt 0 id_])
-
-instance Print AbsCalc.Stm where
-  prt i = \case
-    AbsCalc.SCout exp -> prPrec i 0 (concatD [doc (showString "std::cout"), doc (showString "<<"), prt 0 exp, doc (showString "<<"), doc (showString "std::endl"), doc (showString ";")])
-    AbsCalc.SReturn exp -> prPrec i 0 (concatD [doc (showString "return"), prt 0 exp, doc (showString ";")])
-
 instance Print AbsCalc.Exp where
   prt i = \case
-    AbsCalc.EInt n -> prPrec i 0 (concatD [prt 0 n])
-    AbsCalc.EDouble d -> prPrec i 0 (concatD [prt 0 d])
-    AbsCalc.EString str -> prPrec i 0 (concatD [printString str])
+    AbsCalc.ThrowExcep exp -> prPrec i 1 (concatD [doc (showString "throw"), prt 1 exp])
+    AbsCalc.AssignExp exp1 exp2 -> prPrec i 2 (concatD [prt 3 exp1, doc (showString "="), prt 2 exp2])
+    AbsCalc.PlusAssigExp exp1 exp2 -> prPrec i 2 (concatD [prt 3 exp1, doc (showString "+="), prt 2 exp2])
+    AbsCalc.MinusAssigExp exp1 exp2 -> prPrec i 2 (concatD [prt 3 exp1, doc (showString "-="), prt 2 exp2])
+    AbsCalc.CondExp exp1 exp2 exp3 -> prPrec i 2 (concatD [prt 3 exp1, doc (showString "?"), prt 0 exp2, doc (showString ":"), prt 2 exp3])
+    AbsCalc.DisjExp exp1 exp2 -> prPrec i 3 (concatD [prt 3 exp1, doc (showString "||"), prt 4 exp2])
+    AbsCalc.ConjExp exp1 exp2 -> prPrec i 4 (concatD [prt 4 exp1, doc (showString "&&"), prt 5 exp2])
+    AbsCalc.EqExp exp1 exp2 -> prPrec i 8 (concatD [prt 8 exp1, doc (showString "=="), prt 9 exp2])
+    AbsCalc.InEqExp exp1 exp2 -> prPrec i 8 (concatD [prt 8 exp1, doc (showString "!="), prt 9 exp2])
+    AbsCalc.LessExp exp1 exp2 -> prPrec i 9 (concatD [prt 9 exp1, doc (showString "<"), prt 10 exp2])
+    AbsCalc.LeqExp exp1 exp2 -> prPrec i 9 (concatD [prt 9 exp1, doc (showString "<="), prt 10 exp2])
+    AbsCalc.GeqExp exp1 exp2 -> prPrec i 9 (concatD [prt 9 exp1, doc (showString ">="), prt 10 exp2])
+    AbsCalc.GreaterExp exp1 exp2 -> prPrec i 9 (concatD [prt 9 exp1, doc (showString ">"), prt 10 exp2])
+    AbsCalc.LShift exp1 exp2 -> prPrec i 10 (concatD [prt 10 exp1, doc (showString "<<"), prt 11 exp2])
+    AbsCalc.RShift exp1 exp2 -> prPrec i 10 (concatD [prt 10 exp1, doc (showString ">>"), prt 11 exp2])
+    AbsCalc.AddExp exp1 exp2 -> prPrec i 11 (concatD [prt 11 exp1, doc (showString "+"), prt 12 exp2])
+    AbsCalc.MinExp exp1 exp2 -> prPrec i 11 (concatD [prt 11 exp1, doc (showString "-"), prt 12 exp2])
+    AbsCalc.MulExp exp1 exp2 -> prPrec i 12 (concatD [prt 12 exp1, doc (showString "*"), prt 13 exp2])
+    AbsCalc.DivExp exp1 exp2 -> prPrec i 12 (concatD [prt 12 exp1, doc (showString "/"), prt 13 exp2])
+    AbsCalc.ModExp exp1 exp2 -> prPrec i 12 (concatD [prt 12 exp1, doc (showString "%"), prt 13 exp2])
+    AbsCalc.Incr2Exp exp -> prPrec i 13 (concatD [doc (showString "++"), prt 13 exp])
+    AbsCalc.Decr2Exp exp -> prPrec i 13 (concatD [doc (showString "--"), prt 13 exp])
+    AbsCalc.NegExp exp -> prPrec i 13 (concatD [doc (showString "!"), prt 13 exp])
+    AbsCalc.DeRefExp exp -> prPrec i 13 (concatD [doc (showString "*"), prt 13 exp])
+    AbsCalc.Incr1Exp exp -> prPrec i 14 (concatD [prt 14 exp, doc (showString "++")])
+    AbsCalc.Decr1Exp exp -> prPrec i 14 (concatD [prt 14 exp, doc (showString "--")])
+    AbsCalc.IndexExp exp1 exp2 -> prPrec i 14 (concatD [prt 14 exp1, doc (showString "["), prt 0 exp2, doc (showString "]")])
+    AbsCalc.FunCallExp exp exps -> prPrec i 14 (concatD [prt 14 exp, doc (showString "("), prt 0 exps, doc (showString ")")])
+    AbsCalc.DotStrucProjExp exp1 exp2 -> prPrec i 14 (concatD [prt 14 exp1, doc (showString "."), prt 15 exp2])
+    AbsCalc.ArrStrucProjExp exp1 exp2 -> prPrec i 14 (concatD [prt 14 exp1, doc (showString "->"), prt 15 exp2])
+    AbsCalc.IntExp n -> prPrec i 15 (concatD [prt 0 n])
+    AbsCalc.DoubleExp d -> prPrec i 15 (concatD [prt 0 d])
+    AbsCalc.StringArrExp strs -> prPrec i 15 (concatD [prt 0 strs])
+    AbsCalc.CharExp c -> prPrec i 15 (concatD [prt 0 c])
+    AbsCalc.QualConstExp qualconst -> prPrec i 15 (concatD [prt 0 qualconst])
+
+instance Print [AbsCalc.Exp] where
+  prt _ [] = concatD []
+  prt _ [x] = concatD [prt 0 x]
+  prt _ (x:xs) = concatD [prt 0 x, doc (showString ","), prt 0 xs]
+
+instance Print [String] where
+  prt _ [] = concatD []
+  prt _ [x] = concatD [printString x]
+  prt _ (x:xs) = concatD [printString x, prt 0 xs]
+
+instance Print AbsCalc.QualConst where
+  prt i = \case
+    AbsCalc.QualConstDecls ids -> prPrec i 0 (concatD [prt 0 ids])
+
+instance Print [AbsCalc.Id] where
+  prt _ [] = concatD []
+  prt _ [x] = concatD [prt 0 x]
+  prt _ (x:xs) = concatD [prt 0 x, doc (showString "::"), prt 0 xs]
 
 instance Print AbsCalc.Type where
   prt i = \case
-    AbsCalc.Tbool -> prPrec i 0 (concatD [doc (showString "bool")])
-    AbsCalc.Tdouble -> prPrec i 0 (concatD [doc (showString "double")])
-    AbsCalc.Tint -> prPrec i 0 (concatD [doc (showString "int")])
-    AbsCalc.Tvoid -> prPrec i 0 (concatD [doc (showString "void")])
+    AbsCalc.CharType -> prPrec i 0 (concatD [doc (showString "char")])
+    AbsCalc.BoolType -> prPrec i 0 (concatD [doc (showString "bool")])
+    AbsCalc.DoubleType -> prPrec i 0 (concatD [doc (showString "double")])
+    AbsCalc.IntType -> prPrec i 0 (concatD [doc (showString "int")])
+    AbsCalc.VoidType -> prPrec i 0 (concatD [doc (showString "void")])
+    AbsCalc.QualConstType qualconst -> prPrec i 0 (concatD [prt 0 qualconst])
+
+instance Print AbsCalc.GenType where
+  prt i = \case
+    AbsCalc.GenTypeDecl type_ -> prPrec i 0 (concatD [prt 0 type_])
+    AbsCalc.ConstGenType type_ -> prPrec i 0 (concatD [doc (showString "const"), prt 0 type_])
+    AbsCalc.AndGenType type_ -> prPrec i 0 (concatD [prt 0 type_, doc (showString "&")])
+    AbsCalc.CAndGenType type_ -> prPrec i 0 (concatD [doc (showString "const"), prt 0 type_, doc (showString "&")])
+
+instance Print AbsCalc.Init where
+  prt i = \case
+    AbsCalc.InitDecl id_ -> prPrec i 0 (concatD [prt 0 id_])
+    AbsCalc.InitAssign id_ exp -> prPrec i 0 (concatD [prt 0 id_, doc (showString "="), prt 0 exp])
+
+instance Print [AbsCalc.Init] where
+  prt _ [] = concatD []
+  prt _ [x] = concatD [prt 0 x]
+  prt _ (x:xs) = concatD [prt 0 x, doc (showString ","), prt 0 xs]

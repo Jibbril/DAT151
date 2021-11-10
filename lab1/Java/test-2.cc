@@ -15,7 +15,7 @@ int main()
     da nummer = 1;
 
     int x;
-    int x = 5, y, z = 3;
+    int x = 5, z = 3;
     const int x, y = 0;
     const int& x = y;
 

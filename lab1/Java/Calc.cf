@@ -1,8 +1,13 @@
+entrypoints Program;
+
 -- ===================== DEFINITIONS =====================
 ProgDef.        Program ::= [Def];
 QualConstDef.   Def ::= "using" QualConst ";";
-FuncDef.        Def ::= Type Id "(" [Arg] ")" "{" [Stm] "}";
-terminator Def "";
+StmDef.         Def ::= GenType [Init] ";";
+FuncDef.        Def ::= GenType Id "(" [Arg] ")" "{" [Stm] "}";
+FuncDef2.       Def ::= GenType Id "(" [Arg] ")" ";";
+TypeDef.	Def ::= "typedef" GenType Id ";";
+terminator 	Def "";
 
 -- ===================== COMMENTS =====================
 comment "//";
@@ -10,31 +15,48 @@ comment "/*" "*/";
 comment "#";
 
 -- ===================== ARGUMENTS =====================
-separator       Arg ",";
-ArgDecl.        Arg ::= Type Id;
+separator           Arg ",";
+ArgDecl2.	        Arg ::= GenType Init;
+ArgDecl3.	        Arg ::= GenType;
 
 -- ===================== STATEMENTS =====================
 InitStm.            Stm ::= GenType [Init] ";";
-StmDef.             Stm ::= Exp ";";
+StmExp.             Stm ::= Exp ";";
 ReturnStm.          Stm ::= "return" Stm;
 WhileStm.           Stm ::= "while" "(" Exp ")" Stm ;
--- Conflict here
-IfStm.              Stm ::= "if" "(" Exp ")" Stm ;
-IfElseStm.          Stm ::= "if" "(" Exp ")" Stm "else" Stm ;
--- Conflict end
+ForStm.		        Stm ::= "for" "(" GenType Init ";" Exp ";" Exp")" Stm; 
+DoWhileStm.	        Stm ::= "do" Stm "while" "(" Exp ")" ";" ;
 BlockStm.           Stm ::= "{" [Stm] "}" ;
 TypeDefStm.         Stm ::= "typedef" GenType Id ";";
 
-terminator      Stm "";
+-- These rules cause a shift/reduce conflict that can be ignored since
+-- it will always default to shifting. This is correct since we want every
+-- "else" statement to be connected to the "if" statement closest before it.
+-- So "if (Exp) if (Exp) Stm else Stm" => "if (Exp) (if (Exp) Stm else Stm)"
+IfStm.              Stm ::= "if" "(" Exp ")" Stm ;
+IfElseStm.          Stm ::= "if" "(" Exp ")" Stm "else" Stm ;
+
+
+terminator          Stm "";
 
 -- ===================== EXPRESSIONS =====================
-AssignExp.          Exp2 ::= Exp2 "=" Exp3 ;
-IncrExp.            Exp2 ::= Exp2 "+=" Exp3 ;
-DecrExp.            Exp2 ::= Exp2 "-=" Exp3 ;
-CondExp.            Exp2 ::= Exp2 "?" Exp3 ":" Exp3 ;
+ThrowExcep.	        Exp1 ::= "throw" Exp1 ; 
+
+AssignExp.          Exp2 ::= Exp3 "=" Exp2 ;
+PlusAssigExp.       Exp2 ::= Exp3 "+=" Exp2 ;
+MinusAssigExp.      Exp2 ::= Exp3 "-=" Exp2 ;
+CondExp.            Exp2 ::= Exp3 "?" Exp ":" Exp2 ;
+
+DisjExp.	        Exp3 ::= Exp3 "||" Exp4;
+ConjExp.	        Exp4 ::= Exp4 "&&" Exp5;
 
 EqExp.              Exp8 ::= Exp8 "==" Exp9 ;
 InEqExp.            Exp8 ::= Exp8 "!=" Exp9 ;
+
+LessExp.	        Exp9 ::= Exp9 "<" Exp10;
+LeqExp.		        Exp9 ::= Exp9 "<=" Exp10;
+GeqExp.		        Exp9 ::= Exp9 ">=" Exp10;
+GreaterExp.	        Exp9 ::= Exp9 ">" Exp10;
 
 LShift.             Exp10 ::= Exp10 "<<" Exp11 ;
 RShift.             Exp10 ::= Exp10 ">>" Exp11 ;
@@ -46,6 +68,13 @@ MulExp.             Exp12 ::= Exp12 "*" Exp13;
 DivExp.             Exp12 ::= Exp12 "/" Exp13;
 ModExp.             Exp12 ::= Exp12 "%" Exp13;
 
+Incr2Exp.	        Exp13 ::= "++" Exp13; 
+Decr2Exp.	        Exp13 ::= "--" Exp13;
+NegExp.	            Exp13 ::= "!" Exp13;
+DeRefExp.	        Exp13 ::= "*" Exp13;
+
+Incr1Exp.	        Exp14 ::= Exp14 "++"; 
+Decr1Exp.	        Exp14 ::= Exp14 "--";
 IndexExp.           Exp14 ::= Exp14 "[" Exp "]";
 FunCallExp.         Exp14 ::= Exp14 "(" [Exp] ")";
 DotStrucProjExp.    Exp14 ::= Exp14 "." Exp15 ;
@@ -61,11 +90,9 @@ separator           Exp ",";
 separator           nonempty String "" ;
 
 
--- ===================== QUALIFIED CONSTANTS =====================
---Hej.            Stm ::= Type Id "=" Exp ";";    
-QualConstDecl.  QualConst ::= Id;
-QualConstDecls. QualConst ::= [Id];
-separator       nonempty Id "::";
+-- ===================== QUALIFIED CONSTANTS =====================   
+QualConstDecls.   QualConst ::= [Id];
+separator         nonempty Id "::";
 
 -- ===================== TYPES =====================
 CharType.       Type ::= "char";

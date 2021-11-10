@@ -21,30 +21,93 @@ transId x = case x of
 
 transProgram :: AbsCalc.Program -> Result
 transProgram x = case x of
-  AbsCalc.PDefs defs -> failure x
+  AbsCalc.ProgDef defs -> failure x
 
 transDef :: AbsCalc.Def -> Result
 transDef x = case x of
-  AbsCalc.DFun type_ id args stms -> failure x
+  AbsCalc.QualConstDef qualconst -> failure x
+  AbsCalc.StmDef gentype inits -> failure x
+  AbsCalc.FuncDef gentype id args stms -> failure x
+  AbsCalc.FuncDef2 gentype id args -> failure x
+  AbsCalc.TypeDef gentype id -> failure x
 
 transArg :: AbsCalc.Arg -> Result
 transArg x = case x of
-  AbsCalc.ADecl type_ id -> failure x
+  AbsCalc.ArgDecl2 gentype init -> failure x
+  AbsCalc.ArgDecl3 gentype -> failure x
 
 transStm :: AbsCalc.Stm -> Result
 transStm x = case x of
-  AbsCalc.SCout exp -> failure x
-  AbsCalc.SReturn exp -> failure x
+  AbsCalc.InitStm gentype inits -> failure x
+  AbsCalc.StmExp exp -> failure x
+  AbsCalc.ReturnStm stm -> failure x
+  AbsCalc.WhileStm exp stm -> failure x
+  AbsCalc.ForStm gentype init exp1 exp2 stm -> failure x
+  AbsCalc.DoWhileStm stm exp -> failure x
+  AbsCalc.BlockStm stms -> failure x
+  AbsCalc.TypeDefStm gentype id -> failure x
+  AbsCalc.IfStm exp stm -> failure x
+  AbsCalc.IfElseStm exp stm1 stm2 -> failure x
 
 transExp :: AbsCalc.Exp -> Result
 transExp x = case x of
-  AbsCalc.EInt integer -> failure x
-  AbsCalc.EDouble double -> failure x
-  AbsCalc.EString string -> failure x
+  AbsCalc.ThrowExcep exp -> failure x
+  AbsCalc.AssignExp exp1 exp2 -> failure x
+  AbsCalc.PlusAssigExp exp1 exp2 -> failure x
+  AbsCalc.MinusAssigExp exp1 exp2 -> failure x
+  AbsCalc.CondExp exp1 exp2 exp3 -> failure x
+  AbsCalc.DisjExp exp1 exp2 -> failure x
+  AbsCalc.ConjExp exp1 exp2 -> failure x
+  AbsCalc.EqExp exp1 exp2 -> failure x
+  AbsCalc.InEqExp exp1 exp2 -> failure x
+  AbsCalc.LessExp exp1 exp2 -> failure x
+  AbsCalc.LeqExp exp1 exp2 -> failure x
+  AbsCalc.GeqExp exp1 exp2 -> failure x
+  AbsCalc.GreaterExp exp1 exp2 -> failure x
+  AbsCalc.LShift exp1 exp2 -> failure x
+  AbsCalc.RShift exp1 exp2 -> failure x
+  AbsCalc.AddExp exp1 exp2 -> failure x
+  AbsCalc.MinExp exp1 exp2 -> failure x
+  AbsCalc.MulExp exp1 exp2 -> failure x
+  AbsCalc.DivExp exp1 exp2 -> failure x
+  AbsCalc.ModExp exp1 exp2 -> failure x
+  AbsCalc.Incr2Exp exp -> failure x
+  AbsCalc.Decr2Exp exp -> failure x
+  AbsCalc.NegExp exp -> failure x
+  AbsCalc.DeRefExp exp -> failure x
+  AbsCalc.Incr1Exp exp -> failure x
+  AbsCalc.Decr1Exp exp -> failure x
+  AbsCalc.IndexExp exp1 exp2 -> failure x
+  AbsCalc.FunCallExp exp exps -> failure x
+  AbsCalc.DotStrucProjExp exp1 exp2 -> failure x
+  AbsCalc.ArrStrucProjExp exp1 exp2 -> failure x
+  AbsCalc.IntExp integer -> failure x
+  AbsCalc.DoubleExp double -> failure x
+  AbsCalc.StringArrExp strings -> failure x
+  AbsCalc.CharExp char -> failure x
+  AbsCalc.QualConstExp qualconst -> failure x
+
+transQualConst :: AbsCalc.QualConst -> Result
+transQualConst x = case x of
+  AbsCalc.QualConstDecls ids -> failure x
 
 transType :: AbsCalc.Type -> Result
 transType x = case x of
-  AbsCalc.Tbool -> failure x
-  AbsCalc.Tdouble -> failure x
-  AbsCalc.Tint -> failure x
-  AbsCalc.Tvoid -> failure x
+  AbsCalc.CharType -> failure x
+  AbsCalc.BoolType -> failure x
+  AbsCalc.DoubleType -> failure x
+  AbsCalc.IntType -> failure x
+  AbsCalc.VoidType -> failure x
+  AbsCalc.QualConstType qualconst -> failure x
+
+transGenType :: AbsCalc.GenType -> Result
+transGenType x = case x of
+  AbsCalc.GenTypeDecl type_ -> failure x
+  AbsCalc.ConstGenType type_ -> failure x
+  AbsCalc.AndGenType type_ -> failure x
+  AbsCalc.CAndGenType type_ -> failure x
+
+transInit :: AbsCalc.Init -> Result
+transInit x = case x of
+  AbsCalc.InitDecl id -> failure x
+  AbsCalc.InitAssign id exp -> failure x

@@ -1,0 +1,13 @@
+-- Run test suite
+(cd ../Haskell && bnfc -m Calc.cf)
+(cd ../Haskell && make)
+./progs-test-lab1 ../Haskell/Calc.cf 
+
+-- Debug
+(cd ../Haskell && bnfc -dm Calc.cf)
+(cd ../Haskell && make)
+
+-- Run test file
+(cd ../Haskell && bnfc -m Calc.cf)
+(cd ../Haskell && make)
+(cd ../Haskell && ./TestCalc test-2.cc)
