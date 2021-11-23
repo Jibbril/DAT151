@@ -33,7 +33,7 @@ EInt.      Exp6  ::= Integer ;
 EDouble.   Exp6  ::= Double  ;
 
 -- ### Identifiers and function calls.
-EId.       Exp6  ::= Id      ;
+EId.       Exp6  ::= Id ;
 EApp.      Exp6  ::= Id "(" [Exp] ")" ;  -- Restricted to Id.
 
 -- ### Increment and decrement.

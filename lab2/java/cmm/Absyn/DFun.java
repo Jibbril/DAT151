@@ -24,5 +24,6 @@ public class DFun  extends Def {
     return 37*(37*(37*(this.type_.hashCode())+this.id_.hashCode())+this.listarg_.hashCode())+this.liststm_.hashCode();
   }
 
+  public String getId() {return id_;}
 
 }
