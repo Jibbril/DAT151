@@ -1,35 +1,41 @@
 int main () { 
-    // int hej = 123;
-    // double pa = 456;
-    // double hej = 34 * 566;
-    // bool dig = true;
 
-    // bool a = 2 == 3;
-    // bool b = 2 < 3;
-    // bool c = 2 < 3.3;
-    // bool d = 1.4 == 3;
-    // bool e = 2 < true;
-    double a;
-    int i = 4;
-    a = i;
-    bool b = true && false;
-    bool c = true || false;
+    bool a = 1 >= 1.0;
+    if (a) printInt(1234); else int i = 1;
     
+    // int a,b,c;
+    // int a = 1;
+    // int b = 2;
+    // int c = a + b;
+    // printInt(c);
+
+    // int i = 1234;
+    // while (true) i = i + 1;
+    // printInt(i);
+
+    // myFun(i);
+
+
 }
 
+// int myFun (int i) {
+//     int b = i + 1;
+//     return b;
+// }
 
 
-double two (int heja, double da) {
-    // void b,c,d;
-    // bool boo = true;
-    // double hej = 123.45;
-    // int i = 0;
-    // while (boo) bool boo = false;
 
-    // if (boo) int a = 123; else bool b = false;
+// double two (int heja, double da) {
+//     void b,c,d;
+//     bool boo = true;
+//     double hej = 123.45;
+//     int i = 0;
+//     while (boo) bool boo = false;
 
-    // printInt(1);
+//     if (boo) int a = 123; else bool b = false;
 
-    // return hej;
-}
+//     printInt(1);
+
+//     return hej;
+// }
 

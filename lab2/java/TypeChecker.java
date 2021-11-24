@@ -36,7 +36,6 @@ public class TypeChecker {
             
             for (cmm.Absyn.Def x: p.listdef_) {
                 x.accept(new DefCheckerVisitor(), arg);
-                
             }
 
             if (!definitions.containsKey("main")){
@@ -118,6 +117,7 @@ public class TypeChecker {
         public Void visit(cmm.Absyn.ADecl p, Void arg)
         { /* Code for ADecl goes here */
             p.type_.accept(new TypeVisitor(), arg);
+            addVarToContext(p.id_, p.type_);
             //p.id_;
             return null;
         }
