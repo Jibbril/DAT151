@@ -1,3 +1,4 @@
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.HashMap;
@@ -150,7 +151,14 @@ public class TypeChecker {
                 throw new TypeException("Cannot be of type void");
             }
             addVarToContext(p.id_,p.type_);
-            p.exp_.accept(new ExpVisitor(), arg);
+            Type expType = p.exp_.accept(new ExpVisitor(), arg);
+
+            // Enable inits such as "double a = 345;" and "double b = 2*2.5"
+            if (p.type_.equals(DOUBLE) && expType.equals(INT)) {
+                expType = DOUBLE;
+            } 
+            compareTypes(expType, p.type_);
+            
             return null;
         }
 
@@ -229,65 +237,111 @@ public class TypeChecker {
             for (cmm.Absyn.Exp x: p.listexp_) {
                 x.accept(new ExpVisitor(), arg);
             }
+
             // Check number of arguments in function
             if (fd == null || p.listexp_.size() != fd.argumentsList.size()){
                 throw new TypeException("Function is not defined or is called with the wrong number of arguments");
             }
-
+            checkArgTypes(p.listexp_,fd.argumentsList);
             return null;
         }
         public Type visit(cmm.Absyn.EPost p, Void arg)
         { /* Code for EPost goes here */
             //p.id_;
+            Type t = lookupVariableType(p.id_);
+            boolean b = isIntOrDouble(t);
+            if (!b) {
+                throw new TypeException("Increment and decrement only callable on int or double");
+            }
             p.incdecop_.accept(new IncDecOpVisitor(), arg);
-            return null;
+            return t;
         }
         public Type visit(cmm.Absyn.EPre p, Void arg)
         { /* Code for EPre goes here */
+            Type t = lookupVariableType(p.id_);
+            boolean b = isIntOrDouble(t);
+            if (!b) {
+                throw new TypeException("Increment and decrement only callable on int or double");
+            }
             p.incdecop_.accept(new IncDecOpVisitor(), arg);
             //p.id_;
-            return null;
+            return t;
         }
         public Type visit(cmm.Absyn.EMul p, Void arg)
         { /* Code for EMul goes here */
-            p.exp_1.accept(new ExpVisitor(), arg);
+            Type t1 = p.exp_1.accept(new ExpVisitor(), arg);
             p.mulop_.accept(new MulOpVisitor(), arg);
-            p.exp_2.accept(new ExpVisitor(), arg);
-            return null;
+            Type t2 = p.exp_2.accept(new ExpVisitor(), arg);
+            
+            if (!(isIntOrDouble(t1) && isIntOrDouble(t2))) {
+                throw new TypeException("Multiplication only callable on int or double");
+            }
+
+            
+            if (!t1.equals(t2)) return DOUBLE;
+            return t1;
         }
         public Type visit(cmm.Absyn.EAdd p, Void arg)
         { /* Code for EAdd goes here */
-            p.exp_1.accept(new ExpVisitor(), arg);
+            Type t1 = p.exp_1.accept(new ExpVisitor(), arg);
             p.addop_.accept(new AddOpVisitor(), arg);
-            p.exp_2.accept(new ExpVisitor(), arg);
-            return null;
+            Type t2 = p.exp_2.accept(new ExpVisitor(), arg);
+
+            if (!(isIntOrDouble(t1) && isIntOrDouble(t2))) {
+                throw new TypeException("Addition only callable on int or double");
+            }
+
+            if (!t1.equals(t2)) return DOUBLE;
+            return t1;
         }
         public Type visit(cmm.Absyn.ECmp p, Void arg)
         { /* Code for ECmp goes here */
-            p.exp_1.accept(new ExpVisitor(), arg);
-            p.cmpop_.accept(new CmpOpVisitor(), arg);
-            p.exp_2.accept(new ExpVisitor(), arg);
-            return null;
+            Type t1 = p.exp_1.accept(new ExpVisitor(), arg);
+            // Returns true if comparison is eq/neq, false otherwise
+            boolean b = p.cmpop_.accept(new CmpOpVisitor(), arg);
+            Type t2 = p.exp_2.accept(new ExpVisitor(), arg);
+            if (b) {
+                if (t1.equals(VOID) || t2.equals(VOID)) {
+                    throw new TypeException("Eq/Neq not applicable to void type.");
+                }
+                compareTypes(t1, t2);
+            } else {
+                if (!(isIntOrDouble(t1) && isIntOrDouble(t2))) {
+                    throw new TypeException("Comparison only applies to numerical values.");
+                }
+            }
+                        
+            return BOOL;
         }
         public Type visit(cmm.Absyn.EAnd p, Void arg)
         { /* Code for EAnd goes here */
-            p.exp_1.accept(new ExpVisitor(), arg);
-            p.exp_2.accept(new ExpVisitor(), arg);
-            return null;
-        }
-        
+            Type t1 = p.exp_1.accept(new ExpVisitor(), arg);
+            Type t2 = p.exp_2.accept(new ExpVisitor(), arg);
+            compareTypes(t1, t2);
+            compareTypes(t1, BOOL);
+
+            return BOOL;
+        } 
         public Type visit(cmm.Absyn.EOr p, Void arg)
         { /* Code for EOr goes here */
-            p.exp_1.accept(new ExpVisitor(), arg);
-            p.exp_2.accept(new ExpVisitor(), arg);
-            return null;
+            Type t1 = p.exp_1.accept(new ExpVisitor(), arg);
+            Type t2 = p.exp_2.accept(new ExpVisitor(), arg);
+            compareTypes(t1, t2);
+            compareTypes(t1, BOOL);
+            return BOOL;
         }
-        
         public Type visit(cmm.Absyn.EAss p, Void arg)
         { /* Code for EAss goes here */
-            //p.id_;
-            p.exp_.accept(new ExpVisitor(), arg);
-            return null;
+            Type t1 = p.exp_.accept(new ExpVisitor(), arg);
+            Type t2 = lookupVariableType(p.id_);
+
+            // Enable assignments such as "double a; a = 345;"
+            if (t2.equals(DOUBLE) && t1.equals(INT)) {
+                t1 = DOUBLE;
+            } 
+            compareTypes(t1, t2);
+            
+            return t1;
         }
     }
     
@@ -327,31 +381,31 @@ public class TypeChecker {
         }
     }
     
-    public class CmpOpVisitor implements cmm.Absyn.CmpOp.Visitor<Void,Void>
+    public class CmpOpVisitor implements cmm.Absyn.CmpOp.Visitor<Boolean,Void>
     {
-        public Void visit(cmm.Absyn.OLt p, Void arg)
+        public Boolean visit(cmm.Absyn.OLt p, Void arg)
         { /* Code for OLt goes here */
-            return null;
+            return false;
         }
-        public Void visit(cmm.Absyn.OGt p, Void arg)
+        public Boolean visit(cmm.Absyn.OGt p, Void arg)
         { /* Code for OGt goes here */
-            return null;
+            return false;
         }
-        public Void visit(cmm.Absyn.OLtEq p, Void arg)
+        public Boolean visit(cmm.Absyn.OLtEq p, Void arg)
         { /* Code for OLtEq goes here */
-            return null;
+            return false;
         }
-        public Void visit(cmm.Absyn.OGtEq p, Void arg)
+        public Boolean visit(cmm.Absyn.OGtEq p, Void arg)
         { /* Code for OGtEq goes here */
-            return null;
+            return false;
         }
-        public Void visit(cmm.Absyn.OEq p, Void arg)
+        public Boolean visit(cmm.Absyn.OEq p, Void arg)
         { /* Code for OEq goes here */
-            return null;
+            return true;
         }
-        public Void visit(cmm.Absyn.ONEq p, Void arg)
+        public Boolean visit(cmm.Absyn.ONEq p, Void arg)
         { /* Code for ONEq goes here */
-            return null;
+            return true;
         }
     }
     
@@ -427,6 +481,7 @@ public class TypeChecker {
         }
         throw new TypeException("The variable " + x + " is not initialized ");
     }
+
     public void addVarToContext(String id, Type t) {
         // Get the top context block
         HashMap<String,Type> cxt = scopeList.get(0);
@@ -436,6 +491,19 @@ public class TypeChecker {
             throw new TypeException("found a duplicate variable binding with name: " + id);
         // Add the binding
         cxt.put(id, t);
+    }
+
+    private void checkArgTypes(ListExp le, ListArg la) {
+        for (int i = 0;i< le.size();i++) {
+            Type expType = le.get(i).accept(new ExpVisitor(), null);
+            Type argType = ((ADecl) la.get(i)).type_;
+
+            compareTypes(expType, argType);
+        }
+    }
+
+    private boolean isIntOrDouble(Type t) {
+        return t.equals(INT) || t.equals(DOUBLE);
     }
 }
 
