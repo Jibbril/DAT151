@@ -67,6 +67,9 @@ public class Interpreter {
         public Value visit(cmm.Absyn.SInit p, Void arg)
         { /* Code for SInit goes here */
             Value val = p.exp_.accept(new ExpVisitor(), arg);
+            if (val instanceof VInteger && p.type_.equals(DOUBLE)) {
+                val = castToVDouble(val);
+            }
             addVarToContext(p.id_, val);
 
             return null;
@@ -227,8 +230,8 @@ public class Interpreter {
             Value t = lookupVariable(p.id_);
             Boolean b = p.incdecop_.accept(new IncDecOpVisitor(), arg);
             updateVarInContext(p.id_, valueAddition(t, new VInteger(1), b), n);
-
-            return t;
+            Value t2 = lookupVariable(p.id_);
+            return t2;
         }
         public Value visit(cmm.Absyn.EMul p, Void arg)
         { /* Code for EMul goes here */
