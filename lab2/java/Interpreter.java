@@ -196,10 +196,16 @@ public class Interpreter {
 
             for (Stm stm : fun.liststm_) {
                 Value r = stm.accept(new StmVisitor(), arg);
+
+                if (r != null && fun.type_.equals(DOUBLE) && r instanceof VInteger) {
+                    closeScope();
+                    return castToVDouble(r);
+                }
+                
                 if (r != null) {
                     closeScope();
                     return r;
-                }
+                }  
             }
             
             closeScope();
