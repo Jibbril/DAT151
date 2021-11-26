@@ -40,7 +40,6 @@ public class Interpreter {
     {
         public Void visit(cmm.Absyn.DFun p, Void arg)
         { /* Code for DFun goes here */
-            
             definitions.put(p.id_ , p);
             
             return null;
@@ -75,6 +74,12 @@ public class Interpreter {
 
         public Value visit(cmm.Absyn.SReturn p, Void arg)
         { /* Code for SReturn goes here */
+            // Value v = p.exp_.accept(new ExpVisitor(), arg);
+            // if (v instanceof VInteger) {
+            //     v = castToVDouble(v);
+            // }
+            // return v;
+
             return p.exp_.accept(new ExpVisitor(), arg);
         }
 
@@ -159,7 +164,7 @@ public class Interpreter {
             }
 
             if (p.id_.equals("printDouble")) {
-                VDouble v = (VDouble)p.listexp_.get(0).accept(new ExpVisitor(), null);
+                VDouble v = castToVDouble(p.listexp_.get(0).accept(new ExpVisitor(), null));
                 System.out.println(v.value);
                 return null;
             }
@@ -178,8 +183,14 @@ public class Interpreter {
             DFun fun = definitions.get(p.id_);
             newScope();
             for (int i = 0;i<p.listexp_.size();i++){
-                String argName = ((ADecl) fun.listarg_.get(i)).id_;
-                Value val = p.listexp_.get(i).accept(new ExpVisitor(), arg);
+                Exp exp = p.listexp_.get(i);
+                ADecl a = (ADecl) fun.listarg_.get(i);
+
+                String argName = a.id_;
+                Value val = exp.accept(new ExpVisitor(), arg);
+                if (a.type_.equals(DOUBLE) && val instanceof VInteger) {
+                    val = castToVDouble(val);
+                }
                 addVarToContext(argName, val);
             }
 
@@ -457,8 +468,7 @@ public class Interpreter {
     public int lookupContextNr(String x) {
         int i = 0;
         for (HashMap<String, Value> v: contexts) {
-            Value t = v.get(x);
-            if (t != null) return i;
+            if (v.containsKey(x)) return i;
             i++;
         }
         throw new RuntimeException("The variable " + x + " is not initialized ");
@@ -487,13 +497,13 @@ public class Interpreter {
             if (v1 instanceof VInteger && v2 instanceof VInteger){
                 return new VInteger(((VInteger)v1).value + ((VInteger)v2).value);
             }
-            return new VDouble(((VDouble) v1).value + ((VDouble) v2).value);
+            return new VDouble(castToVDouble(v1).value +  castToVDouble(v2).value);
         }
         else{
             if (v1 instanceof VInteger && v2 instanceof VInteger){
                 return new VInteger(((VInteger)v1).value - ((VInteger)v2).value);
             }
-            return new VDouble(((VDouble) v1).value - ((VDouble) v2).value);
+            return new VDouble(castToVDouble(v1).value -  castToVDouble(v2).value);
         }
     }
 
@@ -502,13 +512,13 @@ public class Interpreter {
             if (v1 instanceof VInteger && v2 instanceof VInteger){
                 return new VInteger(((VInteger)v1).value * ((VInteger)v2).value);
             }
-            return new VDouble(((VDouble) v1).value * ((VDouble) v2).value);
+            return new VDouble(castToVDouble(v1).value *  castToVDouble(v2).value);
         }
         else {
             if (v1 instanceof VInteger && v2 instanceof VInteger){
                 return new VInteger(((VInteger)v1).value / ((VInteger)v2).value);
             }
-            return new VDouble(((VDouble) v1).value / ((VDouble) v2).value);
+            return new VDouble(castToVDouble(v1).value /  castToVDouble(v2).value);
         }
     }
 

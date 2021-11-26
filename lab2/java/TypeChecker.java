@@ -142,7 +142,7 @@ public class TypeChecker {
             }
             return null;
         }
-        
+
         public Void visit(cmm.Absyn.SInit p, Void arg)
         { /* Code for SInit goes here */
             p.type_.accept(new TypeVisitor(), arg);
@@ -164,6 +164,9 @@ public class TypeChecker {
         public Void visit(cmm.Absyn.SReturn p, Void arg)
         { /* Code for SReturn goes here */
             Type t = p.exp_.accept(new ExpVisitor(), arg);
+            if (returnType.equals(DOUBLE) && t.equals(INT)) {
+                t = new Type_double();
+            }
             compareTypes(t, returnType);
             return null;
         }
@@ -229,7 +232,6 @@ public class TypeChecker {
         }
         public Type visit(cmm.Absyn.EApp p, Void arg)
         { /* Code for EApp goes here */
-            //p.id_;
             // Check if function is defined
             FunctionDefinition fd = definitions.get(p.id_);
             // Check function expressions
@@ -242,7 +244,7 @@ public class TypeChecker {
                 throw new TypeException("Function is not defined or is called with the wrong number of arguments");
             }
             checkArgTypes(p.listexp_,fd.argumentsList);
-            return null;
+            return fd.returnType;
         }
         public Type visit(cmm.Absyn.EPost p, Void arg)
         { /* Code for EPost goes here */
@@ -499,7 +501,8 @@ public class TypeChecker {
         for (int i = 0;i< le.size();i++) {
             Type expType = le.get(i).accept(new ExpVisitor(), null);
             Type argType = ((ADecl) la.get(i)).type_;
-
+            
+            if (argType.equals(DOUBLE) && expType.equals(INT)) expType = new Type_double();
             compareTypes(expType, argType);
         }
     }

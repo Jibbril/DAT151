@@ -1,11 +1,7 @@
 {
-    "java.project.referencedLibraries": {
-        "include": [
-            "lib/**/*.jar",
-            "/Users/jibbril/java-lib/java-cup-11b-runtime.jar"
-        ],
-        "exclude": [
-            "/Users/jibbril/java-lib/JLex-1.2.6.jar"
-        ]
-    }
+    "java.project.referencedLibraries": [
+        "lib/**/*.jar",
+        "/Users/jibbril/java-lib/java-cup-11b-runtime.jar",
+        "/Users/jibbril/java-lib/JLex-1.2.6.jar"
+    ]
 }
