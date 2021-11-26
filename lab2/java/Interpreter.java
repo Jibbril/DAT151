@@ -1,5 +1,6 @@
 import cmm.Absyn.*;
 import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
 
@@ -192,16 +193,27 @@ public class Interpreter {
 
             DFun fun = definitions.get(p.id_);
             newScope();
+
+            ArrayList<String> argNames = new ArrayList<>();
+            ArrayList<Value> vals = new ArrayList<>();
+
+
             for (int i = 0;i<p.listexp_.size();i++){
                 Exp exp = p.listexp_.get(i);
                 ADecl a = (ADecl) fun.listarg_.get(i);
 
-                String argName = a.id_;
+                argNames.add(a.id_);
+                
                 Value val = exp.accept(new ExpVisitor(), arg);
                 if (a.type_.equals(DOUBLE) && val instanceof VInteger) {
                     val = castToVDouble(val);
                 }
-                addVarToContext(argName, val);
+                vals.add(val);
+
+            }
+
+            for (int i = 0; i<argNames.size();i++) {
+                addVarToContext(argNames.get(i), vals.get(i));
             }
 
             for (Stm stm : fun.liststm_) {
