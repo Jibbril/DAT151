@@ -1,7 +1,8 @@
 int main () { 
+    if (false || false) printInt(123); else printInt(456);
 
-    bool a = 1 >= 1.0;
-    if (a) printInt(1234); else int i = 1;
+    // bool a = 1 >= 1.0;
+    // if (a) printInt(1234); else int i = 1;
     
     // int a,b,c;
     // int a = 1;

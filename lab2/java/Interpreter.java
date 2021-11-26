@@ -233,6 +233,7 @@ public class Interpreter {
 
             return valueAddition(v1, v2, b);
         }
+
         public Value visit(cmm.Absyn.ECmp p, Void arg)
         { /* Code for ECmp goes here */
             Value t1 = p.exp_1.accept(new ExpVisitor(), arg);
@@ -245,17 +246,19 @@ public class Interpreter {
 
         public Value visit(cmm.Absyn.EAnd p, Void arg)
         { /* Code for EAnd goes here */
-            Value t1 = p.exp_1.accept(new ExpVisitor(), arg);
-            Value t2 = p.exp_2.accept(new ExpVisitor(), arg);
+            VBoolean t1 = (VBoolean) p.exp_1.accept(new ExpVisitor(), arg);
+            VBoolean t2 = (VBoolean) p.exp_2.accept(new ExpVisitor(), arg);
 
-            return new VBoolean(true);
+            return new VBoolean(t1.value && t2.value);
         } 
+
         public Value visit(cmm.Absyn.EOr p, Void arg)
         { /* Code for EOr goes here */
-            Value t1 = p.exp_1.accept(new ExpVisitor(), arg);
-            Value t2 = p.exp_2.accept(new ExpVisitor(), arg);
-            return new VBoolean(true);
+            VBoolean t1 = (VBoolean) p.exp_1.accept(new ExpVisitor(), arg);
+            VBoolean t2 = (VBoolean) p.exp_2.accept(new ExpVisitor(), arg);
+            return new VBoolean(t1.value || t2.value);
         }
+        
         public Value visit(cmm.Absyn.EAss p, Void arg)
         { /* Code for EAss goes here */
             Value t1 = p.exp_.accept(new ExpVisitor(), arg);
