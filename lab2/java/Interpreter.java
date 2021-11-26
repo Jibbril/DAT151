@@ -582,7 +582,7 @@ public class Interpreter {
         }
        
         if (operator.equals(new ONEq())) {
-            return new VBoolean(v1.value != v2.value);
+            return new VBoolean(!v1.value.equals(v2.value));
         }
 
         if (operator.equals(new OLt())) {

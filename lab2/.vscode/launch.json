@@ -24,7 +24,7 @@
             "request": "launch",
             "mainClass": "lab2",
             "projectName": "lab2_e6034d6f",
-            "args": "test/good/redeclare_in_while.cc"
+            "args": "test/good/good11.cc"
         }
     ]
 }
