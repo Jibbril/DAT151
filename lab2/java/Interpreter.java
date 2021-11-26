@@ -105,7 +105,10 @@ public class Interpreter {
             newScope();
             for (cmm.Absyn.Stm x: p.liststm_) {
                 Value v = x.accept(new StmVisitor(), arg);
-                if (v!=null) return v;
+                if (v!=null) {
+                    closeScope();
+                    return v;
+                };
             }
             closeScope();
             return null;
@@ -161,7 +164,7 @@ public class Interpreter {
         public Value visit(cmm.Absyn.EApp p, Void arg)
         { /* Code for EApp goes here */
             if (p.id_.equals("printInt")) {
-                VInteger v = (VInteger)p.listexp_.get(0).accept(new ExpVisitor(), null);
+                VInteger v = (VInteger) p.listexp_.get(0).accept(new ExpVisitor(), null);
                 System.out.println(v.value);
                 return null;
             }
