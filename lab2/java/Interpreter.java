@@ -88,15 +88,19 @@ public class Interpreter {
 
         public Value visit(cmm.Absyn.SWhile p, Void arg)
         { /* Code for SWhile goes here */
-            newScope();
-            Value condition = p.exp_.accept(new ExpVisitor(), null);
 
-            while (((VBoolean) condition).value){
+            Value condition = p.exp_.accept(new ExpVisitor(), arg);
+            if (((VBoolean) condition).value) {
+                newScope();
                 Value ret_v = p.stm_.accept(new StmVisitor(), arg);
-                if (ret_v != null) return ret_v;
-                condition = p.exp_.accept(new ExpVisitor(), null);
+                closeScope();
+                if(ret_v != null) {
+                    return ret_v;
+                }
+                else {
+                    p.accept(new StmVisitor(), arg);
+                }
             }
-            closeScope();
             return null;
         }
         
