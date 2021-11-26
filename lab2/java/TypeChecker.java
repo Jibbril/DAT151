@@ -51,8 +51,7 @@ public class TypeChecker {
             }
             
             for (cmm.Absyn.Def x: p.listdef_) {
-                x.accept(new DefVisitor(), arg);
-                
+                x.accept(new DefVisitor(), arg); 
             }
 
             return null;
@@ -99,11 +98,11 @@ public class TypeChecker {
             returnType = p.type_;
             p.type_.accept(new TypeVisitor(), arg);
             //p.id_;
+            newScope();
             for (cmm.Absyn.Arg x: p.listarg_) {
                 x.accept(new ArgVisitor(), arg);
             }
 
-            newScope();
             for (cmm.Absyn.Stm x: p.liststm_) {
                 x.accept(new StmVisitor(), arg);
             }
@@ -469,6 +468,9 @@ public class TypeChecker {
     }
 
     public void compareTypes(Type t1, Type t2) {
+        if (t1 == null || t2 == null) {
+            throw new TypeException("Expected type: " + t2 + ", but found type: " + t1);
+        }
         if (!t1.equals(t2)) {
             throw new TypeException("Expected type: " + t2 + ", but found type: " + t1);
         }

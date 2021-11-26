@@ -1,5 +1,4 @@
 import cmm.Absyn.*;
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.HashMap;
 import java.util.Scanner;
@@ -8,9 +7,6 @@ public class Interpreter {
     public HashMap<String,DFun> definitions = new HashMap<>();
     public LinkedList<HashMap<String,Value>> contexts = new LinkedList<>();
     public Scanner userInput = new Scanner(System.in);
-
-    // Return type of function we are checking
-    private Type returnType;
 
     // Share type constants
     public final Type BOOL   = new Type_bool();
@@ -64,7 +60,7 @@ public class Interpreter {
             p.type_.accept(new TypeVisitor(), arg);
     
             for (String x: p.listid_) {
-                addVarToContext(x, new VVoid());
+                addVarToContext(x, null);
             }
             return null;
         }
@@ -246,19 +242,46 @@ public class Interpreter {
 
         public Value visit(cmm.Absyn.EAnd p, Void arg)
         { /* Code for EAnd goes here */
-            VBoolean t1 = (VBoolean) p.exp_1.accept(new ExpVisitor(), arg);
-            VBoolean t2 = (VBoolean) p.exp_2.accept(new ExpVisitor(), arg);
+            Value t1 =  p.exp_1.accept(new ExpVisitor(), arg);
+            if (!isVBoolean(t1)) {
+                throw new RuntimeException("&& Operator only accepts booleans");
+            }
 
-            return new VBoolean(t1.value && t2.value);
+            if (((VBoolean) t1).value) {
+                Value t2 =  p.exp_2.accept(new ExpVisitor(), arg);
+
+                if (!isVBoolean(t2)) {
+                    throw new RuntimeException("&& Operator only accepts booleans");
+                }
+
+                if (((VBoolean) t2).value) {
+                    return new VBoolean(true);
+                }
+            } 
+            return new VBoolean(false);
         } 
 
         public Value visit(cmm.Absyn.EOr p, Void arg)
         { /* Code for EOr goes here */
-            VBoolean t1 = (VBoolean) p.exp_1.accept(new ExpVisitor(), arg);
-            VBoolean t2 = (VBoolean) p.exp_2.accept(new ExpVisitor(), arg);
-            return new VBoolean(t1.value || t2.value);
+            Value t1 =  p.exp_1.accept(new ExpVisitor(), arg);
+
+            if (!isVBoolean(t1)) {
+                throw new RuntimeException("|| Operator only accepts booleans");
+            }
+            if (((VBoolean) t1).value) {
+                return new VBoolean(true);
+            } else {
+                Value t2 =  p.exp_2.accept(new ExpVisitor(), arg);
+                if (!isVBoolean(t2)) {
+                    throw new RuntimeException("|| Operator only accepts booleans");
+                }
+                if (((VBoolean) t2).value) {
+                    return new VBoolean(true);
+                }
+            }
+            return new VBoolean(false);
         }
-        
+
         public Value visit(cmm.Absyn.EAss p, Void arg)
         { /* Code for EAss goes here */
             Value t1 = p.exp_.accept(new ExpVisitor(), arg);
@@ -554,5 +577,7 @@ public class Interpreter {
         return null;
     }
 
-    
+    boolean isVBoolean(Value b) {
+        return b instanceof VBoolean;
+    }
 }
