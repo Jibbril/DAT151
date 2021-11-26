@@ -24,7 +24,7 @@
             "request": "launch",
             "mainClass": "lab2",
             "projectName": "lab2_e6034d6f",
-            "args": "test/good/subtyping/int_fun0.cc"
+            "args": "test/good/subtyping/cmp_while_int_eq_double.cc"
         }
     ]
 }

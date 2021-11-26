@@ -301,9 +301,13 @@ public class TypeChecker {
             // Returns true if comparison is eq/neq, false otherwise
             boolean b = p.cmpop_.accept(new CmpOpVisitor(), arg);
             Type t2 = p.exp_2.accept(new ExpVisitor(), arg);
+
             if (b) {
                 if (t1.equals(VOID) || t2.equals(VOID)) {
                     throw new TypeException("Eq/Neq not applicable to void type.");
+                }
+                if (t1.equals(INT) && t2.equals(DOUBLE) || t1.equals(DOUBLE) && t2.equals(INT)) {
+                    t1 = t2 = new Type_double();  
                 }
                 compareTypes(t1, t2);
             } else {

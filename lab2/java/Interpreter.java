@@ -568,7 +568,7 @@ public class Interpreter {
 
     public VBoolean resolveNumericalComparison(VDouble v1, VDouble v2,CmpOp operator){
         if (operator.equals(new OEq())) {
-            return new VBoolean(v1.value == v2.value);
+            return new VBoolean(v1.value.equals(v2.value));
         }
        
         if (operator.equals(new ONEq())) {
