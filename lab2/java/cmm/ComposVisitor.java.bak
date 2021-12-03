@@ -102,24 +102,6 @@ public class ComposVisitor<A> implements
     }
 
     /* Exp */
-    public cmm.Absyn.Exp visit(cmm.Absyn.ETyped p, A arg)
-    {
-      cmm.Absyn.Type type_ = p.type_.accept(this, arg);
-      cmm.Absyn.Exp exp_ = p.exp_.accept(this, arg);
-      return new cmm.Absyn.ETyped(type_, exp_);
-    }
-    public cmm.Absyn.Exp visit(cmm.Absyn.EConv p, A arg)
-    {
-      cmm.Absyn.Type type_ = p.type_.accept(this, arg);
-      cmm.Absyn.Exp exp_ = p.exp_.accept(this, arg);
-      return new cmm.Absyn.EConv(type_, exp_);
-    }
-    public cmm.Absyn.Exp visit(cmm.Absyn.EAss p, A arg)
-    {
-      String id_ = p.id_;
-      cmm.Absyn.Exp exp_ = p.exp_.accept(this, arg);
-      return new cmm.Absyn.EAss(id_, exp_);
-    }
     public cmm.Absyn.Exp visit(cmm.Absyn.EBool p, A arg)
     {
       cmm.Absyn.BoolLit boollit_ = p.boollit_.accept(this, arg);
@@ -194,6 +176,12 @@ public class ComposVisitor<A> implements
       cmm.Absyn.Exp exp_1 = p.exp_1.accept(this, arg);
       cmm.Absyn.Exp exp_2 = p.exp_2.accept(this, arg);
       return new cmm.Absyn.EOr(exp_1, exp_2);
+    }
+    public cmm.Absyn.Exp visit(cmm.Absyn.EAss p, A arg)
+    {
+      String id_ = p.id_;
+      cmm.Absyn.Exp exp_ = p.exp_.accept(this, arg);
+      return new cmm.Absyn.EAss(id_, exp_);
     }
 
     /* IncDecOp */
