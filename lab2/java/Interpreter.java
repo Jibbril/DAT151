@@ -59,8 +59,8 @@ public class Interpreter {
         { /* Code for SDecls goes here */
             p.type_.accept(new TypeVisitor(), arg);
     
-            for (String x: p.listid_) {
-                addVarToContext(x, null);
+            for (String val: p.listid_) {
+                addVarToContext(val, null);
             }
             return null;
         }
@@ -78,11 +78,6 @@ public class Interpreter {
 
         public Value visit(cmm.Absyn.SReturn p, Void arg)
         { /* Code for SReturn goes here */
-            // Value v = p.exp_.accept(new ExpVisitor(), arg);
-            // if (v instanceof VInteger) {
-            //     v = castToVDouble(v);
-            // }
-            // return v;
 
             return p.exp_.accept(new ExpVisitor(), arg);
         }
@@ -486,9 +481,12 @@ public class Interpreter {
     }
 
     public Value lookupVariable(String x) {
-        for (HashMap<String, Value> v: contexts) {
-            Value t = v.get(x);
-            if (t != null) return t;
+        for (HashMap<String, Value> ctx: contexts) {
+            if (ctx.containsKey(x)) {
+                Value v = ctx.get(x);
+                if (v != null) return v;
+                break;
+            }
         }
         throw new RuntimeException("The variable " + x + " is not initialized ");
     }

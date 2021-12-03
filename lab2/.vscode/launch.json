@@ -24,7 +24,7 @@
             "request": "launch",
             "mainClass": "lab2",
             "projectName": "lab2_e6034d6f",
-            "args": "test/good/bind_function_arguments_lazily.cc"
+            "args": "java/dummy.cc"
         }
     ]
 }
