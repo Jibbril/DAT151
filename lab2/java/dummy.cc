@@ -1,6 +1,6 @@
-int main () {
- double dooble;
- dooble = 1;
- printDouble(dooble / 2);
- return 0;
+int main() {
+  double d = 1;
+  d = d / 2;
+  printDouble(d);
+  return 0;
 }

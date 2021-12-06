@@ -401,7 +401,7 @@ public class Interpreter {
 
     // ======================== Value class ========================
     private abstract class Value {
-        public ETyped eTyped = new ETyped(DOUBLE, null);
+        public ETyped eTyped;
     }
 
     public class VInteger extends Value {
@@ -409,6 +409,7 @@ public class Interpreter {
 
         public VInteger(Integer v) {
             value = v;
+            eTyped = new ETyped(INT, null);
         }
 
         public VInteger(Integer v, ETyped e) {
@@ -426,6 +427,8 @@ public class Interpreter {
 
         public VBoolean(boolean v) {
             value = v;
+            eTyped = new ETyped(BOOL, null);
+
         }
 
         public VBoolean(boolean v, ETyped e) {
@@ -443,6 +446,7 @@ public class Interpreter {
 
         public VDouble(Double v) {
             value = v;
+            eTyped = new ETyped(DOUBLE, null);
         }
 
         public VDouble(Double v, ETyped e) {
