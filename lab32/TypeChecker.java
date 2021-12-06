@@ -519,11 +519,13 @@ public class TypeChecker {
 
     private void checkArgTypes(ListExp le, ListArg la) {
         for (int i = 0;i< le.size();i++) {
-            Type expType = le.get(i).accept(new ExpVisitor(), null);
+            ETyped expType = le.get(i).accept(new ExpVisitor(), null);
             Type argType = ((ADecl) la.get(i)).type_;
             
-            if (argType.equals(DOUBLE) && expType.equals(INT)) expType = new Type_double();
-            compareTypes(expType, argType);
+            if (argType.equals(DOUBLE) && expType.type_.equals(INT)) { 
+                expType = new ETyped(DOUBLE,expType);
+                compareTypes(expType.type_, argType);
+            }
         }
     }
 
