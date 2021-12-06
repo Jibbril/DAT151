@@ -153,7 +153,11 @@ public class Interpreter {
 
         public Value visit(cmm.Absyn.EId p, Void arg) { /* Code for EId goes here */
             // p.id_;
-            return lookupVariable(p.id_);
+
+            Value val = lookupVariable(p.id_);
+            if (!(val instanceof VVoid))
+                return val;
+            throw new RuntimeException("Variable not initialized");
         }
 
         public Value visit(cmm.Absyn.EApp p, Void arg) { /* Code for EApp goes here */
@@ -460,6 +464,8 @@ public class Interpreter {
     }
 
     public class VVoid extends Value {
+        public final Integer value = null;
+
         public VVoid(ETyped e) {
             eTyped = e;
         }
@@ -498,8 +504,9 @@ public class Interpreter {
         for (HashMap<String, Value> ctx : contexts) {
             if (ctx.containsKey(x)) {
                 Value v = ctx.get(x);
-                if (v != null)
+                if (v != null) {
                     return v;
+                }
                 break;
             }
         }
