@@ -84,6 +84,23 @@ public abstract class FoldVisitor<R,A> implements AllVisitor<R,A> {
     }
 
 /* Exp */
+    public R visit(cmm.Absyn.ETyped p, A arg) {
+      R r = leaf(arg);
+      r = combine(p.type_.accept(this, arg), r, arg);
+      r = combine(p.exp_.accept(this, arg), r, arg);
+      return r;
+    }
+    public R visit(cmm.Absyn.EConv p, A arg) {
+      R r = leaf(arg);
+      r = combine(p.type_.accept(this, arg), r, arg);
+      r = combine(p.exp_.accept(this, arg), r, arg);
+      return r;
+    }
+    public R visit(cmm.Absyn.EAss p, A arg) {
+      R r = leaf(arg);
+      r = combine(p.exp_.accept(this, arg), r, arg);
+      return r;
+    }
     public R visit(cmm.Absyn.EBool p, A arg) {
       R r = leaf(arg);
       r = combine(p.boollit_.accept(this, arg), r, arg);
@@ -150,11 +167,6 @@ public abstract class FoldVisitor<R,A> implements AllVisitor<R,A> {
       R r = leaf(arg);
       r = combine(p.exp_1.accept(this, arg), r, arg);
       r = combine(p.exp_2.accept(this, arg), r, arg);
-      return r;
-    }
-    public R visit(cmm.Absyn.EAss p, A arg) {
-      R r = leaf(arg);
-      r = combine(p.exp_.accept(this, arg), r, arg);
       return r;
     }
 

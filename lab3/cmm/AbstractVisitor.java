@@ -32,6 +32,9 @@ public class AbstractVisitor<R,A> implements AllVisitor<R,A> {
       throw new IllegalArgumentException(this.getClass().getName() + ": " + p);
     }
     /* Exp */
+    public R visit(cmm.Absyn.ETyped p, A arg) { return visitDefault(p, arg); }
+    public R visit(cmm.Absyn.EConv p, A arg) { return visitDefault(p, arg); }
+    public R visit(cmm.Absyn.EAss p, A arg) { return visitDefault(p, arg); }
     public R visit(cmm.Absyn.EBool p, A arg) { return visitDefault(p, arg); }
     public R visit(cmm.Absyn.EInt p, A arg) { return visitDefault(p, arg); }
     public R visit(cmm.Absyn.EDouble p, A arg) { return visitDefault(p, arg); }
@@ -44,7 +47,6 @@ public class AbstractVisitor<R,A> implements AllVisitor<R,A> {
     public R visit(cmm.Absyn.ECmp p, A arg) { return visitDefault(p, arg); }
     public R visit(cmm.Absyn.EAnd p, A arg) { return visitDefault(p, arg); }
     public R visit(cmm.Absyn.EOr p, A arg) { return visitDefault(p, arg); }
-    public R visit(cmm.Absyn.EAss p, A arg) { return visitDefault(p, arg); }
     public R visitDefault(cmm.Absyn.Exp p, A arg) {
       throw new IllegalArgumentException(this.getClass().getName() + ": " + p);
     }

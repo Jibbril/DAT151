@@ -480,7 +480,34 @@ public class PrettyPrinter
 
   private static void pp(cmm.Absyn.Exp foo, int _i_)
   {
-    if (foo instanceof cmm.Absyn.EBool)
+    if (foo instanceof cmm.Absyn.ETyped)
+    {
+       cmm.Absyn.ETyped _etyped = (cmm.Absyn.ETyped) foo;
+       if (_i_ > 0) render(_L_PAREN);
+       pp(_etyped.type_, 0);
+       pp(_etyped.exp_, 0);
+       if (_i_ > 0) render(_R_PAREN);
+    }
+    else     if (foo instanceof cmm.Absyn.EConv)
+    {
+       cmm.Absyn.EConv _econv = (cmm.Absyn.EConv) foo;
+       if (_i_ > 0) render(_L_PAREN);
+       pp(_econv.type_, 0);
+       render("(");
+       pp(_econv.exp_, 0);
+       render(")");
+       if (_i_ > 0) render(_R_PAREN);
+    }
+    else     if (foo instanceof cmm.Absyn.EAss)
+    {
+       cmm.Absyn.EAss _eass = (cmm.Absyn.EAss) foo;
+       if (_i_ > 0) render(_L_PAREN);
+       pp(_eass.id_, 0);
+       render("=");
+       pp(_eass.exp_, 0);
+       if (_i_ > 0) render(_R_PAREN);
+    }
+    else     if (foo instanceof cmm.Absyn.EBool)
     {
        cmm.Absyn.EBool _ebool = (cmm.Absyn.EBool) foo;
        if (_i_ > 6) render(_L_PAREN);
@@ -578,15 +605,6 @@ public class PrettyPrinter
        render("||");
        pp(_eor.exp_2, 2);
        if (_i_ > 1) render(_R_PAREN);
-    }
-    else     if (foo instanceof cmm.Absyn.EAss)
-    {
-       cmm.Absyn.EAss _eass = (cmm.Absyn.EAss) foo;
-       if (_i_ > 0) render(_L_PAREN);
-       pp(_eass.id_, 0);
-       render("=");
-       pp(_eass.exp_, 0);
-       if (_i_ > 0) render(_R_PAREN);
     }
 
   }
@@ -940,6 +958,33 @@ public class PrettyPrinter
 
   private static void sh(cmm.Absyn.Exp foo)
   {
+    if (foo instanceof cmm.Absyn.ETyped)
+    {
+       cmm.Absyn.ETyped _etyped = (cmm.Absyn.ETyped) foo;
+       render("(");
+       render("ETyped");
+       sh(_etyped.type_);
+       sh(_etyped.exp_);
+       render(")");
+    }
+    if (foo instanceof cmm.Absyn.EConv)
+    {
+       cmm.Absyn.EConv _econv = (cmm.Absyn.EConv) foo;
+       render("(");
+       render("EConv");
+       sh(_econv.type_);
+       sh(_econv.exp_);
+       render(")");
+    }
+    if (foo instanceof cmm.Absyn.EAss)
+    {
+       cmm.Absyn.EAss _eass = (cmm.Absyn.EAss) foo;
+       render("(");
+       render("EAss");
+       sh(_eass.id_);
+       sh(_eass.exp_);
+       render(")");
+    }
     if (foo instanceof cmm.Absyn.EBool)
     {
        cmm.Absyn.EBool _ebool = (cmm.Absyn.EBool) foo;
@@ -1047,15 +1092,6 @@ public class PrettyPrinter
        render("EOr");
        sh(_eor.exp_1);
        sh(_eor.exp_2);
-       render(")");
-    }
-    if (foo instanceof cmm.Absyn.EAss)
-    {
-       cmm.Absyn.EAss _eass = (cmm.Absyn.EAss) foo;
-       render("(");
-       render("EAss");
-       sh(_eass.id_);
-       sh(_eass.exp_);
        render(")");
     }
   }

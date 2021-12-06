@@ -1,8 +1,6 @@
 {
     "java.project.referencedLibraries": [
         "lib/**/*.jar",
-        "jasmin.jar",
-        "/Users/jibbril/java-lib/java-cup-11b-runtime.jar",
-        "/Users/jibbril/java-lib/JLex-1.2.6.jar"
+        "/Users/jibbril/java-lib/java-cup-11b-runtime.jar"
     ]
 }

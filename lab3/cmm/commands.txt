@@ -1,1 +1,0 @@
-export CLASSPATH=.:${HOME}/java-lib/java-cup-11b.jar:${HOME}/java-lib/java-cup-11b-runtime.jar:${HOME}/java-lib/JLex-1.2.6.jar:${CLASSPATH}

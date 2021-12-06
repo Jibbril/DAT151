@@ -121,15 +121,14 @@ public class TypeChecker {
         }
     }
 
-    public class StmVisitor implements cmm.Absyn.Stm.Visitor<Void,Void>
+    public class StmVisitor implements cmm.Absyn.Stm.Visitor<Stm,Void>
     {
-        public Void visit(cmm.Absyn.SExp p, Void arg)
+        public Stm visit(cmm.Absyn.SExp p, Void arg)
         { /* Code for SExp goes here */
-            p.exp_.accept(new ExpVisitor(), arg);
-            return null;
+            ETyped t = p.exp_.accept(new ExpVisitor(), arg);
+            return new SExp(t);
         }
-        
-        public Void visit(cmm.Absyn.SDecls p, Void arg)
+        public Stm visit(cmm.Absyn.SDecls p, Void arg)
         { /* Code for SDecls goes here */
             p.type_.accept(new TypeVisitor(), arg);
             if (isVoidType(p.type_)){
@@ -139,62 +138,68 @@ public class TypeChecker {
             for (String x: p.listid_) {
                 addVarToContext(x, p.type_);
             }
-            return null;
+            return p;
         }
 
-        public Void visit(cmm.Absyn.SInit p, Void arg)
+        public Stm visit(cmm.Absyn.SInit p, Void arg)
         { /* Code for SInit goes here */
             p.type_.accept(new TypeVisitor(), arg);
             if (isVoidType(p.type_)){
                 throw new TypeException("Cannot be of type void");
             }
             addVarToContext(p.id_,p.type_);
-            Type expType = p.exp_.accept(new ExpVisitor(), arg);
-
+            ETyped exp = p.exp_.accept(new ExpVisitor(), arg);
+            Type t = exp.type_;
             // Enable inits such as "double a = 345;" and "double b = 2*2.5"
-            if (p.type_.equals(DOUBLE) && expType.equals(INT)) {
-                expType = DOUBLE;
+            if (p.type_.equals(DOUBLE) && t.equals(INT)) {
+                t = DOUBLE;
             } 
-            compareTypes(expType, p.type_);
-            
-            return null;
-        }
+            compareTypes(t, p.type_);
 
-        public Void visit(cmm.Absyn.SReturn p, Void arg)
-        { /* Code for SReturn goes here */
-            Type t = p.exp_.accept(new ExpVisitor(), arg);
-            if (returnType.equals(DOUBLE) && t.equals(INT)) {
-                t = new Type_double();
+            if (!t.equals(exp.type_)){
+                // Type t may have been updated
+                ETyped e = new ETyped(t, exp.exp_);
+                return new SInit(t, p.id_, e);
             }
-            compareTypes(t, returnType);
-            return null;
+            
+            return new SInit(t, p.id_, exp);
         }
 
-        public Void visit(cmm.Absyn.SWhile p, Void arg)
+        public Stm visit(cmm.Absyn.SReturn p, Void arg)
+        { /* Code for SReturn goes here */
+            ETyped t = p.exp_.accept(new ExpVisitor(), arg);
+            if (returnType.equals(DOUBLE) && t.type_.equals(INT)) {
+                t = new ETyped(DOUBLE, p.exp_);
+            }
+            compareTypes(t.type_, returnType);
+            return new SReturn(t);
+        }
+
+        public Stm visit(cmm.Absyn.SWhile p, Void arg)
         { /* Code for SWhile goes here */
             newScope();
-            Type t = p.exp_.accept(new ExpVisitor(), null);
-            compareTypes(t, BOOL);
+            ETyped t = p.exp_.accept(new ExpVisitor(), null);
+            compareTypes(t.type_, BOOL);
             
             p.stm_.accept(new StmVisitor(), arg);
             closeScope();
-            return null;
+            return p;
         }
         
-        public Void visit(cmm.Absyn.SBlock p, Void arg)
+        public Stm visit(cmm.Absyn.SBlock p, Void arg)
         { /* Code for SBlock goes here */
             newScope();
             for (cmm.Absyn.Stm x: p.liststm_) {
                 x.accept(new StmVisitor(), arg);
             }
             closeScope();
-            return null;
+            return p;
         }
         
-        public Void visit(cmm.Absyn.SIfElse p, Void arg)
+        public Stm visit(cmm.Absyn.SIfElse p, Void arg)
         { /* Code for SIfElse goes here */
-            Type t = p.exp_.accept(new ExpVisitor(), null);
-            compareTypes(t, BOOL);
+            ETyped t = p.exp_.accept(new ExpVisitor(), null);
+            compareTypes(t.type_, BOOL);
             
             newScope();
             p.stm_1.accept(new StmVisitor(), arg);
@@ -203,33 +208,33 @@ public class TypeChecker {
             newScope();
             p.stm_2.accept(new StmVisitor(), arg);
             closeScope();
-            return null;
+            return p;
         }
     }
 
-    public class ExpVisitor implements cmm.Absyn.Exp.Visitor<Type,Void>
+    public class ExpVisitor implements cmm.Absyn.Exp.Visitor<ETyped,Void>
     {
-        public Type visit(cmm.Absyn.EBool p, Void arg)
+        public ETyped visit(cmm.Absyn.EBool p, Void arg)
         { /* Code for EBool goes here */
             p.boollit_.accept(new BoolLitVisitor(), arg);
-            return BOOL;
+            return new ETyped(BOOL, p);
         }
-        public Type visit(cmm.Absyn.EInt p, Void arg)
+        public ETyped visit(cmm.Absyn.EInt p, Void arg)
         { /* Code for EInt goes here */
             //p.integer_;
-            return INT;
+            return new ETyped(INT, p);
         }
-        public Type visit(cmm.Absyn.EDouble p, Void arg)
+        public ETyped visit(cmm.Absyn.EDouble p, Void arg)
         { /* Code for EDouble goes here */
             //p.double_;
-            return DOUBLE;
+            return new ETyped(DOUBLE, p);
         }
-        public Type visit(cmm.Absyn.EId p, Void arg)
+        public ETyped visit(cmm.Absyn.EId p, Void arg)
         { /* Code for EId goes here */
             //p.id_;
-            return lookupVariableType(p.id_);
+            return new ETyped(lookupVariableType(p.id_), p);
         }
-        public Type visit(cmm.Absyn.EApp p, Void arg)
+        public ETyped visit(cmm.Absyn.EApp p, Void arg)
         { /* Code for EApp goes here */
             // Check if function is defined
             FunctionDefinition fd = definitions.get(p.id_);
@@ -243,9 +248,9 @@ public class TypeChecker {
                 throw new TypeException("Function is not defined or is called with the wrong number of arguments");
             }
             checkArgTypes(p.listexp_,fd.argumentsList);
-            return fd.returnType;
+            return new ETyped(fd.returnType, p);
         }
-        public Type visit(cmm.Absyn.EPost p, Void arg)
+        public ETyped visit(cmm.Absyn.EPost p, Void arg)
         { /* Code for EPost goes here */
             //p.id_;
             Type t = lookupVariableType(p.id_);
@@ -254,9 +259,9 @@ public class TypeChecker {
                 throw new TypeException("Increment and decrement only callable on int or double");
             }
             p.incdecop_.accept(new IncDecOpVisitor(), arg);
-            return t;
+            return new ETyped(t, p);
         }
-        public Type visit(cmm.Absyn.EPre p, Void arg)
+        public ETyped visit(cmm.Absyn.EPre p, Void arg)
         { /* Code for EPre goes here */
             Type t = lookupVariableType(p.id_);
             boolean b = isIntOrDouble(t);
@@ -265,41 +270,41 @@ public class TypeChecker {
             }
             p.incdecop_.accept(new IncDecOpVisitor(), arg);
             //p.id_;
-            return t;
+            return new ETyped(t, p);
         }
-        public Type visit(cmm.Absyn.EMul p, Void arg)
+        public ETyped visit(cmm.Absyn.EMul p, Void arg)
         { /* Code for EMul goes here */
-            Type t1 = p.exp_1.accept(new ExpVisitor(), arg);
+            ETyped t1 = p.exp_1.accept(new ExpVisitor(), arg);
             p.mulop_.accept(new MulOpVisitor(), arg);
-            Type t2 = p.exp_2.accept(new ExpVisitor(), arg);
+            ETyped t2 = p.exp_2.accept(new ExpVisitor(), arg);
             
-            if (!(isIntOrDouble(t1) && isIntOrDouble(t2))) {
+            if (!(isIntOrDouble(t1.type_) && isIntOrDouble(t2.type_))) {
                 throw new TypeException("Multiplication only callable on int or double");
             }
 
             
-            if (!t1.equals(t2)) return DOUBLE;
-            return t1;
+            if (!t1.type_.equals(t2.type_)) return new ETyped(DOUBLE, p);
+            return new ETyped(t1.type_, p);
         }
-        public Type visit(cmm.Absyn.EAdd p, Void arg)
+        public ETyped visit(cmm.Absyn.EAdd p, Void arg)
         { /* Code for EAdd goes here */
-            Type t1 = p.exp_1.accept(new ExpVisitor(), arg);
+            ETyped t1 = p.exp_1.accept(new ExpVisitor(), arg);
             p.addop_.accept(new AddOpVisitor(), arg);
-            Type t2 = p.exp_2.accept(new ExpVisitor(), arg);
+            ETyped t2 = p.exp_2.accept(new ExpVisitor(), arg);
 
-            if (!(isIntOrDouble(t1) && isIntOrDouble(t2))) {
+            if (!(isIntOrDouble(t1.type_) && isIntOrDouble(t2.type_))) {
                 throw new TypeException("Addition only callable on int or double");
             }
 
-            if (!t1.equals(t2)) return DOUBLE;
-            return t1;
+            if (!t1.type_.equals(t2.type_)) return new ETyped(DOUBLE, p);;
+            return new ETyped(t1.type_, p);
         }
-        public Type visit(cmm.Absyn.ECmp p, Void arg)
+        public ETyped visit(cmm.Absyn.ECmp p, Void arg)
         { /* Code for ECmp goes here */
-            Type t1 = p.exp_1.accept(new ExpVisitor(), arg);
+            Type t1 = p.exp_1.accept(new ExpVisitor(), arg).type_;
             // Returns true if comparison is eq/neq, false otherwise
             boolean b = p.cmpop_.accept(new CmpOpVisitor(), arg);
-            Type t2 = p.exp_2.accept(new ExpVisitor(), arg);
+            Type t2 = p.exp_2.accept(new ExpVisitor(), arg).type_;
 
             if (b) {
                 if (t1.equals(VOID) || t2.equals(VOID)) {
@@ -315,37 +320,49 @@ public class TypeChecker {
                 }
             }
                         
-            return BOOL;
+            return new ETyped(BOOL, p);
         }
-        public Type visit(cmm.Absyn.EAnd p, Void arg)
+        public ETyped visit(cmm.Absyn.EAnd p, Void arg)
         { /* Code for EAnd goes here */
-            Type t1 = p.exp_1.accept(new ExpVisitor(), arg);
-            Type t2 = p.exp_2.accept(new ExpVisitor(), arg);
+            Type t1 = p.exp_1.accept(new ExpVisitor(), arg).type_;
+            Type t2 = p.exp_2.accept(new ExpVisitor(), arg).type_;
             compareTypes(t1, t2);
             compareTypes(t1, BOOL);
 
-            return BOOL;
+            return new ETyped(BOOL, p);
         } 
-        public Type visit(cmm.Absyn.EOr p, Void arg)
+        public ETyped visit(cmm.Absyn.EOr p, Void arg)
         { /* Code for EOr goes here */
-            Type t1 = p.exp_1.accept(new ExpVisitor(), arg);
-            Type t2 = p.exp_2.accept(new ExpVisitor(), arg);
-            compareTypes(t1, t2);
-            compareTypes(t1, BOOL);
-            return BOOL;
+            ETyped t1 = p.exp_1.accept(new ExpVisitor(), arg);
+            ETyped t2 = p.exp_2.accept(new ExpVisitor(), arg);
+            compareTypes(t1.type_, t2.type_);
+            compareTypes(t1.type_, BOOL);
+            return new ETyped(BOOL,p);
         }
-        public Type visit(cmm.Absyn.EAss p, Void arg)
+        public ETyped visit(cmm.Absyn.EAss p, Void arg)
         { /* Code for EAss goes here */
-            Type t1 = p.exp_.accept(new ExpVisitor(), arg);
+            ETyped t1 = p.exp_.accept(new ExpVisitor(), arg);
             Type t2 = lookupVariableType(p.id_);
 
             // Enable assignments such as "double a; a = 345;"
-            if (t2.equals(DOUBLE) && t1.equals(INT)) {
-                t1 = DOUBLE;
+            if (t2.equals(DOUBLE) && t1.type_.equals(INT)) {
+                t1 = new ETyped(DOUBLE,p);
             } 
-            compareTypes(t1, t2);
+            compareTypes(t1.type_, t2);
             
-            return t1;
+            return new ETyped(t1.type_,p);
+        }
+        public ETyped visit(cmm.Absyn.ETyped p, Void arg)
+        { /* Code for ETyped goes here */
+            p.type_.accept(new TypeVisitor(), arg);
+            ETyped t = p.exp_.accept(new ExpVisitor(), arg);
+            return new ETyped(t.type_,p);
+        }
+        public ETyped visit(cmm.Absyn.EConv p, Void arg)
+        { /* Code for EConv goes here */
+            p.type_.accept(new TypeVisitor(), arg);
+            ETyped t = p.exp_.accept(new ExpVisitor(), arg);
+            return new ETyped(t.type_,p);
         }
     }
     
@@ -502,11 +519,13 @@ public class TypeChecker {
 
     private void checkArgTypes(ListExp le, ListArg la) {
         for (int i = 0;i< le.size();i++) {
-            Type expType = le.get(i).accept(new ExpVisitor(), null);
+            ETyped expType = le.get(i).accept(new ExpVisitor(), null);
             Type argType = ((ADecl) la.get(i)).type_;
             
-            if (argType.equals(DOUBLE) && expType.equals(INT)) expType = new Type_double();
-            compareTypes(expType, argType);
+            if (argType.equals(DOUBLE) && expType.type_.equals(INT)) { 
+                expType = new ETyped(DOUBLE,expType);
+                compareTypes(expType.type_, argType);
+            }
         }
     }
 

@@ -5,6 +5,8 @@ package cmm.Absyn;
 public abstract class Exp implements java.io.Serializable {
   public abstract <R,A> R accept(Exp.Visitor<R,A> v, A arg);
   public interface Visitor <R,A> {
+    public R visit(cmm.Absyn.ETyped p, A arg);
+    public R visit(cmm.Absyn.EConv p, A arg);
     public R visit(cmm.Absyn.EBool p, A arg);
     public R visit(cmm.Absyn.EInt p, A arg);
     public R visit(cmm.Absyn.EDouble p, A arg);

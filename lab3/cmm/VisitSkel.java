@@ -96,6 +96,24 @@ public class VisitSkel
   }
   public class ExpVisitor<R,A> implements cmm.Absyn.Exp.Visitor<R,A>
   {
+    public R visit(cmm.Absyn.ETyped p, A arg)
+    { /* Code for ETyped goes here */
+      p.type_.accept(new TypeVisitor<R,A>(), arg);
+      p.exp_.accept(new ExpVisitor<R,A>(), arg);
+      return null;
+    }
+    public R visit(cmm.Absyn.EConv p, A arg)
+    { /* Code for EConv goes here */
+      p.type_.accept(new TypeVisitor<R,A>(), arg);
+      p.exp_.accept(new ExpVisitor<R,A>(), arg);
+      return null;
+    }
+    public R visit(cmm.Absyn.EAss p, A arg)
+    { /* Code for EAss goes here */
+      //p.id_;
+      p.exp_.accept(new ExpVisitor<R,A>(), arg);
+      return null;
+    }
     public R visit(cmm.Absyn.EBool p, A arg)
     { /* Code for EBool goes here */
       p.boollit_.accept(new BoolLitVisitor<R,A>(), arg);
@@ -167,12 +185,6 @@ public class VisitSkel
     { /* Code for EOr goes here */
       p.exp_1.accept(new ExpVisitor<R,A>(), arg);
       p.exp_2.accept(new ExpVisitor<R,A>(), arg);
-      return null;
-    }
-    public R visit(cmm.Absyn.EAss p, A arg)
-    { /* Code for EAss goes here */
-      //p.id_;
-      p.exp_.accept(new ExpVisitor<R,A>(), arg);
       return null;
     }
   }
