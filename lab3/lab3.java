@@ -10,7 +10,6 @@ import cmm.Absyn.*;
 public class lab3 {
 
   public static void main(String args[]) {
-
     // Ensure that we are called with a single argument.
     if (args.length != 1) {
       System.err.println("Usage: lab3 <SourceFile>");
