@@ -48,12 +48,14 @@ public class TypeChecker {
             if (!(definitions.get("main").argumentsList.isEmpty())) {
                 throw new TypeException("Main function cannot have arguments");
             }
+
+            ListDef defs = new ListDef();
             
             for (cmm.Absyn.Def x: p.listdef_) {
-                x.accept(new DefVisitor(), arg); 
+                defs.add(x.accept(new DefVisitor(), arg)); 
             }
-
-            return p;
+            PDefs type_checked_p = new PDefs(defs);
+            return type_checked_p;
         }
     }
     
@@ -90,9 +92,9 @@ public class TypeChecker {
         }
     }
 
-    public class DefVisitor implements cmm.Absyn.Def.Visitor<Void,Void>
+    public class DefVisitor implements cmm.Absyn.Def.Visitor<DFun,Void>
     {
-        public Void visit(cmm.Absyn.DFun p, Void arg)
+        public DFun visit(cmm.Absyn.DFun p, Void arg)
         { /* Code for DFun goes here */
             returnType = p.type_;
             p.type_.accept(new TypeVisitor(), arg);
@@ -102,11 +104,13 @@ public class TypeChecker {
                 x.accept(new ArgVisitor(), arg);
             }
 
+            ListStm stms = new ListStm();
             for (cmm.Absyn.Stm x: p.liststm_) {
-                x.accept(new StmVisitor(), arg);
+                stms.add(x.accept(new StmVisitor(), arg));
             }
             closeScope();
-            return null;
+            
+            return new DFun(p.type_, p.id_, p.listarg_, stms);
         }
     }
     

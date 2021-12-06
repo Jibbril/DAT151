@@ -9,7 +9,8 @@
             "name": "Launch lab3",
             "request": "launch",
             "mainClass": "lab3",
-            "projectName": "lab3_e6034d70"
+            "projectName": "lab3_e6034d70",
+            "args": "dummy.cc"
         },
         {
             "type": "java",
@@ -23,14 +24,6 @@
             "request": "launch",
             "mainClass": "cmm.Test",
             "projectName": "lab32_da6660c2"
-        },
-        {
-            "type": "java",
-            "name": "Launch lab3",
-            "request": "launch",
-            "mainClass": "lab3",
-            "projectName": "lab32_da6660c2",
-            "args": "dummy.cc"
         }
     ]
 }
