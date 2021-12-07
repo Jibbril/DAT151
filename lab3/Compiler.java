@@ -1,6 +1,5 @@
 import java.util.*;
 import cmm.Absyn.*;
-import java.math.*;
 
 public class Compiler {
   // =================== FROM TYPECHECKER ===================
@@ -377,14 +376,7 @@ public class Compiler {
       p.exp_.accept(new ExpVisitor(), arg);
       Type t2 = lookupVariableType(p.id_).type;
 
-      // // Enable assignments such as "double a; a = 345;"
-      // if (t2.equals(DOUBLE) && t1.type_.equals(INT)) {
-      // t1 = new ETyped(DOUBLE, p);
-      // }
-      // compareTypes(t1.type_, t2);
-
       return null;
-      // return new ETyped(t1.type_, p);
     }
 
     public Void visit(cmm.Absyn.ETyped p, Void arg) { /* Code for ETyped goes here */
@@ -468,33 +460,8 @@ public class Compiler {
     }
   }
 
-  public class TypeVisitor implements cmm.Absyn.Type.Visitor<Integer, Void> {
-    public Integer visit(cmm.Absyn.Type_bool p, Void arg) { /* Code for Type_bool goes here */
-      return 1;
-    }
-
-    public Integer visit(cmm.Absyn.Type_int p, Void arg) { /* Code for Type_int goes here */
-      return 1;
-    }
-
-    public Integer visit(cmm.Absyn.Type_double p, Void arg) { /* Code for Type_double goes here */
-      return 2;
-    }
-
-    public Integer visit(cmm.Absyn.Type_void p, Void arg) { /* Code for Type_void goes here */
-      return 0;
-    }
-  }
-
   public boolean isVoidType(Type t) {
     return t instanceof Type_void;
-  }
-
-  public void incrementStack(int i) {
-    stackSize = stackSize + i;
-    if (stackSize > stackLimit) {
-      stackLimit = stackSize;
-    }
   }
 
   public void newScope() {
@@ -511,15 +478,6 @@ public class Compiler {
     return l;
   }
 
-  public void compareTypes(Type t1, Type t2) {
-    if (t1 == null || t2 == null) {
-      throw new TypeException("Expected type: " + t2 + ", but found type: " + t1);
-    }
-    if (!t1.equals(t2)) {
-      throw new TypeException("Expected type: " + t2 + ", but found type: " + t1);
-    }
-  }
-
   public CxtEntry lookupVariableType(String x) {
     for (HashMap<String, CxtEntry> v : scopeList) {
       CxtEntry ce = v.get(x);
@@ -532,7 +490,7 @@ public class Compiler {
   public int addVarToContext(String id, Type t) {
     int addr = localNr;
     scopeList.get(0).put(id, new CxtEntry(t, addr));
-    localNr += t.accept(new TypeVisitor(), null);
+    localNr += t.accept(new Size(), null);
     if (localNr > localLimit)
       localLimit = localNr;
     return addr;
