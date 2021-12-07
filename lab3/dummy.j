@@ -20,3 +20,22 @@
 
 .end method
 
+
+.method public static main()I
+. limit locals 1
+. limit stack 1
+	
+        ;; int x = int 3;
+	iconst_3
+	istore_0
+	
+        ;; void printInt (x);
+	iload_0
+	invokestatic printInt(I)V
+	pop
+	
+        ;; return int 0;
+	iconst_0
+	ireturn
+
+.end method

@@ -16,13 +16,13 @@ public class lab3 {
       System.exit(1);
     }
 
-    String srcFile   = args[0];                // Ex: path/to/file.cc
-    String fileCore  = stripSuffix(srcFile);   // Ex: path/to/file
-    String dir       = stripFileName(srcFile); // Ex: path/to  or "."
-    String className = stripPath(fileCore);    // Ex:         file
-    String jFile     = fileCore + ".j";        // Ex: path/to/file.j
+    String srcFile = args[0]; // Ex: path/to/file.cc
+    String fileCore = stripSuffix(srcFile); // Ex: path/to/file
+    String dir = stripFileName(srcFile); // Ex: path/to or "."
+    String className = stripPath(fileCore); // Ex: file
+    String jFile = fileCore + ".j"; // Ex: path/to/file.j
 
-    Yylex  l = null;
+    Yylex l = null;
     try {
 
       // Parse
@@ -36,6 +36,7 @@ public class lab3 {
       // Compile
       String jtext = new Compiler().compile(className, typedTree);
 
+      System.out.println(jtext);
       // Write .j file to same directory where source file was.
       PrintWriter writer = new PrintWriter(jFile);
       writer.print(jtext);
@@ -43,42 +44,40 @@ public class lab3 {
 
       // Call jasmin to create .class file.
       callJasmin(Arrays.asList("-d", dir, jFile));
-    }
-    catch (TypeException e) {
+    } catch (TypeException e) {
       System.out.println("TYPE ERROR");
       System.err.println(e.toString());
       System.exit(1);
-    }
-    catch (RuntimeException e) {
+    } catch (RuntimeException e) {
       System.err.println(e.toString());
       System.exit(-1);
-    }
-    catch (IOException e) {
+    } catch (IOException e) {
       System.err.println(e.toString());
       System.exit(1);
-    }
-    catch (Throwable e) {
+    } catch (Throwable e) {
       System.out.println("SYNTAX ERROR");
       System.out.println("At line " + String.valueOf(l.line_num())
-                 + ", near \"" + l.buff() + "\" :");
+          + ", near \"" + l.buff() + "\" :");
       System.out.println("     " + e.getMessage());
       e.printStackTrace();
       System.exit(1);
     }
   }
 
-  // Invoke the external assembler `jasmin` with the given args, waiting for it to finish.
+  // Invoke the external assembler `jasmin` with the given args, waiting for it to
+  // finish.
   static void callJasmin(List<String> args) throws IOException, InterruptedException {
 
     // Path to this class file.
-    String myself     = lab3.class.getResource("lab3.class").getPath();
+    String myself = lab3.class.getResource("lab3.class").getPath();
     // Directory from which this class was started.
-    File   directory  = new File(myself).getParentFile();
+    File directory = new File(myself).getParentFile();
     // jasmin.jar should be in the same directory.
     String jasminPath = new File(directory, "jasmin.jar").toString();
-    List<String> jasminCall = new ArrayList<String>(Arrays.asList( "java", "-jar", jasminPath ));
+    List<String> jasminCall = new ArrayList<String>(Arrays.asList("java", "-jar", jasminPath));
 
-    // Note: If `jasmin` is in your PATH, you can replace the above code by the simpler:
+    // Note: If `jasmin` is in your PATH, you can replace the above code by the
+    // simpler:
     // List<String> jasminCall = new ArrayList<String>(Arrays.asList("jasmin"));
 
     jasminCall.addAll(args);
@@ -102,14 +101,17 @@ public class lab3 {
   // Returns "." if there was no path.
   private static String stripFileName(String name) {
     String dir = new File(name).getParent();
-    if (dir == null) dir = ".";
+    if (dir == null)
+      dir = ".";
     return dir;
   }
 
   // Remove extension from a file name (keep the path).
   private static String stripSuffix(String filename) {
     int divider = filename.lastIndexOf('.');
-    if (divider <= 0) return filename;
-    else return filename.substring(0, divider);
+    if (divider <= 0)
+      return filename;
+    else
+      return filename.substring(0, divider);
   }
 }
