@@ -446,6 +446,10 @@ interface CodeVisitor<R> {
 // ============================= CodeToJvm =============================
 // =====================================================================
 class CodeToJVM implements CodeVisitor<String> {
+    private String print(String str) {
+        return str + "\n";
+    }
+
     public String visit(Inc c) {
         return "Inc string";
     }
@@ -459,7 +463,7 @@ class CodeToJVM implements CodeVisitor<String> {
     }
 
     public String visit(Target c) {
-        return "L" + c.label.label + ":" + "\n";
+        return print("L" + c.label.label + ":");
     }
 
     public String visit(Comment c) {
@@ -468,29 +472,29 @@ class CodeToJVM implements CodeVisitor<String> {
 
     public String visit(Store c) {
         if (c.type instanceof Type_int || c.type instanceof Type_void || c.type instanceof Type_bool)
-            return (c.addr >= 0 && c.addr <= 3) ? "istore_" + c.addr + "\n" : "istore " + c.addr + "\n";
+            return (c.addr >= 0 && c.addr <= 3) ? print("istore_" + c.addr) : print("istore " + c.addr);
         else if (c.type instanceof Type_double)
-            return (c.addr >= 0 && c.addr <= 3) ? "dstore_" + c.addr + "\n" : "dstore " + c.addr + "\n";
-        throw new RuntimeException("Wrong Type for store!");
+            return (c.addr >= 0 && c.addr <= 3) ? print("dstore_" + c.addr) : print("dstore " + c.addr);
+        throw new RuntimeException("The type: "+  c.type + " is not correct for the store method");
     }
 
     public String visit(Load c) {
         if (c.type instanceof Type_int || c.type instanceof Type_void || c.type instanceof Type_bool)
-            return (c.addr >= 0 && c.addr <= 3) ? "iload_" + c.addr + "\n" : "iload " + c.addr + "\n";
+            return (c.addr >= 0 && c.addr <= 3) ? print("iload_" + c.addr) : print("iload " + c.addr);
         else if (c.type instanceof Type_double)
-            return (c.addr >= 0 && c.addr <= 3) ? "dload_" + c.addr + "\n" : "dload " + c.addr + "\n";
-        throw new RuntimeException("Wrong Type for load!");
+            return (c.addr >= 0 && c.addr <= 3) ? print("dload_" + c.addr) : print("dload " + c.addr);
+        throw new RuntimeException("The type: "+  c.type + " is not correct for the load method");
     }
 
     public String visit(IConst c) {
         int i = c.immed.intValue();
         if (i == -1)
-            return "iconst_m1" + "\n";
+            return print("iconst_m1");
         if (i >= 0 && i <= 5)
-            return "iconst_" + i + "\n";
+            return print("iconst_" + i);
         if (i >= -128 && i < 128)
-            return "bipush " + i + "\n";
-        return "ldc " + c.immed.toString() + "\n";
+            return print("bipush " + i);
+        return print("ldc " + c.immed.toString());
     }
 
     public String visit(DConst c) {
@@ -499,124 +503,131 @@ class CodeToJVM implements CodeVisitor<String> {
 
     public String visit(Dup c) {
         if (c.type instanceof Type_int || c.type instanceof Type_void)
-            return "dup" + "\n";
+            return print("dup");
         else if (c.type instanceof Type_double)
-            return "dup2" + "\n";
+            return print("dup2");
         return "";
     }
 
     public String visit(Pop c) {
-        if (c.type instanceof Type_int || c.type instanceof Type_bool)
-            return "pop" + "\n";
-        else if (c.type instanceof Type_void)
-            return "pop" + "\n";
-        return "";
+        //if (c.type instanceof Type_int || c.type instanceof Type_bool)
+        //    return print("pop");
+       // else if (c.type instanceof Type_void)
+       //     return ;
+        if (c.type instanceof Type_double) return "";
+        else return print("pop");
     }
 
     public String visit(Call c) {
-        return "invokestatic " + c.fun.toJVM() + "\n";
+        return print("invokestatic " + c.fun.toJVM());
     }
 
     public String visit(Goto c) {
-        return "goto" + " " + "L" + c.label.label + "\n";
+        return print("goto" + " " + "L" + c.label.label);
     }
 
     public String visit(Return c) {
         if (c.type instanceof Type_int || c.type instanceof Type_bool)
-            return "ireturn\n";
+            return print("ireturn");
         else if (c.type instanceof Type_double)
-            return "dreturn\n";
+            return print("dreturn");
         else if (c.type instanceof Type_void)
-            return "return\n";
-        throw new RuntimeException("Wrong Type for return!");
+            return print("return");
+        throw new RuntimeException("The type: "+  c.type + " is not correct for the return method");
     }
 
     public String visit(IfEq c) {
+        // TODO: Add logic for doubles
         if (c.type instanceof Type_int)
-            return "if_icmpeq " + " " + "L" + c.label.label + "\n";
+            return print("if_icmpeq " + " " + "L" + c.label.label);
         else
-            throw new RuntimeException("type must be int1!");
+            throw new RuntimeException("Expected type int1 but receiced type: " +c.type);
     }
 
     public String visit(IfNe c) {
+        // TODO: Add logic for doubles
         if (c.type instanceof Type_int)
-            return "if_icmpne " + " " + "L" + c.label.label + "\n";
+            return  print("if_icmpne " + " " + "L" + c.label.label);
         else
-            throw new RuntimeException("type must be int!2");
+            throw new RuntimeException("Expected numeric value, found " + c.type);
     }
 
     public String visit(IfLt c) {
+        // TODO: Add logic for doubles
         if (c.type instanceof Type_int)
-            return "if_icmplt " + " " + "L" + c.label.label + "\n";
+            return print("if_icmplt " + " " + "L" + c.label.label);
         else
-            throw new RuntimeException("type must be int!3");
+            throw new RuntimeException("Expected numeric value, found " + c.type);
     }
 
     public String visit(IfGe c) {
+        // TODO: Add logic for doubles
         if (c.type instanceof Type_int)
-            return "if_icmpge " + " " + "L" + c.label.label + "\n";
+            return print("if_icmpge " + " " + "L" + c.label.label);
         else
-            throw new RuntimeException("type must be int!4");
+            throw new RuntimeException("Expected numeric value, found " + c.type);
     }
 
     public String visit(IfGt c) {
+        // TODO: Add logic for doubles
         if (c.type instanceof Type_int)
-            return "if_icmpgt " + " " + "L" + c.label.label + "\n";
+            return print("if_icmpgt " + " " + "L" + c.label.label);
         else
-            throw new RuntimeException("type must be int!5");
+            throw new RuntimeException("Expected numeric value, found " + c.type);
     }
 
     public String visit(IfLe c) {
+        // TODO: Add logic for doubles
         if (c.type instanceof Type_int)
-            return "if_icmple " + " " + "L" + c.label.label + "\n";
+            return print("if_icmple " + " " + "L" + c.label.label);
         else
-            throw new RuntimeException("type must be int!6");
+            throw new RuntimeException("Expected numeric value, found " + c.type);
     }
 
     public String visit(IfZ c) {
-        return "ifeq" + " " + "L" + c.label.label + "\n";
+        return print("ifeq" + " " + "L" + c.label.label);
     }
 
     public String visit(IfNZ c) {
-        return "ifne" + " " + "L" + c.label.label + "\n";
+        return print("ifne" + " " + "L" + c.label.label);
     }
 
     public String visit(Incr c) {
         if (c.type instanceof Type_int)
-            return "iinc " + c.addr + " " + c.increment + "\n";
-        throw new RuntimeException("Internal error: type must be int to incr");
+            return print("iinc " + c.addr + " " + c.increment);
+        throw new RuntimeException("Expected numeric value, found " + c.type);
     }
 
     public String visit(Add c) {
         if (c.type instanceof Type_int)
-            return "iadd" + "\n";
+            return print("iadd");
         else if (c.type instanceof Type_double)
-            return "dadd" + "\n";
-        throw new RuntimeException("Internal error: type must be numeric to add");
+            return print("dadd");
+        throw new RuntimeException("Expected numeric value, found " + c.type);
     }
 
     public String visit(Sub c) {
         if (c.type instanceof Type_int)
-            return "isub" + "\n";
+            return print("isub");
         else if (c.type instanceof Type_double)
-            return "dsub" + "\n";
-        throw new RuntimeException("Internal error: type must be numeric to sub");
+            return print("dsub");
+        throw new RuntimeException("Expected numeric value, found " + c.type);
     }
 
     public String visit(Mul c) {
         if (c.type instanceof Type_int)
-            return "imul" + "\n";
+            return print("imul");
         else if (c.type instanceof Type_double)
-            return "dmul" + "\n";
-        throw new RuntimeException("Internal error: type must be numeric to mul");
+            return print("dmul");
+        throw new RuntimeException("Expected numeric value, found " + c.type);
     }
 
     public String visit(Div c) {
         if (c.type instanceof Type_int)
-            return "idiv" + "\n";
+            return print("idiv");
         else if (c.type instanceof Type_double)
-            return "ddiv" + "\n";
-        throw new RuntimeException("Internal error: type must be numeric to div");
+            return  print("ddiv");
+        throw new RuntimeException("Expected numeric value, found " + c.type);
     }
 
 }
