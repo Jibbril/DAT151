@@ -475,7 +475,7 @@ class CodeToJVM implements CodeVisitor<String> {
             return (c.addr >= 0 && c.addr <= 3) ? print("istore_" + c.addr) : print("istore " + c.addr);
         else if (c.type instanceof Type_double)
             return (c.addr >= 0 && c.addr <= 3) ? print("dstore_" + c.addr) : print("dstore " + c.addr);
-        throw new RuntimeException("The type: "+  c.type + " is not correct for the store method");
+        throw new RuntimeException("The type: " + c.type + " is not correct for the store method");
     }
 
     public String visit(Load c) {
@@ -483,7 +483,7 @@ class CodeToJVM implements CodeVisitor<String> {
             return (c.addr >= 0 && c.addr <= 3) ? print("iload_" + c.addr) : print("iload " + c.addr);
         else if (c.type instanceof Type_double)
             return (c.addr >= 0 && c.addr <= 3) ? print("dload_" + c.addr) : print("dload " + c.addr);
-        throw new RuntimeException("The type: "+  c.type + " is not correct for the load method");
+        throw new RuntimeException("The type: " + c.type + " is not correct for the load method");
     }
 
     public String visit(IConst c) {
@@ -510,12 +510,14 @@ class CodeToJVM implements CodeVisitor<String> {
     }
 
     public String visit(Pop c) {
-        //if (c.type instanceof Type_int || c.type instanceof Type_bool)
-        //    return print("pop");
-       // else if (c.type instanceof Type_void)
-       //     return ;
-        if (c.type instanceof Type_double) return "";
-        else return print("pop");
+        // if (c.type instanceof Type_int || c.type instanceof Type_bool)
+        // return print("pop");
+        // else if (c.type instanceof Type_void)
+        // return ;
+        if (c.type instanceof Type_double)
+            return "";
+        else
+            return print("pop");
     }
 
     public String visit(Call c) {
@@ -533,21 +535,21 @@ class CodeToJVM implements CodeVisitor<String> {
             return print("dreturn");
         else if (c.type instanceof Type_void)
             return print("return");
-        throw new RuntimeException("The type: "+  c.type + " is not correct for the return method");
+        throw new RuntimeException("The type: " + c.type + " is not correct for the return method");
     }
 
     public String visit(IfEq c) {
         // TODO: Add logic for doubles
-        if (c.type instanceof Type_int)
+        if (c.type instanceof Type_bool)
             return print("if_icmpeq " + " " + "L" + c.label.label);
         else
-            throw new RuntimeException("Expected type int1 but receiced type: " +c.type);
+            throw new RuntimeException("Expected type int1 but receiced type: " + c.type);
     }
 
     public String visit(IfNe c) {
         // TODO: Add logic for doubles
         if (c.type instanceof Type_int)
-            return  print("if_icmpne " + " " + "L" + c.label.label);
+            return print("if_icmpne " + " " + "L" + c.label.label);
         else
             throw new RuntimeException("Expected numeric value, found " + c.type);
     }
@@ -626,7 +628,7 @@ class CodeToJVM implements CodeVisitor<String> {
         if (c.type instanceof Type_int)
             return print("idiv");
         else if (c.type instanceof Type_double)
-            return  print("ddiv");
+            return print("ddiv");
         throw new RuntimeException("Expected numeric value, found " + c.type);
     }
 
