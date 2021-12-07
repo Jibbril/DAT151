@@ -95,34 +95,6 @@ public class Compiler {
     }
   }
 
-  public class DefCheckerVisitor implements cmm.Absyn.Def.Visitor<Void, Void> {
-    public Void visit(cmm.Absyn.DFun fun, Void arg) { /* Code for DFun goes here */
-      ArrayList<String> argNames = new ArrayList<>();
-
-      // Check that no function names are repeated
-      if (definitions.get(fun.id_) != null)
-        throw new TypeException("Function name" + fun.id_ + " already exists");
-
-      for (Arg a : fun.listarg_) {
-        ADecl ad = (ADecl) a;
-        if (argNames.contains(ad.id_)) {
-          throw new TypeException("Argument cannot be repeated");
-        }
-
-        if (ad.type_ instanceof Type_void) {
-          throw new TypeException("Argument cannot have void type");
-        }
-        argNames.add(ad.id_);
-      }
-
-      // add function name to list of definitions
-      FunType functionProperties = new FunType(fun.type_, fun.listarg_);
-      definitions.put(fun.id_, functionProperties);
-
-      return null;
-    }
-  }
-
   public class DefVisitor implements cmm.Absyn.Def.Visitor<DFun, Void> {
     public DFun visit(cmm.Absyn.DFun p, Void arg) { /* Code for DFun goes here */
       returnType = p.type_;
@@ -177,17 +149,9 @@ public class Compiler {
 
     public Stm visit(cmm.Absyn.SDecls p, Void arg) { /* Code for SDecls goes here */
       p.type_.accept(new TypeVisitor(), arg);
-      if (isVoidType(p.type_)) {
-        throw new TypeException("Cannot be of type void");
-      }
-
       for (String x : p.listid_) {
-        addVarToContext(x, p.type_);
-      }
-
-      // Add correct value to output
-      if (p.type_.equals(INT)) {
-        output.add("ldc 1");
+        int addr = addVarToContext(x, p.type_);
+        emit(new Store(p.type_, addr));
       }
 
       return p;
@@ -233,20 +197,32 @@ public class Compiler {
         x.accept(new StmVisitor(), arg);
       }
       closeScope();
-      return p;
+      return null;
     }
 
     public Stm visit(cmm.Absyn.SIfElse p, Void arg) { /* Code for SIfElse goes here */
-      p.exp_.accept(new ExpVisitor(), null);
+      emit(new Comment("If condition: " + cmm.PrettyPrinter.print(p.exp_) + "\n"));
 
+      Label true_label = new Label(labelNr++);
+      Label false_label = new Label(labelNr++);
+
+      p.exp_.accept(new ExpVisitor(), null);
+      emit(new IfEq(((ETyped) p.exp_).type_, false_label));
+      emit(new Comment("If true then do: "));
       newScope();
       p.stm_1.accept(new StmVisitor(), arg);
       closeScope();
 
+      emit(new Goto(true_label));
+      emit(new Target(false_label));
+
+      emit(new Comment("If false then do: "));
       newScope();
       p.stm_2.accept(new StmVisitor(), arg);
       closeScope();
-      return p;
+
+      emit(new Target(true_label));
+      return null;
     }
   }
 
@@ -286,26 +262,35 @@ public class Compiler {
 
     public Void visit(cmm.Absyn.EPost p, Void arg) { /* Code for EPost goes here */
       // p.id_;
-      Type t = lookupVariableType(p.id_).type;
-      boolean b = isIntOrDouble(t);
-      if (!b) {
-        throw new TypeException("Increment and decrement only callable on int or double");
-      }
-      p.incdecop_.accept(new IncDecOpVisitor(), arg);
+      CxtEntry ce = lookupVariableType(p.id_);
+      boolean b = p.incdecop_.accept(new IncDecOpVisitor(), arg);
+      emit(new Load(ce.type, ce.addr));
+      emit(new Dup(ce.type));
+      emit(new IConst(1));
+      if (b)
+        emit(new Add(ce.type));
+      else
+        emit(new Sub(ce.type));
+      emit(new Store(ce.type, ce.addr));
       return null;
     }
 
     public Void visit(cmm.Absyn.EPre p, Void arg) { /* Code for EPre goes here */
-      Type t = lookupVariableType(p.id_).type;
-      boolean b = isIntOrDouble(t);
-      if (!b) {
-        throw new TypeException("Increment and decrement only callable on int or double");
-      }
-      p.incdecop_.accept(new IncDecOpVisitor(), arg);
-      // p.id_;
+      CxtEntry ce = lookupVariableType(p.id_);
+      boolean b = p.incdecop_.accept(new IncDecOpVisitor(), arg);
+      emit(new Load(ce.type, ce.addr));
+      // emit(new Dup(ce.type));
+      emit(new IConst(1));
+      if (b)
+        emit(new Add(ce.type));
+      else
+        emit(new Sub(ce.type));
+      emit(new Store(ce.type, ce.addr));
+      emit(new Load(ce.type, ce.addr));
       return null;
     }
 
+    // START HERE
     public Void visit(cmm.Absyn.EMul p, Void arg) { /* Code for EMul goes here */
       boolean b = p.mulop_.accept(new MulOpVisitor(), arg);
       p.exp_1.accept(this, arg);
@@ -394,13 +379,13 @@ public class Compiler {
     }
   }
 
-  public class IncDecOpVisitor implements cmm.Absyn.IncDecOp.Visitor<Void, Void> {
-    public Void visit(cmm.Absyn.OInc p, Void arg) { /* Code for OInc goes here */
-      return null;
+  public class IncDecOpVisitor implements cmm.Absyn.IncDecOp.Visitor<Boolean, Void> {
+    public Boolean visit(cmm.Absyn.OInc p, Void arg) { /* Code for OInc goes here */
+      return true;
     }
 
-    public Void visit(cmm.Absyn.ODec p, Void arg) { /* Code for ODec goes here */
-      return null;
+    public Boolean visit(cmm.Absyn.ODec p, Void arg) { /* Code for ODec goes here */
+      return false;
     }
   }
 

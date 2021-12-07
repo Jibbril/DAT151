@@ -23,19 +23,26 @@
 
 .method public static main()I
 . limit locals 1
-. limit stack 1
+. limit stack 3
 	
-        ;; int x = int 3;
-	iconst_3
+        ;; int i = int 1;
+	iconst_1
 	istore_0
 	
-        ;; void printInt (x);
+        ;; int i ++;
 	iload_0
-	invokestatic printInt(I)V
+	dup
+	iconst_1
+	iadd
+	istore_0
 	pop
 	
-        ;; return int 0;
-	iconst_0
-	ireturn
+        ;; int ++ i;
+	iload_0
+	iconst_1
+	iadd
+	istore_0
+	iload_0
+	pop
 
 .end method
