@@ -6,9 +6,6 @@ public class Compiler {
   public HashMap<String, Fun> definitions = new HashMap<>();
   public LinkedList<HashMap<String, CxtEntry>> scopeList = new LinkedList<>();
 
-  // Return type of function we are checking
-  private Type returnType;
-
   // Share type constants
   public final Type BOOL = new Type_bool();
   public final Type INT = new Type_int();
@@ -97,7 +94,6 @@ public class Compiler {
 
   public class DefVisitor implements cmm.Absyn.Def.Visitor<DFun, Void> {
     public DFun visit(cmm.Absyn.DFun p, Void arg) { /* Code for DFun goes here */
-      returnType = p.type_;
       stackSize = 0;
       stackLimit = 0;
       localLimit = 0;

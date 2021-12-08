@@ -73,7 +73,8 @@ public class lab3 {
     // Directory from which this class was started.
     File directory = new File(myself).getParentFile();
     // jasmin.jar should be in the same directory.
-    String jasminPath = new File(directory, "jasmin.jar").toString();
+    // String jasminPath = new File(directory, "jasmin.jar").toString();
+    String jasminPath = "./jasmin.jar";
     List<String> jasminCall = new ArrayList<String>(Arrays.asList("java", "-jar", jasminPath));
 
     // Note: If `jasmin` is in your PATH, you can replace the above code by the
