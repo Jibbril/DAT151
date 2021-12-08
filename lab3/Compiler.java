@@ -3,7 +3,7 @@ import cmm.Absyn.*;
 
 public class Compiler {
   // =================== FROM TYPECHECKER ===================
-  public HashMap<String, FunType> definitions = new HashMap<>();
+  public HashMap<String, Fun> definitions = new HashMap<>();
   public LinkedList<HashMap<String, CxtEntry>> scopeList = new LinkedList<>();
 
   // Return type of function we are checking
@@ -81,10 +81,10 @@ public class Compiler {
     public Void visit(cmm.Absyn.PDefs p, Void arg) { /* Code for PDefs goes here */
       scopeList.add(new HashMap<String, CxtEntry>());
 
-      definitions.put("printInt", new FunType(VOID, oneArgList(INT)));
-      definitions.put("readInt", new FunType(INT, new ListArg()));
-      definitions.put("printDouble", new FunType(VOID, oneArgList(DOUBLE)));
-      definitions.put("readDouble", new FunType(DOUBLE, new ListArg()));
+      definitions.put("printInt", new Fun("Runtime/printInt", new FunType(VOID, oneArgList(INT))));
+      definitions.put("readInt", new Fun("Runtime/readInt", new FunType(INT, new ListArg())));
+      definitions.put("printDouble", new Fun("Runtime/printDouble", new FunType(VOID, oneArgList(DOUBLE))));
+      definitions.put("readDouble", new Fun("Runtime/readDouble", new FunType(DOUBLE, new ListArg())));
 
       ListDef defs = new ListDef();
 
@@ -121,8 +121,8 @@ public class Compiler {
 
       Fun f = new Fun(p.id_, new FunType(p.type_, p.listarg_));
       output.add("\n.method public static " + f.toJVM() + "\n");
-      output.add(". limit locals " + localLimit + "\n");
-      output.add(". limit stack " + stackLimit + "\n");
+      output.add(".limit locals " + localLimit + "\n");
+      output.add(".limit stack " + stackLimit + "\n");
       for (String s : newOutput) {
         output.add("\t" + s);
       }
@@ -201,22 +201,23 @@ public class Compiler {
     }
 
     public Stm visit(cmm.Absyn.SIfElse p, Void arg) { /* Code for SIfElse goes here */
-      emit(new Comment("If condition: " + cmm.PrettyPrinter.print(p.exp_) + "\n"));
+      emit(new Comment("Evaluate if condition: " + cmm.PrettyPrinter.print(p.exp_) + "\n"));
 
       Label true_label = new Label(labelNr++);
       Label false_label = new Label(labelNr++);
 
       p.exp_.accept(new ExpVisitor(), null);
-      emit(new IfEq(((ETyped) p.exp_).type_, false_label));
-      emit(new Comment("If true then do: "));
+      emit(new Comment("Check if condition is true/false: \n"));
+
+      emit(new IfZ(false_label));
+      emit(new Comment("If true then do: \n"));
       newScope();
       p.stm_1.accept(new StmVisitor(), arg);
       closeScope();
 
       emit(new Goto(true_label));
+      emit(new Comment("If false then do: \n"));
       emit(new Target(false_label));
-
-      emit(new Comment("If false then do: "));
       newScope();
       p.stm_2.accept(new StmVisitor(), arg);
       closeScope();
@@ -251,12 +252,12 @@ public class Compiler {
 
     public Void visit(cmm.Absyn.EApp p, Void arg) { /* Code for EApp goes here */
       // Check if function is defined
-      FunType fd = definitions.get(p.id_);
+      Fun fd = definitions.get(p.id_);
       // Check function expressions
       for (cmm.Absyn.Exp x : p.listexp_) {
         x.accept(new ExpVisitor(), arg);
       }
-      emit(new Call(new Fun(p.id_, fd)));
+      emit(new Call(fd));
       return null;
     }
 
@@ -290,15 +291,14 @@ public class Compiler {
       return null;
     }
 
-    // START HERE
     public Void visit(cmm.Absyn.EMul p, Void arg) { /* Code for EMul goes here */
       boolean b = p.mulop_.accept(new MulOpVisitor(), arg);
       p.exp_1.accept(this, arg);
       p.exp_2.accept(this, arg);
       if (b)
-        emit(new Mul(new Type_int()));
+        emit(new Mul(INT));
       else
-        emit(new Div(new Type_int()));
+        emit(new Div(INT));
       return null;
     }
 
@@ -307,60 +307,117 @@ public class Compiler {
       p.exp_1.accept(this, arg);
       p.exp_2.accept(this, arg);
       if (b)
-        emit(new Add(new Type_int()));
+        emit(new Add(INT));
       else
-        emit(new Sub(new Type_int()));
+        emit(new Sub(INT));
       return null;
     }
 
     public Void visit(cmm.Absyn.ECmp p, Void arg) { /* Code for ECmp goes here */
-      // Type t1 = p.exp_1.accept(new ExpVisitor(), arg).type_;
-      // Returns true if comparison is eq/neq, false otherwise
-      boolean b = p.cmpop_.accept(new CmpOpVisitor(), arg);
-      // Type t2 = p.exp_2.accept(new ExpVisitor(), arg).type_;
+      // Returns operator type
+      CmpOp co = p.cmpop_.accept(new CmpOpVisitor(), arg);
 
-      // if (b) {
-      // if (t1.equals(VOID) || t2.equals(VOID)) {
-      // throw new TypeException("Eq/Neq not applicable to void type.");
-      // }
-      // if (t1.equals(INT) && t2.equals(DOUBLE) || t1.equals(DOUBLE) &&
-      // t2.equals(INT)) {
-      // t1 = t2 = new Type_double();
-      // }
-      // compareTypes(t1, t2);
-      // } else {
-      // if (!(isIntOrDouble(t1) && isIntOrDouble(t2))) {
-      // throw new TypeException("Comparison only applies to numerical values.");
-      // }
-      // }
+      Label true_label = new Label(labelNr++);
+      Label exit_state = new Label(labelNr++);
 
-      // return new ETyped(BOOL, p);
+      p.exp_1.accept(new ExpVisitor(), null);
+      p.exp_2.accept(new ExpVisitor(), null);
+
+      if (((ETyped) p.exp_1).type_.equals(INT) && ((ETyped) p.exp_2).type_.equals(INT)) {
+        integerComparisons(co, true_label);
+      } else if (((ETyped) p.exp_1).type_.equals(DOUBLE) && ((ETyped) p.exp_2).type_.equals(DOUBLE)) {
+        doubleComparisons(co, true_label);
+      }
+
+      // Comparison resolved false
+      emit(new IConst(0));
+      emit(new Goto(exit_state));
+
+      // Comparison resolved true
+      emit(new Target(true_label));
+      emit(new IConst(1));
+      emit(new Target(exit_state));
       return null;
     }
 
-    public Void visit(cmm.Absyn.EAnd p, Void arg) { /* Code for EAnd goes here */
-      // Type t1 = p.exp_1.accept(new ExpVisitor(), arg).type_;
-      // Type t2 = p.exp_2.accept(new ExpVisitor(), arg).type_;
-      // compareTypes(t1, t2);
-      // compareTypes(t1, BOOL);
+    private void integerComparisons(CmpOp co, Label label) {
+      // Check which operator we have
+      if (co instanceof OLt)
+        emit(new IfLt(INT, label));
+      else if (co instanceof OGt)
+        emit(new IfGt(INT, label));
+      else if (co instanceof OLtEq)
+        emit(new IfLe(INT, label));
+      else if (co instanceof OGtEq)
+        emit(new IfGe(INT, label));
+      else if (co instanceof OEq)
+        emit(new IfEq(INT, label));
+      else if (co instanceof ONEq)
+        emit(new IfNe(INT, label));
+    }
 
-      // return new ETyped(BOOL, p);
+    private void doubleComparisons(CmpOp co, Label label) {
+      // Check which operator we have
+      emit(new DCmp());
+      if (co instanceof OLt) {
+        emit(new IConst(-1));
+        emit(new IfEq(INT, label));
+      } else if (co instanceof OGt) {
+        emit(new IConst(1));
+        emit(new IfEq(INT, label));
+      } else if (co instanceof OLtEq) {
+        emit(new IConst(0));
+        emit(new IfLe(INT, label));
+      } else if (co instanceof OGtEq) {
+        emit(new IConst(0));
+        emit(new IfGe(INT, label));
+      } else if (co instanceof OEq) {
+        emit(new IfZ(label));
+      } else if (co instanceof ONEq) {
+        emit(new IConst(0));
+        emit(new IfNe(INT, label));
+      }
+    }
+
+    public Void visit(cmm.Absyn.EAnd p, Void arg) { /* Code for EAnd goes here */
+      Label false_label = new Label(labelNr++);
+      emit(new IConst(0));
+      p.exp_1.accept(new ExpVisitor(), null);
+      emit(new IConst(0));
+      emit(new IfEq(INT, false_label));
+      p.exp_2.accept(new ExpVisitor(), null);
+      emit(new IConst(0));
+      emit(new IfEq(INT, false_label));
+      emit(new Pop(INT));
+      emit(new IConst(1));
+      emit(new Target(false_label));
       return null;
     }
 
     public Void visit(cmm.Absyn.EOr p, Void arg) { /* Code for EOr goes here */
-      // ETyped t1 = p.exp_1.accept(new ExpVisitor(), arg);
-      // ETyped t2 = p.exp_2.accept(new ExpVisitor(), arg);
-      // compareTypes(t1.type_, t2.type_);
-      // compareTypes(t1.type_, BOOL);
-      // return new ETyped(BOOL, p);
+      Label true_label = new Label(labelNr++);
+      emit(new IConst(1));
+      p.exp_1.accept(new ExpVisitor(), null);
+      // check if first expression is true
+      // if yes, go to the end i.e. whole expression is true
+      emit(new IConst(1));
+      emit(new IfEq(INT, true_label));
+      p.exp_2.accept(new ExpVisitor(), null);
+      // otherwise check if the second expression is true
+      // if true, go to the end
+      emit(new IConst(1));
+      emit(new IfEq(INT, true_label));
+      emit(new Pop(INT));
+      emit(new IConst(0));
+      emit(new Target(true_label));
       return null;
     }
 
     public Void visit(cmm.Absyn.EAss p, Void arg) { /* Code for EAss goes here */
       p.exp_.accept(new ExpVisitor(), arg);
-      Type t2 = lookupVariableType(p.id_).type;
-
+      CxtEntry ce = lookupVariableType(p.id_);
+      emit(new Store(ce.type, ce.addr));
+      emit(new Load(ce.type, ce.addr));
       return null;
     }
 
@@ -368,7 +425,6 @@ public class Compiler {
       p.type_.accept(new TypeVisitor(), arg);
       p.exp_.accept(new ExpVisitor(), arg);
       return null;
-      // return new ETyped(t.type_, p);
     }
 
     public Void visit(cmm.Absyn.EConv p, Void arg) { /* Code for EConv goes here */
@@ -409,29 +465,29 @@ public class Compiler {
     }
   }
 
-  public class CmpOpVisitor implements cmm.Absyn.CmpOp.Visitor<Boolean, Void> {
-    public Boolean visit(cmm.Absyn.OLt p, Void arg) { /* Code for OLt goes here */
-      return false;
+  public class CmpOpVisitor implements cmm.Absyn.CmpOp.Visitor<CmpOp, Void> {
+    public CmpOp visit(cmm.Absyn.OLt p, Void arg) { /* Code for OLt goes here */
+      return p;
     }
 
-    public Boolean visit(cmm.Absyn.OGt p, Void arg) { /* Code for OGt goes here */
-      return false;
+    public CmpOp visit(cmm.Absyn.OGt p, Void arg) { /* Code for OGt goes here */
+      return p;
     }
 
-    public Boolean visit(cmm.Absyn.OLtEq p, Void arg) { /* Code for OLtEq goes here */
-      return false;
+    public CmpOp visit(cmm.Absyn.OLtEq p, Void arg) { /* Code for OLtEq goes here */
+      return p;
     }
 
-    public Boolean visit(cmm.Absyn.OGtEq p, Void arg) { /* Code for OGtEq goes here */
-      return false;
+    public CmpOp visit(cmm.Absyn.OGtEq p, Void arg) { /* Code for OGtEq goes here */
+      return p;
     }
 
-    public Boolean visit(cmm.Absyn.OEq p, Void arg) { /* Code for OEq goes here */
-      return true;
+    public CmpOp visit(cmm.Absyn.OEq p, Void arg) { /* Code for OEq goes here */
+      return p;
     }
 
-    public Boolean visit(cmm.Absyn.ONEq p, Void arg) { /* Code for ONEq goes here */
-      return true;
+    public CmpOp visit(cmm.Absyn.ONEq p, Void arg) { /* Code for ONEq goes here */
+      return p;
     }
   }
 
