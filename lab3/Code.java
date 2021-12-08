@@ -455,7 +455,7 @@ class CodeToJVM implements CodeVisitor<String> {
     }
 
     public String visit(DCmp c) {
-        return "DCmp string";
+        return print("dcmpg");
     }
 
     public String visit(Label c) {
@@ -510,14 +510,9 @@ class CodeToJVM implements CodeVisitor<String> {
     }
 
     public String visit(Pop c) {
-        // if (c.type instanceof Type_int || c.type instanceof Type_bool)
-        // return print("pop");
-        // else if (c.type instanceof Type_void)
-        // return ;
-        if (c.type instanceof Type_double)
-            return "";
-        else
-            return print("pop");
+        if (c.type instanceof Type_int || c.type instanceof Type_bool)
+            return "pop" + "\n";
+        return "";
     }
 
     public String visit(Call c) {
@@ -540,7 +535,7 @@ class CodeToJVM implements CodeVisitor<String> {
 
     public String visit(IfEq c) {
         // TODO: Add logic for doubles
-        if (c.type instanceof Type_bool)
+        if (c.type instanceof Type_int)
             return print("if_icmpeq " + " " + "L" + c.label.label);
         else
             throw new RuntimeException("Expected type int1 but receiced type: " + c.type);
