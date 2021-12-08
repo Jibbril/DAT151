@@ -22,27 +22,45 @@
 
 
 .method public static main()I
-. limit locals 1
-. limit stack 3
+.limit locals 2
+.limit stack 5
 	
-        ;; int i = int 1;
-	iconst_1
-	istore_0
+        ;; double i = double 2.50000000000000;
+	ldc2_w 2.5
+	dstore_0
 	
-        ;; int i ++;
-	iload_0
-	dup
+        ;; Evaluate if condition: bool (double i) >= (double 1.50000000000000)
+	dload_0
+	ldc2_w 1.5
+	dcmpg
+	iconst_0
+	if_icmpge  L2
+	iconst_0
+	goto L3
+	L2:
 	iconst_1
-	iadd
-	istore_0
-	pop
+	L3:
 	
-        ;; int ++ i;
-	iload_0
-	iconst_1
-	iadd
-	istore_0
-	iload_0
-	pop
+        ;; Check if condition is true/false: 
+	ifeq L1
+	
+        ;; If true then do: 
+	
+        ;; void printInt (7);
+	bipush 7
+	invokestatic Runtime/printInt(I)V
+	goto L0
+	
+        ;; If false then do: 
+	L1:
+	
+        ;; void printInt (10);
+	bipush 10
+	invokestatic Runtime/printInt(I)V
+	L0:
+	
+        ;; return int 0;
+	iconst_0
+	ireturn
 
 .end method

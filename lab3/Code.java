@@ -498,7 +498,13 @@ class CodeToJVM implements CodeVisitor<String> {
     }
 
     public String visit(DConst c) {
-        return "";
+        double i = c.immed.doubleValue();
+        if (i == 0.0)
+            return print("dconst_0");
+        if (i == 1.0)
+            return print("dconst_1");
+        else
+            return print("ldc2_w " + i);
     }
 
     public String visit(Dup c) {
@@ -511,7 +517,7 @@ class CodeToJVM implements CodeVisitor<String> {
 
     public String visit(Pop c) {
         if (c.type instanceof Type_int || c.type instanceof Type_bool)
-            return "pop" + "\n";
+            return print("pop");
         return "";
     }
 
