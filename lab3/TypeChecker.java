@@ -287,35 +287,36 @@ public class TypeChecker {
         }
 
         public ETyped visit(cmm.Absyn.ECmp p, Void arg) { /* Code for ECmp goes here */
-            Type t1 = p.exp_1.accept(new ExpVisitor(), arg).type_;
+            ETyped t1 = p.exp_1.accept(new ExpVisitor(), arg);
             // Returns true if comparison is eq/neq, false otherwise
             boolean b = p.cmpop_.accept(new CmpOpVisitor(), arg);
-            Type t2 = p.exp_2.accept(new ExpVisitor(), arg).type_;
+            ETyped t2 = p.exp_2.accept(new ExpVisitor(), arg);
 
             if (b) {
-                if (t1.equals(VOID) || t2.equals(VOID)) {
+                if (t1.type_.equals(VOID) || t2.type_.equals(VOID)) {
                     throw new TypeException("Eq/Neq not applicable to void type.");
                 }
-                if (t1.equals(INT) && t2.equals(DOUBLE) || t1.equals(DOUBLE) && t2.equals(INT)) {
-                    t1 = t2 = new Type_double();
+                if (t1.equals(INT) && t2.equals(DOUBLE) || t1.type_.equals(DOUBLE) && t2.type_.equals(INT)) {
+                    t1 = new ETyped(DOUBLE, t1.exp_);
+                    t2 = new ETyped(DOUBLE, t2.exp_);
                 }
-                compareTypes(t1, t2);
+                compareTypes(t1.type_, t2.type_);
             } else {
-                if (!(isIntOrDouble(t1) && isIntOrDouble(t2))) {
+                if (!(isIntOrDouble(t1.type_) && isIntOrDouble(t2.type_))) {
                     throw new TypeException("Comparison only applies to numerical values.");
                 }
             }
 
-            return new ETyped(BOOL, p);
+            return new ETyped(BOOL, new ECmp(t1, p.cmpop_, t2));
         }
 
         public ETyped visit(cmm.Absyn.EAnd p, Void arg) { /* Code for EAnd goes here */
-            Type t1 = p.exp_1.accept(new ExpVisitor(), arg).type_;
-            Type t2 = p.exp_2.accept(new ExpVisitor(), arg).type_;
-            compareTypes(t1, t2);
-            compareTypes(t1, BOOL);
+            ETyped t1 = p.exp_1.accept(new ExpVisitor(), arg);
+            ETyped t2 = p.exp_2.accept(new ExpVisitor(), arg);
+            compareTypes(t1.type_, t2.type_);
+            compareTypes(t1.type_, BOOL);
 
-            return new ETyped(BOOL, p);
+            return new ETyped(BOOL, new EAnd(t1, t2));
         }
 
         public ETyped visit(cmm.Absyn.EOr p, Void arg) { /* Code for EOr goes here */
@@ -323,7 +324,7 @@ public class TypeChecker {
             ETyped t2 = p.exp_2.accept(new ExpVisitor(), arg);
             compareTypes(t1.type_, t2.type_);
             compareTypes(t1.type_, BOOL);
-            return new ETyped(BOOL, p);
+            return new ETyped(BOOL, new EOr(t1, t2));
         }
 
         public ETyped visit(cmm.Absyn.EAss p, Void arg) { /* Code for EAss goes here */
@@ -336,7 +337,7 @@ public class TypeChecker {
             }
             compareTypes(t1.type_, t2);
 
-            return new ETyped(t1.type_, p);
+            return new ETyped(t1.type_, new EAss(p.id_, t1));
         }
 
         public ETyped visit(cmm.Absyn.ETyped p, Void arg) { /* Code for ETyped goes here */
