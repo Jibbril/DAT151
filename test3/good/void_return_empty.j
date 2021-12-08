@@ -22,14 +22,18 @@
 
 
 .method public static empty()V
-.limit locals 0
-.limit stack 0
+  .limit locals 0
+  .limit stack 0
+
+        iconst_0
+        return
 
 .end method
 
 .method public static main()I
-.limit locals 0
-.limit stack 1
+  .limit locals 0
+  .limit stack 1
+
 	
         ;; return int 0;
 	iconst_0

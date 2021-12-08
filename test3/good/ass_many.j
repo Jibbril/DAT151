@@ -22,11 +22,9 @@
 
 
 .method public static main()I
-.limit locals 3
-.limit stack 0
-	istore_0
-	istore_1
-	istore_2
+  .limit locals 3
+  .limit stack 2
+
 	
         ;; int j = int i = int 6;
 	bipush 6
@@ -41,6 +39,7 @@
 	iload_1
 	iadd
 	invokestatic Runtime/printInt(I)V
+	nop
 	
         ;; return int 0;
 	iconst_0

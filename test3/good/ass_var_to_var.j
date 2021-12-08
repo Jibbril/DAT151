@@ -22,8 +22,9 @@
 
 
 .method public static main()I
-.limit locals 2
-.limit stack 1
+  .limit locals 2
+  .limit stack 1
+
 	
         ;; int x = int 0;
 	iconst_0

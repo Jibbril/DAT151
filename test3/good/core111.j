@@ -22,14 +22,16 @@
 
 
 .method public static main()I
-.limit locals 0
-.limit stack 2
+  .limit locals 0
+  .limit stack 2
+
 	
         ;; void printInt (readInt () - 1);
 	invokestatic Runtime/readInt()I
 	iconst_1
 	isub
 	invokestatic Runtime/printInt(I)V
+	nop
 	
         ;; return int 0;
 	iconst_0

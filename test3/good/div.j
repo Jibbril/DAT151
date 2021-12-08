@@ -22,14 +22,16 @@
 
 
 .method public static main()I
-.limit locals 0
-.limit stack 2
+  .limit locals 0
+  .limit stack 2
+
 	
         ;; void printInt (5 / 3);
 	iconst_5
 	iconst_3
 	idiv
 	invokestatic Runtime/printInt(I)V
+	nop
 	
         ;; return int 0;
 	iconst_0

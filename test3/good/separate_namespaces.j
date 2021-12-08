@@ -22,8 +22,9 @@
 
 
 .method public static x(Z)I
-.limit locals 1
-.limit stack 1
+  .limit locals 1
+  .limit stack 1
+
 	
         ;; return int 0;
 	iconst_0
@@ -32,8 +33,9 @@
 .end method
 
 .method public static main()I
-.limit locals 1
-.limit stack 1
+  .limit locals 1
+  .limit stack 1
+
 	
         ;; int x = int 5;
 	iconst_5

@@ -22,8 +22,9 @@
 
 
 .method public static main()I
-.limit locals 2
-.limit stack 2
+  .limit locals 2
+  .limit stack 2
+
 	
         ;; Evaluate if condition: bool (int 0) <= (int 2)
 	iconst_0
@@ -60,6 +61,7 @@
         ;; void printInt (1);
 	iconst_1
 	invokestatic Runtime/printInt(I)V
+	nop
 	
         ;; return int 0;
 	iconst_0

@@ -22,9 +22,9 @@
 
 
 .method public static main()I
-.limit locals 2
-.limit stack 1
-	dstore_0
+  .limit locals 2
+  .limit stack 3
+
 	
         ;; double x = double 1 / 1.10000000000000;
 	iconst_1

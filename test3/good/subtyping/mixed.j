@@ -22,8 +22,9 @@
 
 
 .method public static main()I
-.limit locals 0
-.limit stack 4
+  .limit locals 0
+  .limit stack 4
+
 	
         ;; void printDouble (1.50000000000000 + 1 / 2);
 	ldc2_w 1.5
@@ -32,6 +33,7 @@
 	idiv
 	iadd
 	invokestatic Runtime/printDouble(D)V
+	nop
 	
         ;; return int 0;
 	iconst_0

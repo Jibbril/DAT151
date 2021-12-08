@@ -22,8 +22,9 @@
 
 
 .method public static main()I
-.limit locals 2
-.limit stack 2
+  .limit locals 2
+  .limit stack 2
+
 	
         ;; double d = double 1;
 	iconst_1
@@ -39,6 +40,7 @@
         ;; void printDouble (d);
 	dload_0
 	invokestatic Runtime/printDouble(D)V
+	nop
 	
         ;; return int 0;
 	iconst_0

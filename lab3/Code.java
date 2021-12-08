@@ -518,6 +518,9 @@ class CodeToJVM implements CodeVisitor<String> {
     public String visit(Pop c) {
         if (c.type instanceof Type_int || c.type instanceof Type_bool)
             return print("pop");
+        else if (c.type instanceof Type_void) {
+            return print("nop");
+        }
         return "";
     }
 

@@ -5,6 +5,7 @@ public class Compiler {
   // =================== FROM TYPECHECKER ===================
   public HashMap<String, Fun> definitions = new HashMap<>();
   public LinkedList<HashMap<String, CxtEntry>> scopeList = new LinkedList<>();
+  public String className;
 
   // Share type constants
   public final Type BOOL = new Type_bool();
@@ -38,6 +39,7 @@ public class Compiler {
   public String compile(String name, cmm.Absyn.Program p) {
     // Initialize output
     output = new LinkedList();
+    className = name + "/";
 
     // Output boilerplate
     output.add(".class public " + name + "\n");
@@ -83,6 +85,12 @@ public class Compiler {
       definitions.put("printDouble", new Fun("Runtime/printDouble", new FunType(VOID, oneArgList(DOUBLE))));
       definitions.put("readDouble", new Fun("Runtime/readDouble", new FunType(DOUBLE, new ListArg())));
 
+      for (Def d : ((PDefs) p).listdef_) {
+        DFun def = (DFun) d;
+        definitions.put(def.id_,
+            new Fun(className + def.id_, new FunType(def.type_, def.listarg_)));
+      }
+
       ListDef defs = new ListDef();
 
       for (cmm.Absyn.Def x : p.listdef_) {
@@ -98,6 +106,10 @@ public class Compiler {
       stackLimit = 0;
       localLimit = 0;
       localNr = 0;
+
+      Fun f = new Fun(p.id_, new FunType(p.type_, p.listarg_));
+      // definitions.put(p.id_, f);
+
       LinkedList<String> savedOutput = output;
       output = new LinkedList<>();
       // p.id_;
@@ -115,16 +127,20 @@ public class Compiler {
       output = savedOutput;
       closeScope();
 
-      Fun f = new Fun(p.id_, new FunType(p.type_, p.listarg_));
       output.add("\n.method public static " + f.toJVM() + "\n");
-      output.add(".limit locals " + localLimit + "\n");
-      output.add(".limit stack " + stackLimit + "\n");
+      output.add("  .limit locals " + localLimit + "\n");
+      output.add("  .limit stack " + stackLimit + "\n\n");
       for (String s : newOutput) {
         output.add("\t" + s);
       }
-      output.add("\n.end method\n");
-      return null;
 
+      if (isVoidFunction(p)) {
+        output.add("        iconst_0\n");
+        output.add("        return\n");
+      }
+      output.add("\n.end method\n");
+
+      return null;
     }
   }
 
@@ -147,7 +163,7 @@ public class Compiler {
       p.type_.accept(new TypeVisitor(), arg);
       for (String x : p.listid_) {
         int addr = addVarToContext(x, p.type_);
-        emit(new Store(p.type_, addr));
+        // emit(new Store(VOID, addr));
       }
 
       return p;
@@ -535,6 +551,15 @@ public class Compiler {
 
   private boolean isIntOrDouble(Type t) {
     return t.equals(INT) || t.equals(DOUBLE);
+  }
+
+  boolean isVoidFunction(DFun f) {
+    for (Stm stm : f.liststm_) {
+      if (stm instanceof SReturn) {
+        return false;
+      }
+    }
+    return true;
   }
 
   void emit(Code c) {

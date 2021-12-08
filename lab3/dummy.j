@@ -21,43 +21,39 @@
 .end method
 
 
-.method public static main()I
-.limit locals 2
-.limit stack 5
+.method public static cdec(I)V
+  .limit locals 1
+  .limit stack 3
+
 	
-        ;; double i = double 2.50000000000000;
-	ldc2_w 2.5
-	dstore_0
-	
-        ;; Evaluate if condition: bool (double i) >= (double 1.50000000000000)
-	dload_0
-	ldc2_w 1.5
-	dcmpg
-	iconst_0
-	if_icmpge  L2
-	iconst_0
-	goto L3
-	L2:
+        ;; int c --;
+	iload_0
+	dup
 	iconst_1
-	L3:
+	isub
+	istore_0
+	pop
+        iconst_0
+        return
+
+.end method
+
+.method public static main()I
+  .limit locals 1
+  .limit stack 1
+
 	
-        ;; Check if condition is true/false: 
-	ifeq L1
+        ;; void cdec (c = 0);
+	iconst_0
+	istore_0
+	iload_0
+	invokestatic dummy/cdec(I)V
+	nop
 	
-        ;; If true then do: 
-	
-        ;; void printInt (7);
-	bipush 7
+        ;; void printInt (c);
+	iload_0
 	invokestatic Runtime/printInt(I)V
-	goto L0
-	
-        ;; If false then do: 
-	L1:
-	
-        ;; void printInt (10);
-	bipush 10
-	invokestatic Runtime/printInt(I)V
-	L0:
+	nop
 	
         ;; return int 0;
 	iconst_0

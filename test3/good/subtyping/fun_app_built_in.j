@@ -22,12 +22,14 @@
 
 
 .method public static main()I
-.limit locals 0
-.limit stack 1
+  .limit locals 0
+  .limit stack 1
+
 	
         ;; void printDouble (99);
 	bipush 99
 	invokestatic Runtime/printDouble(D)V
+	nop
 	
         ;; return int 0;
 	iconst_0

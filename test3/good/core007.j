@@ -22,8 +22,9 @@
 
 
 .method public static main()I
-.limit locals 1
-.limit stack 1
+  .limit locals 1
+  .limit stack 1
+
 	
         ;; int x = int 7;
 	bipush 7
@@ -32,6 +33,7 @@
         ;; void printInt (x);
 	iload_0
 	invokestatic Runtime/printInt(I)V
+	nop
 	
         ;; return int 0;
 	iconst_0

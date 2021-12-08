@@ -22,8 +22,9 @@
 
 
 .method public static main()I
-.limit locals 1
-.limit stack 3
+  .limit locals 1
+  .limit stack 3
+
 	
         ;; int uw = int 0;
 	iconst_0
@@ -64,6 +65,7 @@
         ;; void printInt (uw);
 	iload_0
 	invokestatic Runtime/printInt(I)V
+	nop
 	
         ;; return int 0;
 	iconst_0

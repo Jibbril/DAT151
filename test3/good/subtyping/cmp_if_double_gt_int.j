@@ -22,8 +22,9 @@
 
 
 .method public static main()I
-.limit locals 1
-.limit stack 5
+  .limit locals 1
+  .limit stack 5
+
 	
         ;; Evaluate if condition: bool (double 5.00000000000000) > (int 3)
 	ldc2_w 5.0
@@ -38,7 +39,6 @@
 	ifeq L1
 	
         ;; If true then do: 
-	istore_0
 	goto L0
 	
         ;; If false then do: 

@@ -22,8 +22,9 @@
 
 
 .method public static main()I
-.limit locals 2
-.limit stack 1
+  .limit locals 2
+  .limit stack 1
+
 	
         ;; bool x0 = true;
 	iconst_1
@@ -36,6 +37,7 @@
         ;; void printInt (1);
 	iconst_1
 	invokestatic Runtime/printInt(I)V
+	nop
 	
         ;; return int 0;
 	iconst_0

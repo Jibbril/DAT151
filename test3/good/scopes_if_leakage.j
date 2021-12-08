@@ -22,8 +22,9 @@
 
 
 .method public static main()I
-.limit locals 7
-.limit stack 7
+  .limit locals 7
+  .limit stack 7
+
 	
         ;; bool var = bool true;
 	iconst_1

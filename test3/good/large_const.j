@@ -22,12 +22,14 @@
 
 
 .method public static main()I
-.limit locals 0
-.limit stack 1
+  .limit locals 0
+  .limit stack 1
+
 	
         ;; void printInt (1000);
 	ldc 1000
 	invokestatic Runtime/printInt(I)V
+	nop
 	
         ;; return int 0;
 	iconst_0

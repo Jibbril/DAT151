@@ -22,14 +22,16 @@
 
 
 .method public static main()I
-.limit locals 0
-.limit stack 3
+  .limit locals 0
+  .limit stack 3
+
 	
         ;; void printDouble (1 / 2.00000000000000);
 	iconst_1
 	ldc2_w 2.0
 	idiv
 	invokestatic Runtime/printDouble(D)V
+	nop
 	
         ;; return int 0;
 	iconst_0

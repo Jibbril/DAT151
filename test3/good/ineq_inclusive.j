@@ -22,8 +22,9 @@
 
 
 .method public static main()I
-.limit locals 0
-.limit stack 5
+  .limit locals 0
+  .limit stack 5
+
 	
         ;; Evaluate if condition: bool (int 0) >= (int 0)
 	iconst_0
@@ -43,6 +44,7 @@
         ;; void printInt (0);
 	iconst_0
 	invokestatic Runtime/printInt(I)V
+	nop
 	goto L0
 	
         ;; If false then do: 
@@ -51,6 +53,7 @@
         ;; void printInt (1);
 	iconst_1
 	invokestatic Runtime/printInt(I)V
+	nop
 	L0:
 	
         ;; Evaluate if condition: bool (int 1) >= (int 1)
@@ -71,6 +74,7 @@
         ;; void printInt (2);
 	iconst_2
 	invokestatic Runtime/printInt(I)V
+	nop
 	goto L4
 	
         ;; If false then do: 
@@ -79,6 +83,7 @@
         ;; void printInt (3);
 	iconst_3
 	invokestatic Runtime/printInt(I)V
+	nop
 	L4:
 	
         ;; Evaluate if condition: bool (int 2) <= (int 2)
@@ -99,6 +104,7 @@
         ;; void printInt (4);
 	iconst_4
 	invokestatic Runtime/printInt(I)V
+	nop
 	goto L8
 	
         ;; If false then do: 
@@ -107,6 +113,7 @@
         ;; void printInt (5);
 	iconst_5
 	invokestatic Runtime/printInt(I)V
+	nop
 	L8:
 	
         ;; Evaluate if condition: bool (int 0) <= (int 0)
@@ -127,6 +134,7 @@
         ;; void printInt (6);
 	bipush 6
 	invokestatic Runtime/printInt(I)V
+	nop
 	goto L12
 	
         ;; If false then do: 
@@ -135,6 +143,7 @@
         ;; void printInt (7);
 	bipush 7
 	invokestatic Runtime/printInt(I)V
+	nop
 	L12:
 	
         ;; return int 0;

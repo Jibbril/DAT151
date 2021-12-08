@@ -22,8 +22,9 @@
 
 
 .method public static main()I
-.limit locals 0
-.limit stack 4
+  .limit locals 0
+  .limit stack 4
+
 	
         ;; bool (double 1.10000000000000) == (double 1);
 	ldc2_w 1.1

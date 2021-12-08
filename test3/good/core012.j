@@ -22,8 +22,9 @@
 
 
 .method public static main()I
-.limit locals 2
-.limit stack 2
+  .limit locals 2
+  .limit stack 2
+
 	
         ;; int x = int 56;
 	bipush 56
@@ -38,24 +39,28 @@
 	iload_1
 	iadd
 	invokestatic Runtime/printInt(I)V
+	nop
 	
         ;; void printInt (x - y);
 	iload_0
 	iload_1
 	isub
 	invokestatic Runtime/printInt(I)V
+	nop
 	
         ;; void printInt (x * y);
 	iload_0
 	iload_1
 	imul
 	invokestatic Runtime/printInt(I)V
+	nop
 	
         ;; void printInt (45 / 2);
 	bipush 45
 	iconst_2
 	idiv
 	invokestatic Runtime/printInt(I)V
+	nop
 	
         ;; return int 0;
 	iconst_0

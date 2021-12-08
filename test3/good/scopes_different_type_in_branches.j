@@ -22,8 +22,9 @@
 
 
 .method public static main()I
-.limit locals 2
-.limit stack 2
+  .limit locals 2
+  .limit stack 2
+
 	
         ;; Evaluate if condition: bool (int 1) > (int 0)
 	iconst_1

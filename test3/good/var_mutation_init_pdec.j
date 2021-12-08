@@ -22,8 +22,9 @@
 
 
 .method public static main()I
-.limit locals 2
-.limit stack 3
+  .limit locals 2
+  .limit stack 3
+
 	
         ;; int a = int 1;
 	iconst_1
@@ -48,6 +49,7 @@
         ;; void printInt (a);
 	iload_0
 	invokestatic Runtime/printInt(I)V
+	nop
 	
         ;; int b ++;
 	iload_1
@@ -60,6 +62,7 @@
         ;; void printInt (a);
 	iload_0
 	invokestatic Runtime/printInt(I)V
+	nop
 	
         ;; int -- b;
 	iload_1
@@ -72,6 +75,7 @@
         ;; void printInt (a);
 	iload_0
 	invokestatic Runtime/printInt(I)V
+	nop
 	
         ;; int b --;
 	iload_1
@@ -84,6 +88,7 @@
         ;; void printInt (a);
 	iload_0
 	invokestatic Runtime/printInt(I)V
+	nop
 	
         ;; int b = int 832;
 	ldc 832
@@ -94,6 +99,7 @@
         ;; void printInt (a);
 	iload_0
 	invokestatic Runtime/printInt(I)V
+	nop
 	
         ;; return int 0;
 	iconst_0

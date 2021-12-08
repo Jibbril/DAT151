@@ -22,8 +22,9 @@
 
 
 .method public static main()I
-.limit locals 1
-.limit stack 4
+  .limit locals 1
+  .limit stack 4
+
 	
         ;; int x = int 5;
 	iconst_5
@@ -55,6 +56,7 @@
         ;; void printInt (x);
 	iload_0
 	invokestatic Runtime/printInt(I)V
+	nop
 	goto L0
 	
         ;; If false then do: 
@@ -63,6 +65,7 @@
         ;; void printInt (0);
 	iconst_0
 	invokestatic Runtime/printInt(I)V
+	nop
 	L0:
 	
         ;; return int 0;

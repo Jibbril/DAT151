@@ -22,9 +22,9 @@
 
 
 .method public static main()I
-.limit locals 2
-.limit stack 0
-	dstore_0
+  .limit locals 2
+  .limit stack 1
+
 	
         ;; double x = double x = 1;
 	iconst_1

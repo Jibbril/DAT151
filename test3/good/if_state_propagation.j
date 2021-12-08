@@ -22,9 +22,9 @@
 
 
 .method public static main()I
-.limit locals 1
-.limit stack 1
-	istore_0
+  .limit locals 1
+  .limit stack 2
+
 	
         ;; Evaluate if condition: bool (int x = int 1) == (int 1)
 	iconst_1
@@ -51,6 +51,7 @@
         ;; void printInt (x);
 	iload_0
 	invokestatic Runtime/printInt(I)V
+	nop
 	
         ;; return int 0;
 	iconst_0

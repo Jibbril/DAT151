@@ -22,8 +22,9 @@
 
 
 .method public static main()I
-.limit locals 2
-.limit stack 5
+  .limit locals 2
+  .limit stack 5
+
 	
         ;; double d = double 2.00000000000000;
 	ldc2_w 2.0
@@ -32,6 +33,7 @@
         ;; void printDouble (d);
 	dload_0
 	invokestatic Runtime/printDouble(D)V
+	nop
 	
         ;; double d ++;
 	dload_0
@@ -43,6 +45,7 @@
         ;; void printDouble (d);
 	dload_0
 	invokestatic Runtime/printDouble(D)V
+	nop
 	
         ;; double d --;
 	dload_0
@@ -54,6 +57,7 @@
         ;; void printDouble (d);
 	dload_0
 	invokestatic Runtime/printDouble(D)V
+	nop
 	
         ;; return int 0;
 	iconst_0
