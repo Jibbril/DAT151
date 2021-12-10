@@ -307,8 +307,8 @@ public class TypeChecker {
                     throw new TypeException("Eq/Neq not applicable to void type.");
                 }
                 if ((t1.equals(INT) && t2.equals(DOUBLE)) || (t1.type_.equals(DOUBLE) && t2.type_.equals(INT))) {
-                    t1 = new ETyped(DOUBLE, t1.exp_);
-                    t2 = new ETyped(DOUBLE, t2.exp_);
+                    t1 = (new EConv(DOUBLE, t1)).accept(new ExpVisitor(), arg);
+                    t2 = (new EConv(DOUBLE, t2)).accept(new ExpVisitor(), arg);
                 }
                 compareTypes(t1.type_, t2.type_);
             } else {

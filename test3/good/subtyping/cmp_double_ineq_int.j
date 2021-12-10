@@ -23,12 +23,12 @@
 
 .method public static main()I
   .limit locals 0
-  .limit stack 4
+  .limit stack 5
 
 	
-        ;; bool (double 1.10000000000000) != (double 1);
+        ;; bool (double double double 1.10000000000000) != (double 1.00000000000000);
 	ldc2_w 1.1
-	iconst_1
+	dconst_1
 	dcmpg
 	iconst_0
 	if_icmpne  L0

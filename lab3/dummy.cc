@@ -1,6 +1,4 @@
-int main () {
- double x;
- x = 1;
- printDouble(x);
- return 0 ;
+int main() {
+  1.1 == 1;
+  return 0;
 }
