@@ -30,7 +30,6 @@
 	iconst_1
 	invokestatic Runtime/printInt(I)V
 	nop
-        iconst_0
         return
 
 .end method

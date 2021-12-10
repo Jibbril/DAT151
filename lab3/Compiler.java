@@ -135,7 +135,6 @@ public class Compiler {
       }
 
       if (isVoidFunction(p)) {
-        output.add("        iconst_0\n");
         output.add("        return\n");
       }
       output.add("\n.end method\n");
@@ -146,7 +145,8 @@ public class Compiler {
 
   public class ArgVisitor implements cmm.Absyn.Arg.Visitor<Void, Void> {
     public Void visit(cmm.Absyn.ADecl p, Void arg) { /* Code for ADecl goes here */
-      addVarToContext(p.id_, p.type_);
+      int addr = addVarToContext(p.id_, p.type_);
+      // emit(new Store(p.type_, addr));
       return null;
     }
   }

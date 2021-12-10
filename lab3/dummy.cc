@@ -1,11 +1,9 @@
-void cdec(int c) {
-  c--;
+// lots of function arguments, empty body
+void foo() {
 }
 
-int main () {
-  int c;
-  cdec(c = 0);
-  printInt(c);
+int main() {
+  foo();
 
-  return 0;
+  return 5050;
 }

@@ -32,7 +32,6 @@
 	iadd
 	invokestatic Runtime/printInt(I)V
 	nop
-        iconst_0
         return
 
 .end method
@@ -48,7 +47,6 @@
 	iadd
 	invokestatic Runtime/printDouble(D)V
 	nop
-        iconst_0
         return
 
 .end method

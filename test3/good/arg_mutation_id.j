@@ -33,7 +33,6 @@
 	isub
 	istore_0
 	pop
-        iconst_0
         return
 
 .end method

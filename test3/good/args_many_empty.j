@@ -25,7 +25,6 @@
   .limit locals 100
   .limit stack 0
 
-        iconst_0
         return
 
 .end method

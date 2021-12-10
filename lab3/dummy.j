@@ -21,42 +21,25 @@
 .end method
 
 
-.method public static cdec(I)V
-  .limit locals 1
-  .limit stack 3
+.method public static foo()V
+  .limit locals 0
+  .limit stack 0
 
-	
-        ;; int c --;
-	iload_0
-	dup
-	iconst_1
-	isub
-	istore_0
-	pop
-        iconst_0
         return
 
 .end method
 
 .method public static main()I
-  .limit locals 1
+  .limit locals 0
   .limit stack 1
 
 	
-        ;; void cdec (c = 0);
-	iconst_0
-	istore_0
-	iload_0
-	invokestatic dummy/cdec(I)V
+        ;; void foo ();
+	invokestatic dummy/foo()V
 	nop
 	
-        ;; void printInt (c);
-	iload_0
-	invokestatic Runtime/printInt(I)V
-	nop
-	
-        ;; return int 0;
-	iconst_0
+        ;; return int 5050;
+	ldc 5050
 	ireturn
 
 .end method
