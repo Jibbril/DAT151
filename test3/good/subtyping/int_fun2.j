@@ -26,10 +26,10 @@
   .limit stack 4
 
 	
-        ;; return double arg0 / arg1;
+        ;; return double (double arg0) / (double arg1);
 	dload_0
 	dload_2
-	idiv
+	ddiv
 	dreturn
 
 .end method

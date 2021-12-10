@@ -269,8 +269,8 @@ public class TypeChecker {
             }
 
             if (!t1.type_.equals(t2.type_))
-                return new ETyped(DOUBLE, p);
-            return new ETyped(t1.type_, p);
+                return new ETyped(DOUBLE, new EMul(t1, p.mulop_, t2));
+            return new ETyped(t1.type_, new EMul(t1, p.mulop_, t2));
         }
 
         public ETyped visit(cmm.Absyn.EAdd p, Void arg) { /* Code for EAdd goes here */
@@ -283,9 +283,9 @@ public class TypeChecker {
             }
 
             if (!t1.type_.equals(t2.type_))
-                return new ETyped(DOUBLE, p);
-            ;
-            return new ETyped(t1.type_, p);
+                return new ETyped(DOUBLE, new EAdd(t1, p.addop_, t2));
+
+            return new ETyped(t1.type_, new EAdd(t1, p.addop_, t2));
         }
 
         public ETyped visit(cmm.Absyn.ECmp p, Void arg) { /* Code for ECmp goes here */

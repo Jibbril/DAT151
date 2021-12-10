@@ -51,13 +51,13 @@
         ;; If false then do: 
 	L1:
 	
-        ;; double f = double n * dfac (n - 1.00000000000000);
+        ;; double f = double (double n) * (double dfac (double (double n) - (double 1.00000000000000)));
 	dload_0
 	dload_0
 	dconst_1
-	isub
+	dsub
 	invokestatic double__small_program_fac/dfac(D)D
-	imul
+	dmul
 	dstore_2
 	dload_2
 	L0:
@@ -95,7 +95,7 @@
 	
         ;; do: 
 	
-        ;; int r = int r * n;
+        ;; int r = int (int r) * (int n);
 	iload_3
 	iload_2
 	imul
@@ -103,7 +103,7 @@
 	iload_3
 	pop
 	
-        ;; int n = int n - 1;
+        ;; int n = int (int n) - (int 1);
 	iload_2
 	iconst_1
 	isub

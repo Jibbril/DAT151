@@ -30,7 +30,7 @@
 	bipush 50
 	istore_0
 	
-        ;; int y = int x ++ + x --;
+        ;; int y = int (int x ++) + (int x --);
 	iload_0
 	dup
 	iconst_1
@@ -54,7 +54,7 @@
 	invokestatic Runtime/printInt(I)V
 	nop
 	
-        ;; void printInt (int (x = 10) + x ++ + x);
+        ;; void printInt (int (int (int x = int 10) + (int x ++)) + (int x));
 	bipush 10
 	istore_0
 	iload_0

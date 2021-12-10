@@ -41,7 +41,7 @@
 	
         ;; If true then do: 
 	
-        ;; int e = int ev (int y - 2);
+        ;; int e = int ev (int (int y) - (int 2));
 	iload_0
 	iconst_2
 	isub

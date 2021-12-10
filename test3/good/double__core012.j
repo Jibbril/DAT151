@@ -54,7 +54,7 @@
 
 .method public static main()I
   .limit locals 4
-  .limit stack 13
+  .limit stack 10
 
 	
         ;; double z = double 9.30000000000000;
@@ -65,13 +65,13 @@
 	ldc2_w 5.1
 	dstore_2
 	
-        ;; void printBool (bool (double z + w) > (double z - w));
+        ;; void printBool (bool (double (double z) + (double w)) > (double (double z) - (double w)));
 	dload_0
 	dload_2
-	iadd
+	dadd
 	dload_0
 	dload_2
-	isub
+	dsub
 	dcmpg
 	iconst_1
 	if_icmpeq  L2
@@ -83,13 +83,13 @@
 	invokestatic double__core012/printBool(Z)V
 	nop
 	
-        ;; void printBool (bool (double z / w) <= (double z * w));
+        ;; void printBool (bool (double (double z) / (double w)) <= (double (double z) * (double w)));
 	dload_0
 	dload_2
-	idiv
+	ddiv
 	dload_0
 	dload_2
-	imul
+	dmul
 	dcmpg
 	iconst_0
 	if_icmple  L4

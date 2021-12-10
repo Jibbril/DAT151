@@ -42,7 +42,7 @@
   .limit stack 2
 
 	
-        ;; int c = int 0 - 1;
+        ;; int c = int (int 0) - (int 1);
 	iconst_0
 	iconst_1
 	isub

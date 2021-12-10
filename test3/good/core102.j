@@ -26,7 +26,7 @@
   .limit stack 3
 
 	
-        ;; While condition (bool (int 2 + 5 * 6 / 5 - 67) > (int 5))
+        ;; While condition (bool (int (int (int 2) + (int (int (int 5) * (int 6)) / (int 5))) - (int 67)) > (int 5))
 	L0:
 	iconst_2
 	iconst_5

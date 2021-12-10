@@ -26,10 +26,10 @@
   .limit stack 3
 
 	
-        ;; void printDouble (double 1.00000000000000 / 2);
+        ;; void printDouble (double (double 1.00000000000000) / (int 2));
 	dconst_1
 	iconst_2
-	idiv
+	ddiv
 	invokestatic Runtime/printDouble(D)V
 	nop
 	

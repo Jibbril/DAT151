@@ -55,7 +55,7 @@
 	invokestatic Runtime/printInt(I)V
 	nop
 	
-        ;; int id (int z = int z + 1);
+        ;; int id (int z = int (int z) + (int 1));
 	iload_0
 	iconst_1
 	iadd
@@ -69,7 +69,7 @@
 	invokestatic Runtime/printInt(I)V
 	nop
 	
-        ;; int z ++ + z ++;
+        ;; int (int z ++) + (int z ++);
 	iload_0
 	dup
 	iconst_1

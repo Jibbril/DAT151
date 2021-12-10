@@ -38,7 +38,7 @@
 	iconst_1
 	istore_2
 	
-        ;; While condition (bool (int i) < (int arg + 1))
+        ;; While condition (bool (int i) < (int (int arg) + (int 1)))
 	L0:
 	iload_2
 	iload_0
@@ -54,7 +54,7 @@
 	
         ;; do: 
 	
-        ;; int ret = int i * ret;
+        ;; int ret = int (int i) * (int ret);
 	iload_2
 	iload_1
 	imul

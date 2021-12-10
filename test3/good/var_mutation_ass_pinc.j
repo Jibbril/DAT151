@@ -26,7 +26,7 @@
   .limit stack 3
 
 	
-        ;; int a = int 0 - 1;
+        ;; int a = int (int 0) - (int 1);
 	iconst_0
 	iconst_1
 	isub

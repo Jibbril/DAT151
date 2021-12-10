@@ -30,7 +30,7 @@
 	invokestatic Runtime/readInt()I
 	istore_0
 	
-        ;; int d = int x / 2;
+        ;; int d = int (int x) / (int 2);
 	iload_0
 	iconst_2
 	idiv
@@ -50,7 +50,7 @@
 	
         ;; do: 
 	
-        ;; Evaluate if condition: bool (int d * (x / d)) == (int x)
+        ;; Evaluate if condition: bool (int (int d) * (int (int x) / (int d))) == (int x)
 	iload_1
 	iload_0
 	iload_1

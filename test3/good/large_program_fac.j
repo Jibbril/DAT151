@@ -52,7 +52,7 @@
 	
         ;; do: 
 	
-        ;; int r = int r * n;
+        ;; int r = int (int r) * (int n);
 	iload_1
 	iload_2
 	imul
@@ -60,7 +60,7 @@
 	iload_1
 	pop
 	
-        ;; int n = int n - 1;
+        ;; int n = int (int n) - (int 1);
 	iload_2
 	iconst_1
 	isub
@@ -108,7 +108,7 @@
         ;; If false then do: 
 	L5:
 	
-        ;; int f = int n * rfac (n - 1);
+        ;; int f = int (int n) * (int rfac (int (int n) - (int 1)));
 	iload_0
 	iload_0
 	iconst_1
@@ -156,7 +156,7 @@
         ;; If false then do: 
 	L9:
 	
-        ;; int f = int n * nfac (n - 1);
+        ;; int f = int (int n) * (int nfac (int (int n) - (int 1)));
 	iload_0
 	iload_0
 	iconst_1
@@ -194,7 +194,7 @@
 	
         ;; If true then do: 
 	
-        ;; int f = int mfac (n - 1) * n;
+        ;; int f = int (int mfac (int (int n) - (int 1))) * (int n);
 	iload_0
 	iconst_1
 	isub
@@ -277,7 +277,7 @@
         ;; If false then do: 
 	L21:
 	
-        ;; int m = int (l + h) / 2;
+        ;; int m = int (int (int l) + (int h)) / (int 2);
 	iload_0
 	iload_1
 	iadd
@@ -287,7 +287,7 @@
 	iload_3
 	pop
 	
-        ;; int f = int ifac2f (l, m) * ifac2f (m + 1, h);
+        ;; int f = int (int ifac2f (int l, int m)) * (int ifac2f (int (int m) + (int 1), int h));
 	iload_0
 	iload_3
 	invokestatic large_program_fac/ifac2f(II)I

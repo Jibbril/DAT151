@@ -75,7 +75,7 @@
   .limit stack 4
 
 	
-        ;; void printBool (bool (bool test (int 0 - 1)) && (bool test (int 0)));
+        ;; void printBool (bool (bool test (int (int 0) - (int 1))) && (bool test (int 0)));
 	iconst_0
 	iconst_0
 	iconst_1
@@ -93,7 +93,7 @@
 	invokestatic core013/printBool(Z)V
 	nop
 	
-        ;; void printBool (bool (bool test (int 0 - 2)) || (bool test (int 1)));
+        ;; void printBool (bool (bool test (int (int 0) - (int 2))) || (bool test (int 1)));
 	iconst_1
 	iconst_0
 	iconst_2
@@ -111,7 +111,7 @@
 	invokestatic core013/printBool(Z)V
 	nop
 	
-        ;; void printBool (bool (bool (bool test (int 3)) && (bool test (int 0 - 5))) && (bool true));
+        ;; void printBool (bool (bool (bool test (int 3)) && (bool test (int (int 0) - (int 5)))) && (bool true));
 	iconst_0
 	iconst_0
 	iconst_3
@@ -138,7 +138,7 @@
 	invokestatic core013/printBool(Z)V
 	nop
 	
-        ;; void printBool (bool (bool test (int 3)) || (bool (bool test (int 0 - 5)) && (bool true)));
+        ;; void printBool (bool (bool test (int 3)) || (bool (bool test (int (int 0) - (int 5))) && (bool true)));
 	iconst_1
 	iconst_3
 	invokestatic core013/test(I)Z

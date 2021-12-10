@@ -30,7 +30,7 @@
 	bipush 32
 	istore_0
 	
-        ;; Evaluate if condition: bool (int 0) < (int 0 - 0)
+        ;; Evaluate if condition: bool (int 0) < (int (int 0) - (int 0))
 	iconst_0
 	iconst_0
 	iconst_0

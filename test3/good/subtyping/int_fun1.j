@@ -26,10 +26,10 @@
   .limit stack 3
 
 	
-        ;; return double arg / 2;
+        ;; return double (double arg) / (int 2);
 	dload_0
 	iconst_2
-	idiv
+	ddiv
 	dreturn
 
 .end method

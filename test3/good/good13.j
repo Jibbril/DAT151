@@ -60,7 +60,7 @@
 	iconst_2
 	istore_3
 	
-        ;; While condition (bool (bool (int j * j) <= (int i)) && (bool iPrime))
+        ;; While condition (bool (bool (int (int j) * (int j)) <= (int i)) && (bool iPrime))
 	L4:
 	iconst_0
 	iload_3
@@ -85,7 +85,7 @@
 	
         ;; do: 
 	
-        ;; Evaluate if condition: bool (int i / j * j) == (int i)
+        ;; Evaluate if condition: bool (int (int (int i) / (int j)) * (int j)) == (int i)
 	iload_1
 	iload_3
 	idiv
@@ -127,7 +127,7 @@
 	
         ;; end while
 	
-        ;; Evaluate if condition: bool (bool iPrime) && (bool (int n / i * i) == (int n))
+        ;; Evaluate if condition: bool (bool iPrime) && (bool (int (int (int n) / (int i)) * (int i)) == (int n))
 	iconst_0
 	iload_2
 	iconst_0
@@ -160,7 +160,7 @@
 	invokestatic Runtime/printInt(I)V
 	nop
 	
-        ;; int n = int n / i;
+        ;; int n = int (int n) / (int i);
 	iload_0
 	iload_1
 	idiv

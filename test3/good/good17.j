@@ -32,7 +32,7 @@
 	iload_0
 	pop
 	
-        ;; int y = int x + 7;
+        ;; int y = int (int x) + (int 7);
 	iload_0
 	bipush 7
 	iadd

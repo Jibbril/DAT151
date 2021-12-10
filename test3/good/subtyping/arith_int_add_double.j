@@ -26,10 +26,10 @@
   .limit stack 3
 
 	
-        ;; double x = double 1 + 1.10000000000000;
+        ;; double x = double (int 1) + (double 1.10000000000000);
 	iconst_1
 	ldc2_w 1.1
-	iadd
+	dadd
 	dstore_0
 	dload_0
 	

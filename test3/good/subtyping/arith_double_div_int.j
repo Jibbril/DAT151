@@ -26,10 +26,10 @@
   .limit stack 3
 
 	
-        ;; double x = double 1.10000000000000 / 1;
+        ;; double x = double (double 1.10000000000000) / (int 1);
 	ldc2_w 1.1
 	iconst_1
-	idiv
+	ddiv
 	dstore_0
 	dload_0
 	

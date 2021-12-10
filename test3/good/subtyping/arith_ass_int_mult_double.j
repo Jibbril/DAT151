@@ -26,10 +26,10 @@
   .limit stack 3
 
 	
-        ;; double x = double 2 * 3.14000000000000;
+        ;; double x = double (int 2) * (double 3.14000000000000);
 	iconst_2
 	ldc2_w 3.14
-	imul
+	dmul
 	dstore_0
 	dload_0
 	

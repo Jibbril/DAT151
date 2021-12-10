@@ -32,7 +32,7 @@
 	iload_0
 	pop
 	
-        ;; int y = int 36 + 67;
+        ;; int y = int (int 36) + (int 67);
 	bipush 36
 	bipush 67
 	iadd

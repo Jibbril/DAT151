@@ -68,7 +68,7 @@
 	invokestatic Runtime/printInt(I)V
 	nop
 	
-        ;; int hi = int lo + hi;
+        ;; int hi = int (int lo) + (int hi);
 	iload_0
 	iload_1
 	iadd
@@ -76,7 +76,7 @@
 	iload_1
 	pop
 	
-        ;; int lo = int hi - lo;
+        ;; int lo = int (int hi) - (int lo);
 	iload_1
 	iload_0
 	isub

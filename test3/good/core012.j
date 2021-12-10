@@ -34,28 +34,28 @@
 	bipush 23
 	istore_1
 	
-        ;; void printInt (int x + y);
+        ;; void printInt (int (int x) + (int y));
 	iload_0
 	iload_1
 	iadd
 	invokestatic Runtime/printInt(I)V
 	nop
 	
-        ;; void printInt (int x - y);
+        ;; void printInt (int (int x) - (int y));
 	iload_0
 	iload_1
 	isub
 	invokestatic Runtime/printInt(I)V
 	nop
 	
-        ;; void printInt (int x * y);
+        ;; void printInt (int (int x) * (int y));
 	iload_0
 	iload_1
 	imul
 	invokestatic Runtime/printInt(I)V
 	nop
 	
-        ;; void printInt (int 45 / 2);
+        ;; void printInt (int (int 45) / (int 2));
 	bipush 45
 	iconst_2
 	idiv

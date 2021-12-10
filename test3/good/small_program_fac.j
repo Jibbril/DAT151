@@ -52,7 +52,7 @@
 	
         ;; do: 
 	
-        ;; int r = int r * n;
+        ;; int r = int (int r) * (int n);
 	iload_1
 	iload_2
 	imul
@@ -60,7 +60,7 @@
 	iload_1
 	pop
 	
-        ;; int n = int n - 1;
+        ;; int n = int (int n) - (int 1);
 	iload_2
 	iconst_1
 	isub

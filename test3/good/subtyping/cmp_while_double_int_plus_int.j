@@ -26,7 +26,7 @@
   .limit stack 5
 
 	
-        ;; While condition (bool (double 5.32400000000000) >= (int 1 + 43))
+        ;; While condition (bool (double 5.32400000000000) >= (int (int 1) + (int 43)))
 	L0:
 	ldc2_w 5.324
 	iconst_1

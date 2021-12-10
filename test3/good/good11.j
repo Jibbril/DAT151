@@ -50,7 +50,7 @@
 	
         ;; do: 
 	
-        ;; int sum = int sum + x;
+        ;; int sum = int (int sum) + (int x);
 	iload_0
 	iload_2
 	iadd
@@ -70,7 +70,7 @@
 	
         ;; end while
 	
-        ;; void printInt (int sum / num);
+        ;; void printInt (int (int sum) / (int num));
 	iload_0
 	iload_1
 	idiv

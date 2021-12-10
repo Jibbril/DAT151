@@ -30,7 +30,7 @@
 	bipush 56
 	istore_1
 	
-        ;; Evaluate if condition: bool (int y + 45) <= (int 2)
+        ;; Evaluate if condition: bool (int (int y) + (int 45)) <= (int 2)
 	iload_1
 	bipush 45
 	iadd

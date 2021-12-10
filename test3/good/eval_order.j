@@ -77,7 +77,7 @@
 	invokestatic eval_order/order(II)I
 	pop
 	
-        ;; int printIntInt (2) + printIntInt (3);
+        ;; int (int printIntInt (int 2)) + (int printIntInt (int 3));
 	iconst_2
 	invokestatic eval_order/printIntInt(I)I
 	iconst_3
@@ -98,7 +98,7 @@
 	L1:
 	pop
 	
-        ;; int printIntInt (6) * printIntInt (7);
+        ;; int (int printIntInt (int 6)) * (int printIntInt (int 7));
 	bipush 6
 	invokestatic eval_order/printIntInt(I)I
 	bipush 7
@@ -106,7 +106,7 @@
 	imul
 	pop
 	
-        ;; int printIntInt (8) / printIntInt (9);
+        ;; int (int printIntInt (int 8)) / (int printIntInt (int 9));
 	bipush 8
 	invokestatic eval_order/printIntInt(I)I
 	bipush 9
@@ -114,7 +114,7 @@
 	idiv
 	pop
 	
-        ;; int printIntInt (10) - printIntInt (11);
+        ;; int (int printIntInt (int 10)) - (int printIntInt (int 11));
 	bipush 10
 	invokestatic eval_order/printIntInt(I)I
 	bipush 11

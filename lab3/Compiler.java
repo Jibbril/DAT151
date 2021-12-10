@@ -305,23 +305,36 @@ public class Compiler {
 
     public Void visit(cmm.Absyn.EMul p, Void arg) { /* Code for EMul goes here */
       boolean b = p.mulop_.accept(new MulOpVisitor(), arg);
+      Type t;
+      if (((ETyped) p.exp_1).type_.equals(INT) && ((ETyped) p.exp_2).type_.equals(INT))
+        t = INT;
+      else
+        t = DOUBLE;
       p.exp_1.accept(this, arg);
       p.exp_2.accept(this, arg);
       if (b)
-        emit(new Mul(INT));
+        emit(new Mul(t));
       else
-        emit(new Div(INT));
+        emit(new Div(t));
       return null;
     }
 
     public Void visit(cmm.Absyn.EAdd p, Void arg) { /* Code for EAdd goes here */
       boolean b = p.addop_.accept(new AddOpVisitor(), arg);
+      Type t;
+      if (((ETyped) p.exp_1).type_.equals(INT) && ((ETyped) p.exp_2).type_.equals(INT))
+        t = INT;
+      else {
+        t = DOUBLE;
+        p = new EAdd(new ETyped(DOUBLE, p.exp_1), p.addop_, new ETyped(DOUBLE, p.exp_2));
+      }
+
       p.exp_1.accept(this, arg);
       p.exp_2.accept(this, arg);
       if (b)
-        emit(new Add(INT));
+        emit(new Add(t));
       else
-        emit(new Sub(INT));
+        emit(new Sub(t));
       return null;
     }
 

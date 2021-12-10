@@ -30,10 +30,10 @@
 	iconst_1
 	dstore_0
 	
-        ;; double d = double d / 2;
+        ;; double d = double (double d) / (int 2);
 	dload_0
 	iconst_2
-	idiv
+	ddiv
 	dstore_0
 	dload_0
 	

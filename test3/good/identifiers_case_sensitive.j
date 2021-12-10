@@ -26,7 +26,7 @@
   .limit stack 2
 
 	
-        ;; void printInt (int 100 + x);
+        ;; void printInt (int (int 100) + (int x));
 	bipush 100
 	iload_0
 	iadd
@@ -41,10 +41,10 @@
   .limit stack 4
 
 	
-        ;; void printDouble (double 99.0000000000000 + x);
+        ;; void printDouble (double (double 99.0000000000000) + (double x));
 	ldc2_w 99.0
 	dload_0
-	iadd
+	dadd
 	invokestatic Runtime/printDouble(D)V
 	nop
         return

@@ -44,7 +44,7 @@
 	
         ;; do: 
 	
-        ;; int y = int y - 2;
+        ;; int y = int (int y) - (int 2);
 	iload_0
 	iconst_2
 	isub

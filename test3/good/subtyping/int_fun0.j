@@ -37,10 +37,10 @@
   .limit stack 3
 
 	
-        ;; void printDouble (double have_an_int () / 2);
+        ;; void printDouble (double (double have_an_int ()) / (int 2));
 	invokestatic int_fun0/have_an_int()D
 	iconst_2
-	idiv
+	ddiv
 	invokestatic Runtime/printDouble(D)V
 	nop
 	
