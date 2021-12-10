@@ -161,6 +161,7 @@ public class TypeChecker {
             ETyped t = p.exp_.accept(new ExpVisitor(), arg);
             if (returnType.equals(DOUBLE) && t.type_.equals(INT)) {
                 t = new ETyped(DOUBLE, p.exp_);
+
             }
             compareTypes(t.type_, returnType);
             return new SReturn(t);
@@ -306,7 +307,8 @@ public class TypeChecker {
                 if (t1.type_.equals(VOID) || t2.type_.equals(VOID)) {
                     throw new TypeException("Eq/Neq not applicable to void type.");
                 }
-                if ((t1.equals(INT) && t2.equals(DOUBLE)) || (t1.type_.equals(DOUBLE) && t2.type_.equals(INT))) {
+                if ((t1.type_.equals(INT) && t2.type_.equals(DOUBLE))
+                        || (t1.type_.equals(DOUBLE) && t2.type_.equals(INT))) {
                     t1 = (new EConv(DOUBLE, t1)).accept(new ExpVisitor(), arg);
                     t2 = (new EConv(DOUBLE, t2)).accept(new ExpVisitor(), arg);
                 }

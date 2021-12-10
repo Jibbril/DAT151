@@ -1,4 +1,4 @@
-.class public dummy
+.class public cmp_int_eq_double
 .super java/lang/Object
 
 .method public <init>()V
@@ -14,7 +14,7 @@
   .limit locals 1
   .limit stack  1
 
-  invokestatic dummy/main()I
+  invokestatic cmp_int_eq_double/main()I
   pop
   return
 

@@ -1,4 +1,4 @@
-.class public dummy
+.class public cmp_int_ineq_double
 .super java/lang/Object
 
 .method public <init>()V
@@ -14,7 +14,7 @@
   .limit locals 1
   .limit stack  1
 
-  invokestatic dummy/main()I
+  invokestatic cmp_int_ineq_double/main()I
   pop
   return
 
@@ -26,11 +26,12 @@
   .limit stack 5
 
 	
-        ;; bool (double 1.00000000000000) == (double double double 1.10000000000000);
+        ;; bool (double 1.00000000000000) != (double double double 1.10000000000000);
 	dconst_1
 	ldc2_w 1.1
 	dcmpg
-	ifeq L0
+	iconst_0
+	if_icmpne  L0
 	iconst_0
 	goto L1
 	L0:
