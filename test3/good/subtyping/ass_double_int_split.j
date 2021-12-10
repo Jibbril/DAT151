@@ -23,13 +23,11 @@
 
 .method public static main()I
   .limit locals 2
-  .limit stack 1
+  .limit stack 2
 
 	
-        ;; double x = double x = 1;
-	iconst_1
-	dstore_0
-	dload_0
+        ;; double x = double 1.00000000000000;
+	dconst_1
 	dstore_0
 	dload_0
 	pop2

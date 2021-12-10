@@ -343,7 +343,9 @@ public class TypeChecker {
 
             // Enable assignments such as "double a; a = 345;"
             if (t2.equals(DOUBLE) && t1.type_.equals(INT)) {
-                t1 = new ETyped(DOUBLE, p);
+                // t1 = new ETyped(DOUBLE, p);
+                t1 = (new EConv(DOUBLE, t1)).accept(new ExpVisitor(), arg);
+
             }
             compareTypes(t1.type_, t2);
 
