@@ -26,18 +26,13 @@
   .limit stack 4
 
 	
-        ;; double x = double (double 2.00000000000000) * (double double double 3.14000000000000);
-	ldc2_w 2.0
-	ldc2_w 3.14
-	dmul
+        ;; double x = double (double double double 1.10000000000000) + (double 1.00000000000000);
+	ldc2_w 1.1
+	dconst_1
+	dadd
 	dstore_0
 	dload_0
 	pop2
-	
-        ;; void printDouble (double x);
-	dload_0
-	invokestatic Runtime/printDouble(D)V
-	nop
 	
         ;; return int 0;
 	iconst_0

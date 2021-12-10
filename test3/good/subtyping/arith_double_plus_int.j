@@ -23,12 +23,12 @@
 
 .method public static main()I
   .limit locals 2
-  .limit stack 3
+  .limit stack 4
 
 	
-        ;; double x = double (double 1.10000000000000) + (int 1);
+        ;; double x = double (double double double 1.10000000000000) + (double 1.00000000000000);
 	ldc2_w 1.1
-	iconst_1
+	dconst_1
 	dadd
 	dstore_0
 	dload_0

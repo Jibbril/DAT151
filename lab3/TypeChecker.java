@@ -285,8 +285,11 @@ public class TypeChecker {
                 throw new TypeException("Addition only callable on int or double");
             }
 
-            if (!t1.type_.equals(t2.type_))
-                return new ETyped(DOUBLE, new EAdd(t1, p.addop_, t2));
+            if (!t1.type_.equals(t2.type_)) {
+                ETyped tc1 = (new EConv(DOUBLE, t1)).accept(new ExpVisitor(), arg);
+                ETyped tc2 = (new EConv(DOUBLE, t2)).accept(new ExpVisitor(), arg);
+                return new ETyped(DOUBLE, new EAdd(tc1, p.addop_, tc2));
+            }
 
             return new ETyped(t1.type_, new EAdd(t1, p.addop_, t2));
         }
