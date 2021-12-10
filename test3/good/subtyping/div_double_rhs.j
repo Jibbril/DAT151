@@ -23,11 +23,11 @@
 
 .method public static main()I
   .limit locals 0
-  .limit stack 3
+  .limit stack 4
 
 	
-        ;; void printDouble (double (int 1) / (double 2.00000000000000));
-	iconst_1
+        ;; void printDouble (double (double 1.00000000000000) / (double double double 2.00000000000000));
+	dconst_1
 	ldc2_w 2.0
 	ddiv
 	invokestatic Runtime/printDouble(D)V

@@ -268,8 +268,11 @@ public class TypeChecker {
                 throw new TypeException("Multiplication only callable on int or double");
             }
 
-            if (!t1.type_.equals(t2.type_))
-                return new ETyped(DOUBLE, new EMul(t1, p.mulop_, t2));
+            if (!t1.type_.equals(t2.type_)) {
+                ETyped tc1 = (new EConv(DOUBLE, t1)).accept(new ExpVisitor(), arg);
+                ETyped tc2 = (new EConv(DOUBLE, t2)).accept(new ExpVisitor(), arg);
+                return new ETyped(DOUBLE, new EMul(tc1, p.mulop_, tc2));
+            }
             return new ETyped(t1.type_, new EMul(t1, p.mulop_, t2));
         }
 
@@ -351,7 +354,13 @@ public class TypeChecker {
         public ETyped visit(cmm.Absyn.EConv p, Void arg) { /* Code for EConv goes here */
             p.type_.accept(new TypeVisitor(), arg);
             ETyped t = p.exp_.accept(new ExpVisitor(), arg);
-            return new ETyped(t.type_, p);
+            if (t.type_.equals(INT)) {
+                Integer val = ((EInt) ((ETyped) t.exp_).exp_).integer_;
+                Double dVal = Double.valueOf(val);
+                return new ETyped(DOUBLE, new EDouble(dVal));
+            }
+
+            return new ETyped(DOUBLE, t);
         }
     }
 

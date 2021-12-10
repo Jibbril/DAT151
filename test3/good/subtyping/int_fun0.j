@@ -34,12 +34,12 @@
 
 .method public static main()I
   .limit locals 0
-  .limit stack 3
+  .limit stack 4
 
 	
-        ;; void printDouble (double (double have_an_int ()) / (int 2));
+        ;; void printDouble (double (double double double have_an_int ()) / (double 2.00000000000000));
 	invokestatic int_fun0/have_an_int()D
-	iconst_2
+	ldc2_w 2.0
 	ddiv
 	invokestatic Runtime/printDouble(D)V
 	nop

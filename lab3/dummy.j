@@ -23,42 +23,20 @@
 
 .method public static main()I
   .limit locals 2
-  .limit stack 3
+  .limit stack 4
 
 	
-        ;; int n = int 0;
-	iconst_0
-	istore_0
+        ;; double x = double (double 2.00000000000000) * (double double double 3.14000000000000);
+	ldc2_w 2.0
+	ldc2_w 3.14
+	dmul
+	dstore_0
+	dload_0
+	pop2
 	
-        ;; While condition (bool (int n ++) < (int 10))
-	L0:
-	iload_0
-	dup
-	iconst_1
-	iadd
-	istore_0
-	bipush 10
-	if_icmplt  L2
-	iconst_0
-	goto L3
-	L2:
-	iconst_1
-	L3:
-	ifeq L1
-	
-        ;; do: 
-	
-        ;; int n = int 100;
-	bipush 100
-	istore_1
-	goto L0
-	L1:
-	
-        ;; end while
-	
-        ;; void printInt (int n);
-	iload_0
-	invokestatic Runtime/printInt(I)V
+        ;; void printDouble (double x);
+	dload_0
+	invokestatic Runtime/printDouble(D)V
 	nop
 	
         ;; return int 0;

@@ -23,16 +23,16 @@
 
 .method public static main()I
   .limit locals 2
-  .limit stack 2
+  .limit stack 3
 
 	
         ;; double d = double 1;
 	iconst_1
 	dstore_0
 	
-        ;; double d = double (double d) / (int 2);
+        ;; double d = double (double double double d) / (double 2.00000000000000);
 	dload_0
-	iconst_2
+	ldc2_w 2.0
 	ddiv
 	dstore_0
 	dload_0

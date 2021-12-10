@@ -321,6 +321,7 @@ public class Compiler {
         t = INT;
       else
         t = DOUBLE;
+
       p.exp_1.accept(this, arg);
       p.exp_2.accept(this, arg);
       if (b)
@@ -468,6 +469,7 @@ public class Compiler {
     public Void visit(cmm.Absyn.EConv p, Void arg) { /* Code for EConv goes here */
       p.type_.accept(new TypeVisitor(), arg);
       p.exp_.accept(new ExpVisitor(), arg);
+
       return null;
       // return new ETyped(t.type_, p);
     }

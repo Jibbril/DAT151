@@ -23,11 +23,11 @@
 
 .method public static main()I
   .limit locals 2
-  .limit stack 3
+  .limit stack 4
 
 	
-        ;; double x = double (int 1) * (double 1.10000000000000);
-	iconst_1
+        ;; double x = double (double 1.00000000000000) * (double double double 1.10000000000000);
+	dconst_1
 	ldc2_w 1.1
 	dmul
 	dstore_0

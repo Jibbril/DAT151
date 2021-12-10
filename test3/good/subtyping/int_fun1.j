@@ -23,12 +23,12 @@
 
 .method public static have_an_int(D)D
   .limit locals 2
-  .limit stack 3
+  .limit stack 4
 
 	
-        ;; return double (double arg) / (int 2);
+        ;; return double (double double double arg) / (double 2.00000000000000);
 	dload_0
-	iconst_2
+	ldc2_w 2.0
 	ddiv
 	dreturn
 
