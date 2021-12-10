@@ -23,42 +23,42 @@
 
 .method public static main()I
   .limit locals 2
-  .limit stack 6
+  .limit stack 3
 
 	
-        ;; double d = double 2.00000000000000;
-	ldc2_w 2.0
-	dstore_0
+        ;; int n = int 0;
+	iconst_0
+	istore_0
 	
-        ;; void printDouble (double d);
-	dload_0
-	invokestatic Runtime/printDouble(D)V
-	nop
+        ;; While condition (bool (int n ++) < (int 10))
+	L0:
+	iload_0
+	dup
+	iconst_1
+	iadd
+	istore_0
+	bipush 10
+	if_icmplt  L2
+	iconst_0
+	goto L3
+	L2:
+	iconst_1
+	L3:
+	ifeq L1
 	
-        ;; double d ++;
-	dload_0
-	dup2
-	dconst_1
-	dadd
-	dstore_0
-	pop2
+        ;; do: 
 	
-        ;; void printDouble (double d);
-	dload_0
-	invokestatic Runtime/printDouble(D)V
-	nop
+        ;; int n = int 100;
+	bipush 100
+	istore_1
+	goto L0
+	L1:
 	
-        ;; double d --;
-	dload_0
-	dup2
-	dconst_1
-	dsub
-	dstore_0
-	pop2
+        ;; end while
 	
-        ;; void printDouble (double d);
-	dload_0
-	invokestatic Runtime/printDouble(D)V
+        ;; void printInt (int n);
+	iload_0
+	invokestatic Runtime/printInt(I)V
 	nop
 	
         ;; return int 0;

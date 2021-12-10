@@ -57,7 +57,7 @@
         ;; end while
 	
         ;; void printInt (int n);
-	iload_1
+	iload_0
 	invokestatic Runtime/printInt(I)V
 	nop
 	

@@ -1,12 +1,8 @@
-#include "../prelude.cc"
+// Extra scope for while body needed.
 
 int main() {
-  double d = 2.0;
-  printDouble(d);
-  d++;
-  printDouble(d);
-  d--;
-  printDouble(d);
-
+  int n = 0;
+  while (n++ < 10) int n = 100;
+  printInt(n);  // Should print 11
   return 0;
 }

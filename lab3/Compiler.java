@@ -196,7 +196,9 @@ public class Compiler {
       p.exp_.accept(new ExpVisitor(), null);
       emit(new IfZ(endL));
       emit(new Comment("do: \n"));
+      newScope();
       p.stm_.accept(new StmVisitor(), null);
+      closeScope();
       emit(new Goto(startL));
       emit(new Target(endL));
 

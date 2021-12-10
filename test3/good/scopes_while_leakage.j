@@ -61,7 +61,7 @@
         ;; end while
 	
         ;; bool (bool var) == (bool true);
-	iload_2
+	iload_0
 	iconst_1
 	if_icmpeq  L4
 	iconst_0
@@ -72,7 +72,7 @@
 	pop
 	
         ;; bool var2 = bool var;
-	iload_2
+	iload_0
 	istore_3
 	
         ;; return int 0;
