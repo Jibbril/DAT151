@@ -60,7 +60,7 @@
 	istore_2
 	L0:
 	
-        ;; void printInt (x0);
+        ;; void printInt (int x0);
 	iload_0
 	invokestatic Runtime/printInt(I)V
 	nop

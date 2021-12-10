@@ -46,7 +46,7 @@
 	iconst_1
 	istore_0
 	
-        ;; void cdec (-- c);
+        ;; void cdec (int -- c);
 	iload_0
 	iconst_1
 	isub
@@ -55,7 +55,7 @@
 	invokestatic arg_mutation_pdec/cdec(I)V
 	nop
 	
-        ;; void printInt (c);
+        ;; void printInt (int c);
 	iload_0
 	invokestatic Runtime/printInt(I)V
 	nop

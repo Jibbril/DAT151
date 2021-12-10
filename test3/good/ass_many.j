@@ -34,7 +34,7 @@
 	iload_1
 	pop
 	
-        ;; void printInt (i + j);
+        ;; void printInt (int i + j);
 	iload_2
 	iload_1
 	iadd

@@ -26,7 +26,7 @@
   .limit stack 2
 
 	
-        ;; void printInt (readInt () - 1);
+        ;; void printInt (int readInt () - 1);
 	invokestatic Runtime/readInt()I
 	iconst_1
 	isub

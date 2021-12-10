@@ -41,7 +41,7 @@
 	
         ;; If true then do: 
 	
-        ;; void printInt (0);
+        ;; void printInt (int 0);
 	iconst_0
 	invokestatic Runtime/printInt(I)V
 	nop
@@ -50,7 +50,7 @@
         ;; If false then do: 
 	L1:
 	
-        ;; void printInt (1);
+        ;; void printInt (int 1);
 	iconst_1
 	invokestatic Runtime/printInt(I)V
 	nop
@@ -71,7 +71,7 @@
 	
         ;; If true then do: 
 	
-        ;; void printInt (2);
+        ;; void printInt (int 2);
 	iconst_2
 	invokestatic Runtime/printInt(I)V
 	nop
@@ -80,7 +80,7 @@
         ;; If false then do: 
 	L5:
 	
-        ;; void printInt (3);
+        ;; void printInt (int 3);
 	iconst_3
 	invokestatic Runtime/printInt(I)V
 	nop
@@ -101,7 +101,7 @@
 	
         ;; If true then do: 
 	
-        ;; void printInt (4);
+        ;; void printInt (int 4);
 	iconst_4
 	invokestatic Runtime/printInt(I)V
 	nop
@@ -110,7 +110,7 @@
         ;; If false then do: 
 	L9:
 	
-        ;; void printInt (5);
+        ;; void printInt (int 5);
 	iconst_5
 	invokestatic Runtime/printInt(I)V
 	nop
@@ -131,7 +131,7 @@
 	
         ;; If true then do: 
 	
-        ;; void printInt (6);
+        ;; void printInt (int 6);
 	bipush 6
 	invokestatic Runtime/printInt(I)V
 	nop
@@ -140,7 +140,7 @@
         ;; If false then do: 
 	L13:
 	
-        ;; void printInt (7);
+        ;; void printInt (int 7);
 	bipush 7
 	invokestatic Runtime/printInt(I)V
 	nop

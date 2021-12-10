@@ -26,7 +26,7 @@
   .limit stack 1
 
 	
-        ;; void printInt (0);
+        ;; void printInt (int 0);
 	iconst_0
 	invokestatic Runtime/printInt(I)V
 	nop
@@ -42,7 +42,7 @@
   .limit stack 1
 
 	
-        ;; void printInt (1);
+        ;; void printInt (int 1);
 	iconst_1
 	invokestatic Runtime/printInt(I)V
 	nop

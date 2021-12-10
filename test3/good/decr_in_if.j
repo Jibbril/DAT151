@@ -62,7 +62,7 @@
 	pop
 	L0:
 	
-        ;; void printInt (uw);
+        ;; void printInt (int uw);
 	iload_0
 	invokestatic Runtime/printInt(I)V
 	nop

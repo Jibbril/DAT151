@@ -26,7 +26,7 @@
   .limit stack 1
 
 	
-        ;; return void printInt (0);
+        ;; return void printInt (int 0);
 	iconst_0
 	invokestatic Runtime/printInt(I)V
 	return

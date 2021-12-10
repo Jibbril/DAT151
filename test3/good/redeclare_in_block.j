@@ -30,11 +30,11 @@
 	bipush 32
 	istore_0
 	
-        ;; bool x0 = true;
+        ;; bool x0 = bool true;
 	iconst_1
 	istore_1
 	
-        ;; void printInt (x0);
+        ;; void printInt (int x0);
 	iload_0
 	invokestatic Runtime/printInt(I)V
 	nop

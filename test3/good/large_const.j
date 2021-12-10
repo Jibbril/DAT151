@@ -26,7 +26,7 @@
   .limit stack 1
 
 	
-        ;; void printInt (1000);
+        ;; void printInt (int 1000);
 	ldc 1000
 	invokestatic Runtime/printInt(I)V
 	nop

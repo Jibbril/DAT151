@@ -23,7 +23,7 @@
 
 .method public static main()I
   .limit locals 7
-  .limit stack 7
+  .limit stack 3
 
 	
         ;; bool var = bool true;
@@ -54,6 +54,7 @@
         ;; bool (bool var) == (bool true);
 	iload_0
 	iconst_1
+	if_icmpeq  L2
 	iconst_0
 	goto L3
 	L2:
@@ -89,6 +90,7 @@
         ;; bool (bool var) == (bool true);
 	iload_0
 	iconst_1
+	if_icmpeq  L6
 	iconst_0
 	goto L7
 	L6:

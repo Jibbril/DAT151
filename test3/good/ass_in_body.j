@@ -43,7 +43,7 @@
   .limit stack 1
 
 	
-        ;; void printInt (f (5));
+        ;; void printInt (int f (int 5));
 	iconst_5
 	invokestatic ass_in_body/f(I)I
 	invokestatic Runtime/printInt(I)V

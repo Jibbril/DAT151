@@ -41,13 +41,13 @@
 	iconst_0
 	istore_0
 	
-        ;; int r = int snd (1, x);
+        ;; int r = int snd (int 1, int x);
 	iconst_1
 	iload_0
 	invokestatic bind_function_arguments_lazily/snd(II)I
 	istore_1
 	
-        ;; void printInt (r);
+        ;; void printInt (int r);
 	iload_1
 	invokestatic Runtime/printInt(I)V
 	nop

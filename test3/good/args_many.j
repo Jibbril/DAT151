@@ -235,7 +235,7 @@
   .limit stack 100
 
 	
-        ;; int x = int foo (1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100);
+        ;; int x = int foo (int 1, int 2, int 3, int 4, int 5, int 6, int 7, int 8, int 9, int 10, int 11, int 12, int 13, int 14, int 15, int 16, int 17, int 18, int 19, int 20, int 21, int 22, int 23, int 24, int 25, int 26, int 27, int 28, int 29, int 30, int 31, int 32, int 33, int 34, int 35, int 36, int 37, int 38, int 39, int 40, int 41, int 42, int 43, int 44, int 45, int 46, int 47, int 48, int 49, int 50, int 51, int 52, int 53, int 54, int 55, int 56, int 57, int 58, int 59, int 60, int 61, int 62, int 63, int 64, int 65, int 66, int 67, int 68, int 69, int 70, int 71, int 72, int 73, int 74, int 75, int 76, int 77, int 78, int 79, int 80, int 81, int 82, int 83, int 84, int 85, int 86, int 87, int 88, int 89, int 90, int 91, int 92, int 93, int 94, int 95, int 96, int 97, int 98, int 99, int 100);
 	iconst_1
 	iconst_2
 	iconst_3
@@ -341,7 +341,7 @@
 	iload_0
 	pop
 	
-        ;; void printInt (x);
+        ;; void printInt (int x);
 	iload_0
 	invokestatic Runtime/printInt(I)V
 	nop

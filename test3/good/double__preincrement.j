@@ -41,12 +41,12 @@
 	dstore_0
 	dload_0
 	
-        ;; void printDouble (j);
+        ;; void printDouble (double j);
 	dload_0
 	invokestatic Runtime/printDouble(D)V
 	nop
 	
-        ;; void printDouble (++ k);
+        ;; void printDouble (double ++ k);
 	dload_2
 	iconst_1
 	dadd

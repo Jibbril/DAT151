@@ -30,7 +30,7 @@
 	bipush 7
 	istore_0
 	
-        ;; void printInt (x);
+        ;; void printInt (int x);
 	iload_0
 	invokestatic Runtime/printInt(I)V
 	nop

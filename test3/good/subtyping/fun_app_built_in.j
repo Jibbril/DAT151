@@ -26,7 +26,7 @@
   .limit stack 1
 
 	
-        ;; void printDouble (99);
+        ;; void printDouble (int 99);
 	bipush 99
 	invokestatic Runtime/printDouble(D)V
 	nop

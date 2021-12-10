@@ -26,7 +26,7 @@
   .limit stack 4
 
 	
-        ;; void printDouble (1.50000000000000 + 1 / 2);
+        ;; void printDouble (double 1.50000000000000 + 1 / 2);
 	ldc2_w 1.5
 	iconst_1
 	iconst_2

@@ -53,7 +53,7 @@
 	
         ;; If true then do: 
 	
-        ;; void printInt (x);
+        ;; void printInt (int x);
 	iload_0
 	invokestatic Runtime/printInt(I)V
 	nop
@@ -62,7 +62,7 @@
         ;; If false then do: 
 	L1:
 	
-        ;; void printInt (0);
+        ;; void printInt (int 0);
 	iconst_0
 	invokestatic Runtime/printInt(I)V
 	nop

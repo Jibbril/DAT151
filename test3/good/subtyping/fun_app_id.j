@@ -26,7 +26,7 @@
   .limit stack 4
 
 	
-        ;; Evaluate if condition: bool (double c (99)) == (double 99.0000000000000)
+        ;; Evaluate if condition: bool (double c (int 99)) == (double 99.0000000000000)
 	bipush 99
 	invokestatic fun_app_id/c(D)D
 	ldc2_w 99.0
@@ -43,7 +43,7 @@
 	
         ;; If true then do: 
 	
-        ;; void printInt (1);
+        ;; void printInt (int 1);
 	iconst_1
 	invokestatic Runtime/printInt(I)V
 	nop
@@ -52,7 +52,7 @@
         ;; If false then do: 
 	L1:
 	
-        ;; void printInt (0);
+        ;; void printInt (int 0);
 	iconst_0
 	invokestatic Runtime/printInt(I)V
 	nop

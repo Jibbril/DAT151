@@ -42,14 +42,14 @@
   .limit stack 1
 
 	
-        ;; void cdec (c = 0);
+        ;; void cdec (int c = int 0);
 	iconst_0
 	istore_0
 	iload_0
 	invokestatic arg_mutation_ass/cdec(I)V
 	nop
 	
-        ;; void printInt (c);
+        ;; void printInt (int c);
 	iload_0
 	invokestatic Runtime/printInt(I)V
 	nop

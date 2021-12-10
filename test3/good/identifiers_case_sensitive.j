@@ -26,7 +26,7 @@
   .limit stack 2
 
 	
-        ;; void printInt (100 + x);
+        ;; void printInt (int 100 + x);
 	bipush 100
 	iload_0
 	iadd
@@ -41,7 +41,7 @@
   .limit stack 4
 
 	
-        ;; void printDouble (99.0000000000000 + x);
+        ;; void printDouble (double 99.0000000000000 + x);
 	ldc2_w 99.0
 	dload_0
 	iadd
@@ -86,12 +86,12 @@
 	invokestatic identifiers_case_sensitive/readdouble()D
 	dstore_1
 	
-        ;; void printint (x);
+        ;; void printint (int x);
 	iload_0
 	invokestatic identifiers_case_sensitive/printint(I)V
 	nop
 	
-        ;; void printdouble (X);
+        ;; void printdouble (double X);
 	dload_1
 	invokestatic identifiers_case_sensitive/printdouble(D)V
 	nop

@@ -58,7 +58,7 @@
   .limit stack 1
 
 	
-        ;; void printInt (g ());
+        ;; void printInt (int g ());
 	invokestatic return_in_if_right/g()I
 	invokestatic Runtime/printInt(I)V
 	nop

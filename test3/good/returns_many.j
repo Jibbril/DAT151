@@ -45,7 +45,7 @@
   .limit stack 1
 
 	
-        ;; void printInt (r ());
+        ;; void printInt (int r ());
 	invokestatic returns_many/r()I
 	invokestatic Runtime/printInt(I)V
 	nop

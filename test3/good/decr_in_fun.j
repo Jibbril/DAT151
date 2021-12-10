@@ -41,7 +41,7 @@
   .limit stack 1
 
 	
-        ;; void printInt (f (0));
+        ;; void printInt (int f (int 0));
 	iconst_0
 	invokestatic decr_in_fun/f(I)I
 	invokestatic Runtime/printInt(I)V

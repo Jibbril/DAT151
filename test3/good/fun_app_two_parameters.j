@@ -37,7 +37,7 @@
   .limit stack 2
 
 	
-        ;; return int abc (true, 0);
+        ;; return int abc (bool true, int 0);
 	iconst_1
 	iconst_0
 	invokestatic fun_app_two_parameters/abc(ZI)I

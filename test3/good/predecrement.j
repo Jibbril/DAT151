@@ -42,12 +42,12 @@
 	iload_0
 	pop
 	
-        ;; void printInt (j);
+        ;; void printInt (int j);
 	iload_0
 	invokestatic Runtime/printInt(I)V
 	nop
 	
-        ;; void printInt (-- k);
+        ;; void printInt (int -- k);
 	iload_1
 	iconst_1
 	isub

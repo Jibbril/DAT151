@@ -37,7 +37,7 @@
   .limit stack 1
 
 	
-        ;; void printInt (i);
+        ;; void printInt (int i);
 	iload_0
 	invokestatic Runtime/printInt(I)V
 	nop
@@ -53,7 +53,7 @@
   .limit stack 1
 
 	
-        ;; void printInt (i);
+        ;; void printInt (int i);
 	iload_0
 	invokestatic Runtime/printInt(I)V
 	nop
@@ -69,7 +69,7 @@
   .limit stack 9
 
 	
-        ;; int order (printIntInt (0), printIntInt (1));
+        ;; int order (int printIntInt (int 0), int printIntInt (int 1));
 	iconst_0
 	invokestatic eval_order/printIntInt(I)I
 	iconst_1
@@ -85,7 +85,7 @@
 	iadd
 	pop
 	
-        ;; bool (int printIntInt (4)) == (int printIntInt (5));
+        ;; bool (int printIntInt (int 4)) == (int printIntInt (int 5));
 	iconst_4
 	invokestatic eval_order/printIntInt(I)I
 	iconst_5
@@ -122,7 +122,7 @@
 	isub
 	pop
 	
-        ;; bool (int printIntInt (12)) < (int printIntInt (13));
+        ;; bool (int printIntInt (int 12)) < (int printIntInt (int 13));
 	bipush 12
 	invokestatic eval_order/printIntInt(I)I
 	bipush 13
@@ -135,7 +135,7 @@
 	L3:
 	pop
 	
-        ;; bool (int printIntInt (14)) > (int printIntInt (15));
+        ;; bool (int printIntInt (int 14)) > (int printIntInt (int 15));
 	bipush 14
 	invokestatic eval_order/printIntInt(I)I
 	bipush 15
@@ -148,7 +148,7 @@
 	L5:
 	pop
 	
-        ;; bool (int printIntInt (16)) <= (int printIntInt (17));
+        ;; bool (int printIntInt (int 16)) <= (int printIntInt (int 17));
 	bipush 16
 	invokestatic eval_order/printIntInt(I)I
 	bipush 17
@@ -161,7 +161,7 @@
 	L7:
 	pop
 	
-        ;; bool (int printIntInt (18)) >= (int printIntInt (19));
+        ;; bool (int printIntInt (int 18)) >= (int printIntInt (int 19));
 	bipush 18
 	invokestatic eval_order/printIntInt(I)I
 	bipush 19
@@ -174,7 +174,7 @@
 	L9:
 	pop
 	
-        ;; bool (int printIntInt (20)) != (int printIntInt (21));
+        ;; bool (int printIntInt (int 20)) != (int printIntInt (int 21));
 	bipush 20
 	invokestatic eval_order/printIntInt(I)I
 	bipush 21
@@ -187,7 +187,7 @@
 	L11:
 	pop
 	
-        ;; bool (bool printIntBool (22)) && (bool printIntBool (23));
+        ;; bool (bool printIntBool (int 22)) && (bool printIntBool (int 23));
 	iconst_0
 	bipush 22
 	invokestatic eval_order/printIntBool(I)Z
@@ -202,7 +202,7 @@
 	L12:
 	pop
 	
-        ;; bool (bool printIntBool (24)) || (bool printIntBool (25));
+        ;; bool (bool printIntBool (int 24)) || (bool printIntBool (int 25));
 	iconst_1
 	bipush 24
 	invokestatic eval_order/printIntBool(I)Z

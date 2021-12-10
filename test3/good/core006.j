@@ -40,12 +40,12 @@
 	iload_1
 	pop
 	
-        ;; void printInt (x);
+        ;; void printInt (int x);
 	iload_0
 	invokestatic Runtime/printInt(I)V
 	nop
 	
-        ;; void printInt (y);
+        ;; void printInt (int y);
 	iload_1
 	invokestatic Runtime/printInt(I)V
 	nop

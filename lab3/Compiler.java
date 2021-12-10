@@ -194,11 +194,11 @@ public class Compiler {
       emit(new Target(startL));
       p.exp_.accept(new ExpVisitor(), null);
       emit(new IfZ(endL));
+      emit(new Comment("do " + cmm.PrettyPrinter.print(p.stm_) + "\n"));
       p.stm_.accept(new StmVisitor(), null);
       emit(new Goto(startL));
       emit(new Target(endL));
 
-      emit(new Comment("while (" + cmm.PrettyPrinter.print(p.stm_) + ") do:\n"));
       emit(new Comment("end while\n"));
       return null;
     }
@@ -336,6 +336,8 @@ public class Compiler {
       p.exp_2.accept(new ExpVisitor(), null);
 
       if (((ETyped) p.exp_1).type_.equals(INT) && ((ETyped) p.exp_2).type_.equals(INT)) {
+        integerComparisons(co, true_label);
+      } else if (((ETyped) p.exp_1).type_.equals(BOOL) && ((ETyped) p.exp_2).type_.equals(BOOL)) {
         integerComparisons(co, true_label);
       } else if (((ETyped) p.exp_1).type_.equals(DOUBLE) && ((ETyped) p.exp_2).type_.equals(DOUBLE)) {
         doubleComparisons(co, true_label);

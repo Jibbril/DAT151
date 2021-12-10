@@ -30,12 +30,12 @@
 	invokestatic Runtime/readInt()I
 	istore_0
 	
-        ;; void printInt (i);
+        ;; void printInt (int i);
 	iload_0
 	invokestatic Runtime/printInt(I)V
 	nop
 	
-        ;; void printInt (i ++);
+        ;; void printInt (int i ++);
 	iload_0
 	dup
 	iconst_1
@@ -44,12 +44,12 @@
 	invokestatic Runtime/printInt(I)V
 	nop
 	
-        ;; void printInt (i);
+        ;; void printInt (int i);
 	iload_0
 	invokestatic Runtime/printInt(I)V
 	nop
 	
-        ;; void printInt (++ i);
+        ;; void printInt (int ++ i);
 	iload_0
 	iconst_1
 	iadd
@@ -58,7 +58,7 @@
 	invokestatic Runtime/printInt(I)V
 	nop
 	
-        ;; void printInt (i);
+        ;; void printInt (int i);
 	iload_0
 	invokestatic Runtime/printInt(I)V
 	nop

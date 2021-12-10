@@ -58,7 +58,7 @@
 	iconst_0
 	istore_1
 	
-        ;; void printInt (1);
+        ;; void printInt (int 1);
 	iconst_1
 	invokestatic Runtime/printInt(I)V
 	nop

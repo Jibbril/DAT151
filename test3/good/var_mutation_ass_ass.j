@@ -42,7 +42,7 @@
 	iload_1
 	pop
 	
-        ;; void printInt (a);
+        ;; void printInt (int a);
 	iload_0
 	invokestatic Runtime/printInt(I)V
 	nop
@@ -55,7 +55,7 @@
 	istore_1
 	pop
 	
-        ;; void printInt (a);
+        ;; void printInt (int a);
 	iload_0
 	invokestatic Runtime/printInt(I)V
 	nop
@@ -68,7 +68,7 @@
 	iload_1
 	pop
 	
-        ;; void printInt (a);
+        ;; void printInt (int a);
 	iload_0
 	invokestatic Runtime/printInt(I)V
 	nop
@@ -81,7 +81,7 @@
 	istore_1
 	pop
 	
-        ;; void printInt (a);
+        ;; void printInt (int a);
 	iload_0
 	invokestatic Runtime/printInt(I)V
 	nop
@@ -92,7 +92,7 @@
 	iload_1
 	pop
 	
-        ;; void printInt (a);
+        ;; void printInt (int a);
 	iload_0
 	invokestatic Runtime/printInt(I)V
 	nop

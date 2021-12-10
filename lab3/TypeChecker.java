@@ -169,18 +169,19 @@ public class TypeChecker {
             ETyped t = p.exp_.accept(new ExpVisitor(), null);
             compareTypes(t.type_, BOOL);
 
-            p.stm_.accept(new StmVisitor(), arg);
+            Stm s = p.stm_.accept(new StmVisitor(), arg);
             closeScope();
-            return p;
+            return new SWhile(t, s);
         }
 
         public Stm visit(cmm.Absyn.SBlock p, Void arg) { /* Code for SBlock goes here */
             newScope();
+            ListStm list_stm = new ListStm();
             for (cmm.Absyn.Stm x : p.liststm_) {
-                x.accept(new StmVisitor(), arg);
+                list_stm.add(x.accept(new StmVisitor(), arg));
             }
             closeScope();
-            return p;
+            return new SBlock(list_stm);
         }
 
         public Stm visit(cmm.Absyn.SIfElse p, Void arg) { /* Code for SIfElse goes here */
@@ -223,8 +224,9 @@ public class TypeChecker {
             // Check if function is defined
             FunctionDefinition fd = definitions.get(p.id_);
             // Check function expressions
+            ListExp listexp = new ListExp();
             for (cmm.Absyn.Exp x : p.listexp_) {
-                x.accept(new ExpVisitor(), arg);
+                listexp.add(x.accept(new ExpVisitor(), arg));
             }
 
             // Check number of arguments in function
@@ -232,7 +234,7 @@ public class TypeChecker {
                 throw new TypeException("Function is not defined or is called with the wrong number of arguments");
             }
             checkArgTypes(p.listexp_, fd.argumentsList);
-            return new ETyped(fd.returnType, p);
+            return new ETyped(fd.returnType, new EApp(p.id_, listexp));
         }
 
         public ETyped visit(cmm.Absyn.EPost p, Void arg) { /* Code for EPost goes here */
@@ -296,7 +298,7 @@ public class TypeChecker {
                 if (t1.type_.equals(VOID) || t2.type_.equals(VOID)) {
                     throw new TypeException("Eq/Neq not applicable to void type.");
                 }
-                if (t1.equals(INT) && t2.equals(DOUBLE) || t1.type_.equals(DOUBLE) && t2.type_.equals(INT)) {
+                if ((t1.equals(INT) && t2.equals(DOUBLE)) || (t1.type_.equals(DOUBLE) && t2.type_.equals(INT))) {
                     t1 = new ETyped(DOUBLE, t1.exp_);
                     t2 = new ETyped(DOUBLE, t2.exp_);
                 }

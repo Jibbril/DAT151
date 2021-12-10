@@ -42,7 +42,7 @@
 	
         ;; If true then do: 
 	
-        ;; void printInt (2);
+        ;; void printInt (int 2);
 	iconst_2
 	invokestatic Runtime/printInt(I)V
 	nop
@@ -51,7 +51,7 @@
         ;; If false then do: 
 	L3:
 	
-        ;; void printInt (1);
+        ;; void printInt (int 1);
 	iconst_1
 	invokestatic Runtime/printInt(I)V
 	nop
@@ -69,7 +69,7 @@
 	
         ;; If true then do: 
 	
-        ;; void printInt (3);
+        ;; void printInt (int 3);
 	iconst_3
 	invokestatic Runtime/printInt(I)V
 	nop
@@ -78,7 +78,7 @@
         ;; If false then do: 
 	L5:
 	
-        ;; void printInt (0);
+        ;; void printInt (int 0);
 	iconst_0
 	invokestatic Runtime/printInt(I)V
 	nop

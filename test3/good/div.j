@@ -26,7 +26,7 @@
   .limit stack 2
 
 	
-        ;; void printInt (5 / 3);
+        ;; void printInt (int 5 / 3);
 	iconst_5
 	iconst_3
 	idiv

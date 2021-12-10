@@ -39,7 +39,7 @@
   .limit stack 2
 
 	
-        ;; void printDouble (have_an_int (1, 2));
+        ;; void printDouble (double have_an_int (int 1, int 2));
 	iconst_1
 	iconst_2
 	invokestatic int_fun2/have_an_int(DD)D

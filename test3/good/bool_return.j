@@ -44,7 +44,7 @@
   .limit stack 1
 
 	
-        ;; Evaluate if condition: bool c (0)
+        ;; Evaluate if condition: bool c (int 0)
 	iconst_0
 	invokestatic bool_return/c(I)Z
 	
@@ -53,7 +53,7 @@
 	
         ;; If true then do: 
 	
-        ;; void printInt (1);
+        ;; void printInt (int 1);
 	iconst_1
 	invokestatic Runtime/printInt(I)V
 	nop
@@ -62,7 +62,7 @@
         ;; If false then do: 
 	L3:
 	
-        ;; void printInt (0);
+        ;; void printInt (int 0);
 	iconst_0
 	invokestatic Runtime/printInt(I)V
 	nop

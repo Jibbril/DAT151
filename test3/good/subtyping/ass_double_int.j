@@ -37,7 +37,7 @@
 	dstore_0
 	dload_0
 	
-        ;; void printDouble (d);
+        ;; void printDouble (double d);
 	dload_0
 	invokestatic Runtime/printDouble(D)V
 	nop

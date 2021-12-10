@@ -30,7 +30,7 @@
 	ldc2_w 2.0
 	dstore_0
 	
-        ;; void printDouble (d);
+        ;; void printDouble (double d);
 	dload_0
 	invokestatic Runtime/printDouble(D)V
 	nop
@@ -42,7 +42,7 @@
 	dadd
 	dstore_0
 	
-        ;; void printDouble (d);
+        ;; void printDouble (double d);
 	dload_0
 	invokestatic Runtime/printDouble(D)V
 	nop
@@ -54,7 +54,7 @@
 	dsub
 	dstore_0
 	
-        ;; void printDouble (d);
+        ;; void printDouble (double d);
 	dload_0
 	invokestatic Runtime/printDouble(D)V
 	nop

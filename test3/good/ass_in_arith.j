@@ -44,17 +44,17 @@
 	iadd
 	istore_1
 	
-        ;; void printInt (y);
+        ;; void printInt (int y);
 	iload_1
 	invokestatic Runtime/printInt(I)V
 	nop
 	
-        ;; void printInt (x);
+        ;; void printInt (int x);
 	iload_0
 	invokestatic Runtime/printInt(I)V
 	nop
 	
-        ;; void printInt ((x = 10) + x ++ + x);
+        ;; void printInt (int (x = 10) + x ++ + x);
 	bipush 10
 	istore_0
 	iload_0
@@ -69,7 +69,7 @@
 	invokestatic Runtime/printInt(I)V
 	nop
 	
-        ;; void printInt (x);
+        ;; void printInt (int x);
 	iload_0
 	invokestatic Runtime/printInt(I)V
 	nop

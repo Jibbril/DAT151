@@ -1,9 +1,14 @@
-// lots of function arguments, empty body
-void foo() {
+void printBool(bool b) {
+  if (b)
+    printInt(1);
+  else
+    printInt(0);
 }
 
 int main() {
-  foo();
+  printBool(true == true);
+  printBool(true == false);
+  printBool(true != false);
 
-  return 5050;
+  return 0;
 }

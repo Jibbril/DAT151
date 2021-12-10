@@ -41,7 +41,7 @@
 	
         ;; If true then do: 
 	
-        ;; int e = int ev (y - 2);
+        ;; int e = int ev (int y - 2);
 	iload_0
 	iconst_2
 	isub
@@ -98,7 +98,7 @@
   .limit stack 1
 
 	
-        ;; void printInt (ev (17));
+        ;; void printInt (int ev (int 17));
 	bipush 17
 	invokestatic core015/ev(I)I
 	invokestatic Runtime/printInt(I)V

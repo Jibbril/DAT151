@@ -41,7 +41,7 @@
 	
         ;; If true then do: 
 	
-        ;; int x = 0;
+        ;; int x = int 0;
 	iconst_0
 	istore_0
 	goto L0
@@ -49,7 +49,7 @@
         ;; If false then do: 
 	L1:
 	
-        ;; bool x = true;
+        ;; bool x = bool true;
 	iconst_1
 	istore_1
 	L0:
