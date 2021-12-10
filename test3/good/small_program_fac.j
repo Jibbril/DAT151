@@ -50,11 +50,7 @@
 	L3:
 	ifeq L1
 	
-        ;; do {
-  int r = int r * n;
-  int n = int n - 1;
-}
-
+        ;; do: 
 	
         ;; int r = int r * n;
 	iload_1

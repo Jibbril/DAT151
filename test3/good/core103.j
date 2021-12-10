@@ -42,13 +42,7 @@
 	L3:
 	ifeq L1
 	
-        ;; do {
-  int i = int 0;
-  int i ++;
-  void printInt (int i);
-  int j ++;
-}
-
+        ;; do: 
 	
         ;; int i = int 0;
 	iconst_0

@@ -48,14 +48,7 @@
 	L3:
 	ifeq L1
 	
-        ;; do {
-  if (bool (int d * (x / d)) == (int x)) void printInt (int d);
-  else
-  {
-  }
-  int d --;
-}
-
+        ;; do: 
 	
         ;; Evaluate if condition: bool (int d * (x / d)) == (int x)
 	iload_1

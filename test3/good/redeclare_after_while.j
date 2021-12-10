@@ -46,8 +46,7 @@
 	L3:
 	ifeq L1
 	
-        ;; do int m = int 100;
-
+        ;; do: 
 	
         ;; int m = int 100;
 	bipush 100

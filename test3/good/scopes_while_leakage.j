@@ -50,8 +50,7 @@
 	L3:
 	ifeq L1
 	
-        ;; do int var = int 1;
-
+        ;; do: 
 	
         ;; int var = int 1;
 	iconst_1

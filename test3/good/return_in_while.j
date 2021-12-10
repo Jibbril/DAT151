@@ -46,10 +46,7 @@
 	L3:
 	ifeq L1
 	
-        ;; do {
-  return int 71;
-}
-
+        ;; do: 
 	
         ;; return int 71;
 	bipush 71

@@ -61,12 +61,7 @@
 	L3:
 	ifeq L1
 	
-        ;; do {
-  void printInt (int hi);
-  int hi = int lo + hi;
-  int lo = int hi - lo;
-}
-
+        ;; do: 
 	
         ;; void printInt (int hi);
 	iload_1

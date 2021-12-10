@@ -50,31 +50,7 @@
 	L3:
 	ifeq L1
 	
-        ;; do {
-  bool iPrime = bool true;
-  int j = int 2;
-  while (bool (bool (int j * j) <= (int i)) && (bool iPrime))
-  {
-    if (bool (int i / j * j) == (int i))
-    {
-      bool iPrime = bool false;
-    }
-    else
-    {
-    }
-    int j ++;
-  }
-  if (bool (bool iPrime) && (bool (int n / i * i) == (int n)))
-  {
-    void printInt (int i);
-    int n = int n / i;
-  }
-  else
-  {
-    int i ++;
-  }
-}
-
+        ;; do: 
 	
         ;; bool iPrime = bool true;
 	iconst_1
@@ -107,17 +83,7 @@
 	L6:
 	ifeq L5
 	
-        ;; do {
-  if (bool (int i / j * j) == (int i))
-  {
-    bool iPrime = bool false;
-  }
-  else
-  {
-  }
-  int j ++;
-}
-
+        ;; do: 
 	
         ;; Evaluate if condition: bool (int i / j * j) == (int i)
 	iload_1

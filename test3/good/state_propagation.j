@@ -196,10 +196,7 @@
 	L13:
 	ifeq L11
 	
-        ;; do {
-  void printInt (int z);
-}
-
+        ;; do: 
 	
         ;; void printInt (int z);
 	iload_0
@@ -231,9 +228,7 @@
 	L17:
 	ifeq L15
 	
-        ;; do {
-}
-
+        ;; do: 
 	goto L14
 	L15:
 	

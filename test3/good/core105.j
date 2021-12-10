@@ -42,8 +42,7 @@
 	L3:
 	ifeq L1
 	
-        ;; do void printInt (int x --);
-
+        ;; do: 
 	
         ;; void printInt (int x --);
 	iload_0

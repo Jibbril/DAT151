@@ -1,14 +1,24 @@
-void printBool(bool b) {
-  if (b)
-    printInt(1);
-  else
-    printInt(0);
-}
-
 int main() {
-  printBool(true == true);
-  printBool(true == false);
-  printBool(true != false);
+  int i = 78;
+  {
+    int i = 1;
+    printInt(i);
+  }
+  printInt(i);
+  while (i > 76) {
+    i--;
+    printInt(i);
+   int i = 7;
+   printInt(i);
+  }
+  printInt(i);
+  if (i > 4) {
+    int i = 4;
+    printInt(i);
+  } else {
 
-  return 0;
+  }
+  printInt(i);
+  return 0 ;
+
 }

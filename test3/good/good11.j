@@ -48,11 +48,7 @@
 	L3:
 	ifeq L1
 	
-        ;; do {
-  int sum = int sum + x;
-  int num ++;
-}
-
+        ;; do: 
 	
         ;; int sum = int sum + x;
 	iload_0

@@ -142,10 +142,7 @@
 	L11:
 	ifeq L9
 	
-        ;; do {
-  int x = int 5;
-}
-
+        ;; do: 
 	
         ;; int x = int 5;
 	iconst_5
@@ -180,11 +177,7 @@
 	L15:
 	ifeq L13
 	
-        ;; do {
-  int x;
-  int x = int 6;
-}
-
+        ;; do: 
 	
         ;; int x = int 6;
 	bipush 6

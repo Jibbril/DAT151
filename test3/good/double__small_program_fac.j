@@ -93,11 +93,7 @@
 	L7:
 	ifeq L5
 	
-        ;; do {
-  int r = int r * n;
-  int n = int n - 1;
-}
-
+        ;; do: 
 	
         ;; int r = int r * n;
 	iload_3

@@ -39,9 +39,7 @@
 	L3:
 	ifeq L1
 	
-        ;; do {
-}
-
+        ;; do: 
 	goto L0
 	L1:
 	

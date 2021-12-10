@@ -42,8 +42,7 @@
 	L3:
 	ifeq L1
 	
-        ;; do int x = int 7;
-
+        ;; do: 
 	
         ;; int x = int 7;
 	bipush 7

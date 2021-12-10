@@ -42,8 +42,7 @@
 	L3:
 	ifeq L1
 	
-        ;; do int y = int y - 2;
-
+        ;; do: 
 	
         ;; int y = int y - 2;
 	iload_0

@@ -52,11 +52,7 @@
 	L3:
 	ifeq L1
 	
-        ;; do {
-  int ret = int i * ret;
-  int ++ i;
-}
-
+        ;; do: 
 	
         ;; int ret = int i * ret;
 	iload_2

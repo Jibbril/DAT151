@@ -194,7 +194,7 @@ public class Compiler {
       emit(new Target(startL));
       p.exp_.accept(new ExpVisitor(), null);
       emit(new IfZ(endL));
-      emit(new Comment("do " + cmm.PrettyPrinter.print(p.stm_) + "\n"));
+      emit(new Comment("do: \n"));
       p.stm_.accept(new StmVisitor(), null);
       emit(new Goto(startL));
       emit(new Target(endL));
