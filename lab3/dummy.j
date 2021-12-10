@@ -21,84 +21,44 @@
 .end method
 
 
-.method public static printBool(Z)V
-  .limit locals 1
-  .limit stack 1
-
-	
-        ;; Evaluate if condition: bool b
-	iload_0
-	
-        ;; Check if condition is true/false: 
-	ifeq L1
-	
-        ;; If true then do: 
-	
-        ;; void printInt (int 1);
-	iconst_1
-	invokestatic Runtime/printInt(I)V
-	nop
-	goto L0
-	
-        ;; If false then do: 
-	L1:
-	
-        ;; void printInt (int 0);
-	iconst_0
-	invokestatic Runtime/printInt(I)V
-	nop
-	L0:
-        return
-
-.end method
-
 .method public static main()I
-  .limit locals 4
-  .limit stack 10
+  .limit locals 2
+  .limit stack 6
 
 	
-        ;; double z = double 9.30000000000000;
-	ldc2_w 9.3
+        ;; double d = double 2.00000000000000;
+	ldc2_w 2.0
 	dstore_0
 	
-        ;; double w = double 5.10000000000000;
-	ldc2_w 5.1
-	dstore_2
-	
-        ;; void printBool (bool (double (double z) + (double w)) > (double (double z) - (double w)));
+        ;; void printDouble (double d);
 	dload_0
-	dload_2
-	dadd
-	dload_0
-	dload_2
-	dsub
-	dcmpg
-	iconst_1
-	if_icmpeq  L2
-	iconst_0
-	goto L3
-	L2:
-	iconst_1
-	L3:
-	invokestatic dummy/printBool(Z)V
+	invokestatic Runtime/printDouble(D)V
 	nop
 	
-        ;; void printBool (bool (double (double z) / (double w)) <= (double (double z) * (double w)));
+        ;; double d ++;
 	dload_0
-	dload_2
-	ddiv
+	dup2
+	dconst_1
+	dadd
+	dstore_0
+	pop2
+	
+        ;; void printDouble (double d);
 	dload_0
-	dload_2
-	dmul
-	dcmpg
-	iconst_0
-	if_icmple  L4
-	iconst_0
-	goto L5
-	L4:
-	iconst_1
-	L5:
-	invokestatic dummy/printBool(Z)V
+	invokestatic Runtime/printDouble(D)V
+	nop
+	
+        ;; double d --;
+	dload_0
+	dup2
+	dconst_1
+	dsub
+	dstore_0
+	pop2
+	
+        ;; void printDouble (double d);
+	dload_0
+	invokestatic Runtime/printDouble(D)V
 	nop
 	
         ;; return int 0;

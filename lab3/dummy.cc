@@ -1,17 +1,12 @@
-/* Test arithmetic and comparisons. */
-
-void printBool(bool b) {
-  if (b) {
-    printInt(1);
-  } else {
-    printInt(0);
-  }
-}
+#include "../prelude.cc"
 
 int main() {
-    double z = 9.3;
-    double w = 5.1;
-    printBool(z+w > z-w);
-    printBool(z/w <= z*w);
-    return 0;
+  double d = 2.0;
+  printDouble(d);
+  d++;
+  printDouble(d);
+  d--;
+  printDouble(d);
+
+  return 0;
 }

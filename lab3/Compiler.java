@@ -155,6 +155,7 @@ public class Compiler {
     public Stm visit(cmm.Absyn.SExp p, Void arg) { /* Code for SExp goes here */
       emit(new Comment(cmm.PrettyPrinter.print(p)));
       p.exp_.accept(new ExpVisitor(), arg);
+
       emit(new Pop(((ETyped) p.exp_).type_));
       return null;
     }
@@ -279,7 +280,12 @@ public class Compiler {
       boolean b = p.incdecop_.accept(new IncDecOpVisitor(), arg);
       emit(new Load(ce.type, ce.addr));
       emit(new Dup(ce.type));
-      emit(new IConst(1));
+
+      if (ce.type.equals(DOUBLE))
+        emit(new DConst(1.0));
+      else
+        emit(new IConst(1));
+
       if (b)
         emit(new Add(ce.type));
       else
@@ -293,7 +299,10 @@ public class Compiler {
       boolean b = p.incdecop_.accept(new IncDecOpVisitor(), arg);
       emit(new Load(ce.type, ce.addr));
       // emit(new Dup(ce.type));
-      emit(new IConst(1));
+      if (ce.type.equals(DOUBLE))
+        emit(new DConst(1.0));
+      else
+        emit(new IConst(1));
       if (b)
         emit(new Add(ce.type));
       else

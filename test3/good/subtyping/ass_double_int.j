@@ -36,6 +36,7 @@
 	ddiv
 	dstore_0
 	dload_0
+	pop2
 	
         ;; void printDouble (double d);
 	dload_0

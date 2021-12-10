@@ -46,6 +46,7 @@
 	dconst_1
 	dstore_2
 	dload_2
+	pop2
 	goto L0
 	
         ;; If false then do: 
@@ -60,6 +61,7 @@
 	dmul
 	dstore_2
 	dload_2
+	pop2
 	L0:
 	
         ;; return double f;

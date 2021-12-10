@@ -23,7 +23,7 @@
 
 .method public static main()I
   .limit locals 4
-  .limit stack 3
+  .limit stack 4
 
 	
         ;; double j = double 22.5000000000000;
@@ -36,10 +36,11 @@
 	
         ;; double ++ j;
 	dload_0
-	iconst_1
+	dconst_1
 	dadd
 	dstore_0
 	dload_0
+	pop2
 	
         ;; void printDouble (double j);
 	dload_0
@@ -48,7 +49,7 @@
 	
         ;; void printDouble (double ++ k);
 	dload_2
-	iconst_1
+	dconst_1
 	dadd
 	dstore_2
 	dload_2

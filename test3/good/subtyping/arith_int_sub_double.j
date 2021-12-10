@@ -32,6 +32,7 @@
 	dsub
 	dstore_0
 	dload_0
+	pop2
 	
         ;; return int 0;
 	iconst_0
