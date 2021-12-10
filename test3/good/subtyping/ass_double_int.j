@@ -23,11 +23,11 @@
 
 .method public static main()I
   .limit locals 2
-  .limit stack 3
+  .limit stack 4
 
 	
-        ;; double d = double 1;
-	iconst_1
+        ;; double d = double 1.00000000000000;
+	dconst_1
 	dstore_0
 	
         ;; double d = double (double double double d) / (double 2.00000000000000);

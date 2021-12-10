@@ -137,11 +137,13 @@ public class TypeChecker {
             if (isVoidType(p.type_)) {
                 throw new TypeException("Cannot be of type void");
             }
+
             addVarToContext(p.id_, p.type_);
             ETyped exp = p.exp_.accept(new ExpVisitor(), arg);
             Type t = exp.type_;
             // Enable inits such as "double a = 345;" and "double b = 2*2.5"
             if (p.type_.equals(DOUBLE) && t.equals(INT)) {
+                exp = (new EConv(DOUBLE, exp)).accept(new ExpVisitor(), arg);
                 t = DOUBLE;
             }
             compareTypes(t, p.type_);
