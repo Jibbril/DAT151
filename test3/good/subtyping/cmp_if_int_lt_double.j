@@ -26,9 +26,12 @@
   .limit stack 5
 
 	
-        ;; Evaluate if condition: bool (int 3) < (double 5.00000000000000)
-	iconst_3
+        ;; Evaluate if condition: bool (double 3.00000000000000) < (double 5.00000000000000)
+	ldc2_w 3.0
 	ldc2_w 5.0
+	dcmpg
+	iconst_m1
+	if_icmpeq  L2
 	iconst_0
 	goto L3
 	L2:

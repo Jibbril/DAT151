@@ -26,7 +26,7 @@
   .limit stack 5
 
 	
-        ;; bool (double double double 1.10000000000000) != (double 1.00000000000000);
+        ;; bool (double 1.10000000000000) != (double 1.00000000000000);
 	ldc2_w 1.1
 	dconst_1
 	dcmpg

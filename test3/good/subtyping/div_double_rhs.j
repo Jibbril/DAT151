@@ -26,7 +26,7 @@
   .limit stack 4
 
 	
-        ;; void printDouble (double (double 1.00000000000000) / (double double double 2.00000000000000));
+        ;; void printDouble (double (double 1.00000000000000) / (double 2.00000000000000));
 	dconst_1
 	ldc2_w 2.0
 	ddiv

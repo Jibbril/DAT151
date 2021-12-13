@@ -1,4 +1,4 @@
-.class public ass_double_int
+.class public mixed
 .super java/lang/Object
 
 .method public <init>()V
@@ -14,7 +14,7 @@
   .limit locals 1
   .limit stack  1
 
-  invokestatic ass_double_int/main()I
+  invokestatic mixed/main()I
   pop
   return
 
@@ -22,24 +22,16 @@
 
 
 .method public static main()I
-  .limit locals 2
-  .limit stack 4
+  .limit locals 0
+  .limit stack 6
 
 	
-        ;; double d = double 1.00000000000000;
+        ;; void printDouble (double (double 1.50000000000000) + (double (double 1.00000000000000) / (double 2.00000000000000)));
+	ldc2_w 1.5
 	dconst_1
-	dstore_0
-	
-        ;; double d = double (double double double d) / (double 2.00000000000000);
-	dload_0
 	ldc2_w 2.0
 	ddiv
-	dstore_0
-	dload_0
-	pop2
-	
-        ;; void printDouble (double d);
-	dload_0
+	dadd
 	invokestatic Runtime/printDouble(D)V
 	nop
 	

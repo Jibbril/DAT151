@@ -317,6 +317,11 @@ public class TypeChecker {
                 if (!(isIntOrDouble(t1.type_) && isIntOrDouble(t2.type_))) {
                     throw new TypeException("Comparison only applies to numerical values.");
                 }
+                if ((t1.type_.equals(INT) && t2.type_.equals(DOUBLE))
+                        || (t1.type_.equals(DOUBLE) && t2.type_.equals(INT))) {
+                    t1 = (new EConv(DOUBLE, t1)).accept(new ExpVisitor(), arg);
+                    t2 = (new EConv(DOUBLE, t2)).accept(new ExpVisitor(), arg);
+                }
             }
 
             return new ETyped(BOOL, new ECmp(t1, p.cmpop_, t2));
@@ -357,19 +362,49 @@ public class TypeChecker {
         public ETyped visit(cmm.Absyn.ETyped p, Void arg) { /* Code for ETyped goes here */
             p.type_.accept(new TypeVisitor(), arg);
             ETyped t = p.exp_.accept(new ExpVisitor(), arg);
-            return new ETyped(t.type_, p);
+            return new ETyped(t.type_, p.exp_);
         }
 
         public ETyped visit(cmm.Absyn.EConv p, Void arg) { /* Code for EConv goes here */
-            p.type_.accept(new TypeVisitor(), arg);
             ETyped t = p.exp_.accept(new ExpVisitor(), arg);
-            if (t.type_.equals(INT)) {
-                Integer val = ((EInt) ((ETyped) t.exp_).exp_).integer_;
+            // Exp p2 = (ETyped) t.exp_;
+
+            if (t.exp_ instanceof EInt) {
+                Integer val = ((EInt) t.exp_).integer_;
                 Double dVal = Double.valueOf(val);
                 return new ETyped(DOUBLE, new EDouble(dVal));
+            } else if (t.exp_ instanceof EDouble) {
+                return t;
+            } else if (t.exp_ instanceof EAdd) {
+                ETyped t1 = ((EAdd) t.exp_).exp_1.accept(new ExpVisitor(), arg);
+                ETyped t2 = ((EAdd) t.exp_).exp_2.accept(new ExpVisitor(), arg);
+
+                ETyped tc1 = (new EConv(DOUBLE, (t1).exp_)).accept(new ExpVisitor(), arg);
+                ETyped tc2 = (new EConv(DOUBLE, (t2).exp_)).accept(new ExpVisitor(), arg);
+
+                return new ETyped(DOUBLE, new EAdd(tc1, ((EAdd) t.exp_).addop_, tc2));
+            } else if (t.exp_ instanceof EMul) {
+                ETyped t1 = ((EMul) t.exp_).exp_1.accept(new ExpVisitor(), arg);
+                ETyped t2 = ((EMul) t.exp_).exp_2.accept(new ExpVisitor(), arg);
+
+                ETyped tc1 = (new EConv(DOUBLE, (t1).exp_)).accept(new ExpVisitor(), arg);
+                ETyped tc2 = (new EConv(DOUBLE, (t2).exp_)).accept(new ExpVisitor(), arg);
+
+                return new ETyped(DOUBLE, new EMul(tc1, ((EMul) t.exp_).mulop_, tc2));
+            } else {
+                throw new TypeException("Something went wrong");
             }
 
-            return new ETyped(DOUBLE, t);
+            /*
+             * p.type_.accept(new TypeVisitor(), arg);
+             * ETyped t = p.exp_.accept(new ExpVisitor(), arg);
+             * if (t.type_.equals(INT)) {
+             * Integer val = ((EInt) ((ETyped) t.exp_).exp_).integer_;
+             * Double dVal = Double.valueOf(val);
+             * return new ETyped(DOUBLE, new EDouble(dVal));
+             * }
+             */
+
         }
     }
 

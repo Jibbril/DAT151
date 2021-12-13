@@ -26,7 +26,7 @@
   .limit stack 5
 
 	
-        ;; While condition (bool (double 3.00000000000000) == (double double double 3.10000000000000))
+        ;; While condition (bool (double 3.00000000000000) == (double 3.10000000000000))
 	L0:
 	ldc2_w 3.0
 	ldc2_w 3.1

@@ -23,20 +23,30 @@
 
 .method public static main()I
   .limit locals 0
-  .limit stack 5
+  .limit stack 6
 
 	
-        ;; bool (double 1.00000000000000) == (double double double 1.10000000000000);
-	dconst_1
-	ldc2_w 1.1
-	dcmpg
-	ifeq L0
-	iconst_0
-	goto L1
+        ;; While condition (bool (double 5.32400000000000) >= (double (double 1.00000000000000) + (double 43.0000000000000)))
 	L0:
+	ldc2_w 5.324
+	dconst_1
+	ldc2_w 43.0
+	dadd
+	dcmpg
+	iconst_0
+	if_icmpge  L2
+	iconst_0
+	goto L3
+	L2:
 	iconst_1
+	L3:
+	ifeq L1
+	
+        ;; do: 
+	goto L0
 	L1:
-	pop
+	
+        ;; end while
 	
         ;; return int 0;
 	iconst_0

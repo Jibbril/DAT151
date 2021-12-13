@@ -23,15 +23,18 @@
 
 .method public static main()I
   .limit locals 0
-  .limit stack 5
+  .limit stack 6
 
 	
-        ;; While condition (bool (double 5.32400000000000) >= (int (int 1) + (int 43)))
+        ;; While condition (bool (double 5.32400000000000) >= (double (double 1.00000000000000) + (double 43.0000000000000)))
 	L0:
 	ldc2_w 5.324
-	iconst_1
-	bipush 43
-	iadd
+	dconst_1
+	ldc2_w 43.0
+	dadd
+	dcmpg
+	iconst_0
+	if_icmpge  L2
 	iconst_0
 	goto L3
 	L2:
