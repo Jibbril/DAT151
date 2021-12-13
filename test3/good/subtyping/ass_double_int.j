@@ -1,4 +1,4 @@
-.class public dummy
+.class public ass_double_int
 .super java/lang/Object
 
 .method public <init>()V
@@ -14,7 +14,7 @@
   .limit locals 1
   .limit stack  1
 
-  invokestatic dummy/main()I
+  invokestatic ass_double_int/main()I
   pop
   return
 

@@ -1,4 +1,4 @@
-.class public dummy
+.class public int_fun1
 .super java/lang/Object
 
 .method public <init>()V
@@ -14,32 +14,34 @@
   .limit locals 1
   .limit stack  1
 
-  invokestatic dummy/main()I
+  invokestatic int_fun1/main()I
   pop
   return
 
 .end method
 
 
-.method public static main()I
+.method public static have_an_int(D)D
   .limit locals 2
   .limit stack 4
 
 	
-        ;; double d = double 1.00000000000000;
-	dconst_1
-	dstore_0
-	
-        ;; double d = double (double d) / (double 2.00000000000000);
+        ;; return double (double arg) / (double 2.00000000000000);
 	dload_0
 	ldc2_w 2.0
 	ddiv
-	dstore_0
-	dload_0
-	pop2
+	dreturn
+
+.end method
+
+.method public static main()I
+  .limit locals 0
+  .limit stack 1
+
 	
-        ;; void printDouble (double d);
-	dload_0
+        ;; void printDouble (double have_an_int (int 1));
+	iconst_1
+	invokestatic int_fun1/have_an_int(D)D
 	invokestatic Runtime/printDouble(D)V
 	nop
 	
