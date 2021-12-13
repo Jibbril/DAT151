@@ -236,7 +236,7 @@ public class TypeChecker {
             if (fd == null || p.listexp_.size() != fd.argumentsList.size()) {
                 throw new TypeException("Function is not defined or is called with the wrong number of arguments");
             }
-            checkArgTypes(p.listexp_, fd.argumentsList);
+            listexp = checkArgTypes(p.listexp_, fd.argumentsList);
             return new ETyped(fd.returnType, new EApp(p.id_, listexp));
         }
 
@@ -549,15 +549,22 @@ public class TypeChecker {
         cxt.put(id, t);
     }
 
-    private void checkArgTypes(ListExp le, ListArg la) {
+    private ListExp checkArgTypes(ListExp le, ListArg la) {
+        ListExp newLe = new ListExp();
         for (int i = 0; i < le.size(); i++) {
             ETyped exp = le.get(i).accept(new ExpVisitor(), null);
             Type argType = ((ADecl) la.get(i)).type_;
 
-            if (argType.equals(DOUBLE) && exp.type_.equals(INT))
-                exp = new ETyped(DOUBLE, exp);
+            if (argType.equals(DOUBLE) && exp.type_.equals(INT)) {
+                exp = (new EConv(DOUBLE, exp)).accept(new ExpVisitor(), null);
+            }
+
+            newLe.add(exp);
+
             compareTypes(exp.type_, argType);
         }
+
+        return newLe;
     }
 
     private boolean isIntOrDouble(Type t) {

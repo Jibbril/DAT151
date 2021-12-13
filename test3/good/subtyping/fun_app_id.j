@@ -23,11 +23,11 @@
 
 .method public static main()I
   .limit locals 0
-  .limit stack 4
+  .limit stack 5
 
 	
-        ;; Evaluate if condition: bool (double c (int 99)) == (double 99.0000000000000)
-	bipush 99
+        ;; Evaluate if condition: bool (double c (double 99.0000000000000)) == (double 99.0000000000000)
+	ldc2_w 99.0
 	invokestatic fun_app_id/c(D)D
 	ldc2_w 99.0
 	dcmpg

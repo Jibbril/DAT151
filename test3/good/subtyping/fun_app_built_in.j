@@ -23,11 +23,11 @@
 
 .method public static main()I
   .limit locals 0
-  .limit stack 1
+  .limit stack 2
 
 	
-        ;; void printDouble (int 99);
-	bipush 99
+        ;; void printDouble (double 99.0000000000000);
+	ldc2_w 99.0
 	invokestatic Runtime/printDouble(D)V
 	nop
 	

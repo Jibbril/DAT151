@@ -22,24 +22,12 @@
 
 
 .method public static main()I
-  .limit locals 2
-  .limit stack 4
+  .limit locals 0
+  .limit stack 2
 
 	
-        ;; double d = double 1.00000000000000;
-	dconst_1
-	dstore_0
-	
-        ;; double d = double (double d) / (double 2.00000000000000);
-	dload_0
-	ldc2_w 2.0
-	ddiv
-	dstore_0
-	dload_0
-	pop2
-	
-        ;; void printDouble (double d);
-	dload_0
+        ;; void printDouble (double 99.0000000000000);
+	ldc2_w 99.0
 	invokestatic Runtime/printDouble(D)V
 	nop
 	

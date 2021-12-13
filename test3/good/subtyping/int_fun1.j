@@ -36,11 +36,11 @@
 
 .method public static main()I
   .limit locals 0
-  .limit stack 1
+  .limit stack 2
 
 	
-        ;; void printDouble (double have_an_int (int 1));
-	iconst_1
+        ;; void printDouble (double have_an_int (double 1.00000000000000));
+	dconst_1
 	invokestatic int_fun1/have_an_int(D)D
 	invokestatic Runtime/printDouble(D)V
 	nop

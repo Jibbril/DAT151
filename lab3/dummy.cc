@@ -1,6 +1,4 @@
 int main() {
-  double d = 1;
-  d = d / 2;
-  printDouble(d);
+  printDouble(99);
   return 0;
 }
