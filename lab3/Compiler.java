@@ -13,7 +13,8 @@ public class Compiler {
   public final Type DOUBLE = new Type_double();
   public final Type VOID = new Type_void();
   // =================== STOP FROM TYPECHECKER ===================
-
+  // Return type of function we are checking
+  private Type returnType;
   // The output of the compiler is a list of strings.
   LinkedList<String> output;
   private int stackSize = 0;
@@ -106,6 +107,7 @@ public class Compiler {
       stackLimit = 0;
       localLimit = 0;
       localNr = 0;
+      returnType = p.type_;
 
       Fun f = new Fun(p.id_, new FunType(p.type_, p.listarg_));
       // definitions.put(p.id_, f);
@@ -183,8 +185,27 @@ public class Compiler {
 
     public Stm visit(cmm.Absyn.SReturn p, Void arg) { /* Code for SReturn goes here */
       emit(new Comment(cmm.PrettyPrinter.print(p)));
-      p.exp_.accept(new ExpVisitor(), arg);
-      emit(new Return(((ETyped) p.exp_).type_));
+
+      Type t = ((ETyped) p.exp_).type_;
+
+      if (((ETyped) p.exp_).exp_ instanceof EId) {
+        ETyped e = (ETyped) p.exp_;
+        EId id = (EId) e.exp_;
+        String sId = id.id_;
+        CxtEntry c = lookupVariableType(sId);
+        p.exp_.accept(new ExpVisitor(), arg);
+
+        if (returnType.equals(DOUBLE) && c.type.equals(INT)) {
+          t = DOUBLE;
+          emit(new I2D());
+        }
+      } else if (returnType.equals(DOUBLE) && t.equals(INT)) {
+        p.exp_.accept(new ExpVisitor(), arg);
+        emit(new I2D());
+      } else {
+        p.exp_.accept(new ExpVisitor(), arg);
+      }
+      emit(new Return(t));
       return null;
     }
 
@@ -243,6 +264,11 @@ public class Compiler {
   }
 
   public class ExpVisitor implements cmm.Absyn.Exp.Visitor<Void, Void> {
+    public Void visit(cmm.Absyn.EId p, Void arg, boolean b) {
+      b = false;
+      return null;
+    }
+
     public Void visit(cmm.Absyn.EBool p, Void arg) { /* Code for EBool goes here */
       emit(new IConst(p.boollit_.accept(new BoolLitVisitor(), arg)));
       return null;
@@ -261,6 +287,10 @@ public class Compiler {
 
     public Void visit(cmm.Absyn.EId p, Void arg) { /* Code for EId goes here */
       CxtEntry ce = lookupVariableType(p.id_);
+      // if (this.b) {
+      // emit(new Load(DOUBLE, ce.addr));
+      // return null;
+      // }
       emit(new Load(ce.type, ce.addr));
       return null;
     }
@@ -321,6 +351,7 @@ public class Compiler {
         t = INT;
       else
         t = DOUBLE;
+      // emit(new I2D());
 
       p.exp_1.accept(this, arg);
       p.exp_2.accept(this, arg);
@@ -611,7 +642,10 @@ public class Compiler {
   void updateStack(Code c) {
     if (c instanceof Store)
       decStack(((Store) c).type);
-    else if (c instanceof Load)
+    else if (c instanceof I2D) {
+      // decStack(INT);
+      incStack(INT);
+    } else if (c instanceof Load)
       incStack(((Load) c).type);
     else if (c instanceof IConst)
       incStack(INT);

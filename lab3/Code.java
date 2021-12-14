@@ -383,10 +383,21 @@ class Div extends Code {
     }
 }
 
+class I2D extends Code {
+    public I2D() {
+    }
+
+    public <R> R accept(CodeVisitor<R> v) {
+        return v.visit(this);
+    }
+}
+
 // =====================================================================
 // ============================ CodeVisitor ============================
 // =====================================================================
 interface CodeVisitor<R> {
+    public R visit(I2D c);
+
     public R visit(Incr c);
 
     public R visit(Comment c);
@@ -448,6 +459,10 @@ interface CodeVisitor<R> {
 class CodeToJVM implements CodeVisitor<String> {
     private String print(String str) {
         return str + "\n";
+    }
+
+    public String visit(I2D c) {
+        return print("i2d");
     }
 
     public String visit(Inc c) {

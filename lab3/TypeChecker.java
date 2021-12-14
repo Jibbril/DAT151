@@ -160,7 +160,7 @@ public class TypeChecker {
         public Stm visit(cmm.Absyn.SReturn p, Void arg) { /* Code for SReturn goes here */
             ETyped t = p.exp_.accept(new ExpVisitor(), arg);
             if (returnType.equals(DOUBLE) && t.type_.equals(INT)) {
-                t = new ETyped(DOUBLE, p.exp_);
+                t = (new EConv(DOUBLE, t)).accept(new ExpVisitor(), arg);
 
             }
             compareTypes(t.type_, returnType);
@@ -373,8 +373,10 @@ public class TypeChecker {
                 Integer val = ((EInt) t.exp_).integer_;
                 Double dVal = Double.valueOf(val);
                 return new ETyped(DOUBLE, new EDouble(dVal));
-            } else if (t.exp_ instanceof EDouble || t.exp_ instanceof EId) {
+            } else if (t.exp_ instanceof EDouble || t.exp_ instanceof EApp) {
                 return t;
+            } else if (t.exp_ instanceof EId) {
+                return new ETyped(DOUBLE, t.exp_);
             } else if (t.exp_ instanceof EAdd) {
                 ETyped t1 = ((EAdd) t.exp_).exp_1.accept(new ExpVisitor(), arg);
                 ETyped t2 = ((EAdd) t.exp_).exp_2.accept(new ExpVisitor(), arg);
@@ -387,10 +389,14 @@ public class TypeChecker {
                 ETyped t1 = ((EMul) t.exp_).exp_1.accept(new ExpVisitor(), arg);
                 ETyped t2 = ((EMul) t.exp_).exp_2.accept(new ExpVisitor(), arg);
 
-                ETyped tc1 = (new EConv(DOUBLE, (t1).exp_)).accept(new ExpVisitor(), arg);
-                ETyped tc2 = (new EConv(DOUBLE, (t2).exp_)).accept(new ExpVisitor(), arg);
+                // printDouble(1+2)
+                // printDouble(1.2 +(1+2))
 
-                return new ETyped(DOUBLE, new EMul(tc1, ((EMul) t.exp_).mulop_, tc2));
+                // ETyped tc1 = (new EConv(DOUBLE, (t1).exp_)).accept(new ExpVisitor(), arg);
+                // ETyped tc2 = (new EConv(DOUBLE, (t2).exp_)).accept(new ExpVisitor(), arg);
+
+                // return new ETyped(DOUBLE, new EMul(tc1, ((EMul) t.exp_).mulop_, tc2));
+                return new ETyped(DOUBLE, new EMul(t1, ((EMul) t.exp_).mulop_, t2));
             } else {
                 throw new TypeException("Something went wrong");
             }

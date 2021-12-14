@@ -21,13 +21,26 @@
 .end method
 
 
-.method public static main()I
+.method public static have_an_int()D
   .limit locals 0
   .limit stack 2
 
 	
-        ;; void printDouble (double 99.0000000000000);
-	ldc2_w 99.0
+        ;; return double 1.00000000000000;
+	dconst_1
+	dreturn
+
+.end method
+
+.method public static main()I
+  .limit locals 0
+  .limit stack 4
+
+	
+        ;; void printDouble (double (double have_an_int ()) / (double 2.00000000000000));
+	invokestatic dummy/have_an_int()D
+	ldc2_w 2.0
+	ddiv
 	invokestatic Runtime/printDouble(D)V
 	nop
 	

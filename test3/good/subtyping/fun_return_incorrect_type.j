@@ -66,11 +66,12 @@
 
 .method public static c(I)D
   .limit locals 1
-  .limit stack 1
+  .limit stack 2
 
 	
         ;; return double x;
 	iload_0
+	i2d
 	dreturn
 
 .end method
