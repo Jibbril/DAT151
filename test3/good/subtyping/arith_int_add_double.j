@@ -26,8 +26,9 @@
   .limit stack 4
 
 	
-        ;; double x = double (double 1.00000000000000) + (double 1.10000000000000);
-	dconst_1
+        ;; double x = double (int 1) + (double 1.10000000000000);
+	iconst_1
+	i2d
 	ldc2_w 1.1
 	dadd
 	dstore_0

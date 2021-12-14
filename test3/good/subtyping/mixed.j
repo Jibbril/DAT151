@@ -26,11 +26,12 @@
   .limit stack 4
 
 	
-        ;; void printDouble (double (double 1.50000000000000) + (double (int 1) / (int 2)));
+        ;; void printDouble (double (double 1.50000000000000) + (int (int 1) / (int 2)));
 	ldc2_w 1.5
 	iconst_1
 	iconst_2
 	idiv
+	i2d
 	dadd
 	invokestatic Runtime/printDouble(D)V
 	nop

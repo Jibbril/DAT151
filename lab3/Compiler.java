@@ -110,11 +110,9 @@ public class Compiler {
       returnType = p.type_;
 
       Fun f = new Fun(p.id_, new FunType(p.type_, p.listarg_));
-      // definitions.put(p.id_, f);
 
       LinkedList<String> savedOutput = output;
       output = new LinkedList<>();
-      // p.id_;
       newScope();
       for (cmm.Absyn.Arg x : p.listarg_) {
         x.accept(new ArgVisitor(), arg);
@@ -166,7 +164,6 @@ public class Compiler {
       p.type_.accept(new TypeVisitor(), arg);
       for (String x : p.listid_) {
         int addr = addVarToContext(x, p.type_);
-        // emit(new Store(VOID, addr));
       }
 
       return p;
@@ -174,7 +171,6 @@ public class Compiler {
 
     public Stm visit(cmm.Absyn.SInit p, Void arg) { /* Code for SInit goes here */
       emit(new Comment(cmm.PrettyPrinter.print(p)));
-      // String label = addVarToContext(p.id_, p.type_);
       int addr = addVarToContext(p.id_, p.type_);
 
       p.exp_.accept(new ExpVisitor(), arg);
@@ -287,10 +283,7 @@ public class Compiler {
 
     public Void visit(cmm.Absyn.EId p, Void arg) { /* Code for EId goes here */
       CxtEntry ce = lookupVariableType(p.id_);
-      // if (this.b) {
-      // emit(new Load(DOUBLE, ce.addr));
-      // return null;
-      // }
+
       emit(new Load(ce.type, ce.addr));
       return null;
     }
@@ -347,37 +340,52 @@ public class Compiler {
     public Void visit(cmm.Absyn.EMul p, Void arg) { /* Code for EMul goes here */
       boolean b = p.mulop_.accept(new MulOpVisitor(), arg);
       Type t;
-      if (((ETyped) p.exp_1).type_.equals(INT) && ((ETyped) p.exp_2).type_.equals(INT))
+      Type t1 = ((ETyped) p.exp_1).type_;
+      Type t2 = ((ETyped) p.exp_2).type_;
+
+      if ((t1.equals(INT) && t2.equals(INT)))
         t = INT;
       else
         t = DOUBLE;
-      // emit(new I2D());
 
       p.exp_1.accept(this, arg);
+      if (t.equals(DOUBLE) && !(t1.equals(DOUBLE)))
+        emit(new I2D());
       p.exp_2.accept(this, arg);
+      if (t.equals(DOUBLE) && !(t2.equals(DOUBLE)))
+        emit(new I2D());
+
       if (b)
         emit(new Mul(t));
       else
         emit(new Div(t));
+
       return null;
     }
 
     public Void visit(cmm.Absyn.EAdd p, Void arg) { /* Code for EAdd goes here */
       boolean b = p.addop_.accept(new AddOpVisitor(), arg);
       Type t;
-      if (((ETyped) p.exp_1).type_.equals(INT) && ((ETyped) p.exp_2).type_.equals(INT))
+      Type t1 = ((ETyped) p.exp_1).type_;
+      Type t2 = ((ETyped) p.exp_2).type_;
+
+      if ((t1.equals(INT) && t2.equals(INT)))
         t = INT;
       else {
         t = DOUBLE;
-        p = new EAdd(new ETyped(DOUBLE, p.exp_1), p.addop_, new ETyped(DOUBLE, p.exp_2));
       }
 
       p.exp_1.accept(this, arg);
+      if (t.equals(DOUBLE) && !(t1.equals(DOUBLE)))
+        emit(new I2D());
       p.exp_2.accept(this, arg);
+      if (t.equals(DOUBLE) && !(t2.equals(DOUBLE)))
+        emit(new I2D());
       if (b)
         emit(new Add(t));
       else
         emit(new Sub(t));
+
       return null;
     }
 
@@ -387,15 +395,26 @@ public class Compiler {
 
       Label true_label = new Label(labelNr++);
       Label exit_state = new Label(labelNr++);
+      Type t1 = ((ETyped) p.exp_1).type_;
+      Type t2 = ((ETyped) p.exp_2).type_;
 
       p.exp_1.accept(new ExpVisitor(), null);
-      p.exp_2.accept(new ExpVisitor(), null);
+      if (t1.equals(INT) && t2.equals(DOUBLE)) {
+        emit(new I2D());
+        t1 = DOUBLE;
+      }
 
-      if (((ETyped) p.exp_1).type_.equals(INT) && ((ETyped) p.exp_2).type_.equals(INT)) {
+      p.exp_2.accept(new ExpVisitor(), null);
+      if (t1.equals(DOUBLE) && t2.equals(INT)) {
+        emit(new I2D());
+        t2 = DOUBLE;
+      }
+
+      if (t1.equals(INT) && t2.equals(INT)) {
         integerComparisons(co, true_label);
-      } else if (((ETyped) p.exp_1).type_.equals(BOOL) && ((ETyped) p.exp_2).type_.equals(BOOL)) {
+      } else if (t1.equals(BOOL) && t2.equals(BOOL)) {
         integerComparisons(co, true_label);
-      } else if (((ETyped) p.exp_1).type_.equals(DOUBLE) && ((ETyped) p.exp_2).type_.equals(DOUBLE)) {
+      } else if (t1.equals(DOUBLE) && t2.equals(DOUBLE)) {
         doubleComparisons(co, true_label);
       }
 
@@ -643,7 +662,6 @@ public class Compiler {
     if (c instanceof Store)
       decStack(((Store) c).type);
     else if (c instanceof I2D) {
-      // decStack(INT);
       incStack(INT);
     } else if (c instanceof Load)
       incStack(((Load) c).type);

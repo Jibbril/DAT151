@@ -1,8 +1,4 @@
-double have_an_int() {
-  return 1;
-}
-
-int main() {
-  printDouble(have_an_int() / 2);
-  return 0;
+int main () {
+	while (5.324 >= 1 + 43) {}
+	return 0;
 }

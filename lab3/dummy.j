@@ -21,28 +21,33 @@
 .end method
 
 
-.method public static have_an_int()D
-  .limit locals 0
-  .limit stack 2
-
-	
-        ;; return double 1.00000000000000;
-	dconst_1
-	dreturn
-
-.end method
-
 .method public static main()I
   .limit locals 0
-  .limit stack 4
+  .limit stack 5
 
 	
-        ;; void printDouble (double (double have_an_int ()) / (double 2.00000000000000));
-	invokestatic dummy/have_an_int()D
-	ldc2_w 2.0
-	ddiv
-	invokestatic Runtime/printDouble(D)V
-	nop
+        ;; While condition (bool (double 5.32400000000000) >= (int (int 1) + (int 43)))
+	L0:
+	ldc2_w 5.324
+	iconst_1
+	bipush 43
+	iadd
+	i2d
+	dcmpg
+	iconst_0
+	if_icmpge  L2
+	iconst_0
+	goto L3
+	L2:
+	iconst_1
+	L3:
+	ifeq L1
+	
+        ;; do: 
+	goto L0
+	L1:
+	
+        ;; end while
 	
         ;; return int 0;
 	iconst_0

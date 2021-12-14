@@ -26,9 +26,10 @@
   .limit stack 4
 
 	
-        ;; double x = double (double 1.10000000000000) - (double 1.00000000000000);
+        ;; double x = double (double 1.10000000000000) - (int 1);
 	ldc2_w 1.1
-	dconst_1
+	iconst_1
+	i2d
 	dsub
 	dstore_0
 	dload_0

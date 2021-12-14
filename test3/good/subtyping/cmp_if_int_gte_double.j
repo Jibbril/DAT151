@@ -26,8 +26,9 @@
   .limit stack 5
 
 	
-        ;; Evaluate if condition: bool (double 5.00000000000000) >= (double 3.00000000000000)
-	ldc2_w 5.0
+        ;; Evaluate if condition: bool (int 5) >= (double 3.00000000000000)
+	iconst_5
+	i2d
 	ldc2_w 3.0
 	dcmpg
 	iconst_0
