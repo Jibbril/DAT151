@@ -22,12 +22,18 @@
 
 
 .method public static main()I
-  .limit locals 0
+  .limit locals 1
   .limit stack 2
 
 	
-        ;; void printDouble (int readInt ());
-	invokestatic Runtime/readInt()I
+        ;; int x = int (int 1) / (int 2);
+	iconst_1
+	iconst_2
+	idiv
+	istore_0
+	
+        ;; void printDouble (int x);
+	iload_0
 	i2d
 	invokestatic Runtime/printDouble(D)V
 	nop

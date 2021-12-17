@@ -26,8 +26,9 @@
   .limit stack 2
 
 	
-        ;; return double 1.00000000000000;
-	dconst_1
+        ;; return int 1;
+	iconst_1
+	i2d
 	dreturn
 
 .end method

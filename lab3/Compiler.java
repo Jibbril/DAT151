@@ -197,6 +197,7 @@ public class Compiler {
         }
       } else if (returnType.equals(DOUBLE) && t.equals(INT)) {
         p.exp_.accept(new ExpVisitor(), arg);
+        t = DOUBLE;
         emit(new I2D());
       } else {
         p.exp_.accept(new ExpVisitor(), arg);
@@ -283,7 +284,6 @@ public class Compiler {
 
     public Void visit(cmm.Absyn.EId p, Void arg) { /* Code for EId goes here */
       CxtEntry ce = lookupVariableType(p.id_);
-
       emit(new Load(ce.type, ce.addr));
       return null;
     }

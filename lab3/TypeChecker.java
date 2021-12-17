@@ -160,7 +160,9 @@ public class TypeChecker {
         public Stm visit(cmm.Absyn.SReturn p, Void arg) { /* Code for SReturn goes here */
             ETyped t = p.exp_.accept(new ExpVisitor(), arg);
             if (returnType.equals(DOUBLE) && t.type_.equals(INT)) {
-                t = (new EConv(DOUBLE, t)).accept(new ExpVisitor(), arg);
+                // t = (new EConv(DOUBLE, t)).accept(new ExpVisitor(), arg);
+                // t = new ETyped(DOUBLE, t.exp_);
+                return new SReturn(t);
 
             }
             compareTypes(t.type_, returnType);
@@ -373,7 +375,8 @@ public class TypeChecker {
                 return t;
                 // return new ETyped(DOUBLE, t.exp_);
             } else if (t.exp_ instanceof EId) {
-                return new ETyped(DOUBLE, t.exp_);
+                return t;
+                // return new ETyped(DOUBLE, t.exp_);
             } else if (t.exp_ instanceof EAdd) {
                 ETyped t1 = ((EAdd) t.exp_).exp_1.accept(new ExpVisitor(), arg);
                 ETyped t2 = ((EAdd) t.exp_).exp_2.accept(new ExpVisitor(), arg);

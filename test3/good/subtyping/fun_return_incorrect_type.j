@@ -69,7 +69,7 @@
   .limit stack 2
 
 	
-        ;; return double x;
+        ;; return int x;
 	iload_0
 	i2d
 	dreturn
