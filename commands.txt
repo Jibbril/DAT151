@@ -1,0 +1,12 @@
+Export classPath
+cd ~ && export CLASSPATH=.:${HOME}/java-lib/java-cup-11b.jar:${HOME}/java-lib/java-cup-11b-runtime.jar:${HOME}/java-lib/JLex-1.2.6.jar:${CLASSPATH}
+
+Build/make
+bnfc -m -java cmm.cf
+make
+
+Tar a file with gzip
+tar -czvf name-of-archive.tar.gz /path/to/directory-or-file
+
+Untar a file
+tar --strip-components=1 -xzf lab2.tar.gz
