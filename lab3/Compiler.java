@@ -291,9 +291,15 @@ public class Compiler {
     public Void visit(cmm.Absyn.EApp p, Void arg) { /* Code for EApp goes here */
       // Check if function is defined
       Fun fd = definitions.get(p.id_);
-      // Check function expressions
+      // Check function expressions¨
+      ListArg argList = (ListArg) fd.funDef.argumentsList.clone();
       for (cmm.Absyn.Exp x : p.listexp_) {
         x.accept(new ExpVisitor(), arg);
+        Type t1 = ((ETyped) x).type_;
+        Type t2 = ((ADecl) argList.removeFirst()).type_;
+        if (t2.equals(DOUBLE) && t1.equals(INT)) {
+          emit(new I2D());
+        }
       }
       emit(new Call(fd));
       return null;

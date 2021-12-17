@@ -367,8 +367,11 @@ public class TypeChecker {
                 Integer val = ((EInt) t.exp_).integer_;
                 Double dVal = Double.valueOf(val);
                 return new ETyped(DOUBLE, new EDouble(dVal));
-            } else if (t.exp_ instanceof EDouble || t.exp_ instanceof EApp) {
+            } else if (t.exp_ instanceof EDouble) {
                 return t;
+            } else if (t.exp_ instanceof EApp) {
+                return t;
+                // return new ETyped(DOUBLE, t.exp_);
             } else if (t.exp_ instanceof EId) {
                 return new ETyped(DOUBLE, t.exp_);
             } else if (t.exp_ instanceof EAdd) {
@@ -537,9 +540,11 @@ public class TypeChecker {
 
             if (argType.equals(DOUBLE) && exp.type_.equals(INT)) {
                 exp = (new EConv(DOUBLE, exp)).accept(new ExpVisitor(), null);
-            }
+                newLe.add(exp);
 
-            newLe.add(exp);
+                exp = new ETyped(DOUBLE, exp.exp_);
+            } else
+                newLe.add(exp);
 
             compareTypes(exp.type_, argType);
         }

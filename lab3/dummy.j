@@ -23,31 +23,14 @@
 
 .method public static main()I
   .limit locals 0
-  .limit stack 5
+  .limit stack 2
 
 	
-        ;; While condition (bool (double 5.32400000000000) >= (int (int 1) + (int 43)))
-	L0:
-	ldc2_w 5.324
-	iconst_1
-	bipush 43
-	iadd
+        ;; void printDouble (int readInt ());
+	invokestatic Runtime/readInt()I
 	i2d
-	dcmpg
-	iconst_0
-	if_icmpge  L2
-	iconst_0
-	goto L3
-	L2:
-	iconst_1
-	L3:
-	ifeq L1
-	
-        ;; do: 
-	goto L0
-	L1:
-	
-        ;; end while
+	invokestatic Runtime/printDouble(D)V
+	nop
 	
         ;; return int 0;
 	iconst_0

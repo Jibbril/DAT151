@@ -1,4 +1,5 @@
-int main () {
-	while (5.324 >= 1 + 43) {}
-	return 0;
+int main() {
+  int x = 1 / 2;
+  printDouble(x);
+  return 0;
 }
